@@ -1,0 +1,12 @@
+{
+  "found": true,
+  "phase_number": "1",
+  "phase_name": "Environment & Core Stability",
+  "goal": "Secure the application environment and ensure a baseline for stable iteration.",
+  "success_criteria": [
+    "API keys are handled via secure environment variables and not exposed in client-side code.",
+    "A regression baseline exists for core PDF rendering and AI explanation features.",
+    "Core functional logic remains concise and clean after security hardening."
+  ],
+  "section": "### Phase 1: Environment & Core Stability\n**Goal**: Secure the application environment and ensure a baseline for stable iteration.\n**Depends on**: Nothing\n**Requirements**: SEC-01, STAB-01, STAB-02\n**Success Criteria** (what must be TRUE):\n  1. API keys are handled via secure environment variables and not exposed in client-side code.\n  2. A regression baseline exists for core PDF rendering and AI explanation features.\n  3. Core functional logic remains concise and clean after security hardening.\n**Plans**: TBD"
+}

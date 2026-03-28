@@ -1,0 +1,47 @@
+<h2>知识点高亮：优化方案对比</h2>
+<p class="subtitle">目标：从“碎片化”转向“语义完整性”</p>
+
+<div class="options" data-multiselect>
+  <div class="option" data-choice="approach-1" onclick="toggleSelect(this)">
+    <div class="letter">1</div>
+    <div class="content">
+      <h3>方案 A：外接矩形合并 (Bounding Box Merge)</h3>
+      <p><strong>逻辑：</strong>将属于同一个知识点的所有小块坐标，合并为一个覆盖全区的大矩形（取 Min-Top, Min-Left, Max-Bottom, Max-Right）。</p>
+      <div class="pros-cons">
+        <div class="pros"><ul><li>实现最简单</li><li>视觉干净</li></ul></div>
+        <div class="cons"><ul><li>如果包含非矩形区域（如 L 型段落），会覆盖无关内容</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="approach-2" onclick="toggleSelect(this)">
+    <div class="letter">2</div>
+    <div class="content">
+      <h3>方案 B：语义 ID 锚定 (Semantic ID Anchoring)</h3>
+      <p><strong>逻辑：</strong>LLM 不再返回原始坐标，而是返回对应 Layout 块的 ID。前端根据 ID 直接获取完整的 Layout 块坐标进行高亮。</p>
+      <div class="pros-cons">
+        <div class="pros"><ul><li>坐标绝对准确</li><li>完全遵循原始布局</li><li>LLM 负载低</li></ul></div>
+        <div class="cons"><ul><li>需要 LLM 具备极强的 ID 对应能力</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="approach-3" onclick="toggleSelect(this)">
+    <div class="letter">3</div>
+    <div class="content">
+      <h3>方案 C：智能物理聚合 (Spatial Aggregation) - 推荐</h3>
+      <p><strong>逻辑：</strong>前端接收碎坐标后，进行空间计算：如果两个框在垂直方向上相邻且水平重叠度高，自动合并为一个复合路径。同时保留 LLM 的 BBox 提示。</p>
+      <div class="pros-cons">
+        <div class="pros"><ul><li>鲁棒性最强</li><li>无需改变协议</li><li>适应不规则形状</li></ul></div>
+        <div class="cons"><ul><li>前端计算逻辑稍复杂</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>我的建议：方案 B + 方案 C 的混合模式</h3>
+  <p>让 LLM 尽可能返回 <strong>ID</strong>（语义锚点），如果 LLM 无法确定 ID，则回退到物理坐标。前端使用一个 <code>BoxGroup</code> 组件来处理这些坐标的<strong>视觉融合</strong>（通过 CSS <code>filter: blur()</code> 或简单的矩形并集逻辑）。</p>
+</div>
+
+<p>请查看 Visual Companion (http://localhost:52341) 选择你倾向的方案，或者在终端告知我你的看法。</p>

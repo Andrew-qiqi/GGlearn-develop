@@ -1,0 +1,14 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+SlideTutor-AI/
+
+# GSD / Planning (Ensuring these are NOT ignored)
+!.planning/
+!.gemini/
+!.agents/

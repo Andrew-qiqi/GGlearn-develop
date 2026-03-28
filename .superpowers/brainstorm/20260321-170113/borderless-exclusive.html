@@ -1,0 +1,49 @@
+<h2>高亮进化：极致清晰度</h2>
+<p class="subtitle">移除边框干扰 & 确保知识点唯一性</p>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">现状：带边框 & 可能重叠 (Confusing)</div>
+    <div class="mockup-body" style="background: white; padding: 20px; font-family: serif;">
+      <div style="border: 2px solid orange; background: rgba(255, 255, 0, 0.2); margin-bottom: 5px; padding: 2px;">
+        知识点 A：神经网络基础概念
+      </div>
+      <div style="border: 2px solid blue; background: rgba(0, 0, 255, 0.1); margin-top: -10px; padding: 2px; position: relative; z-index: 2;">
+        知识点 B：反向传播算法 (重叠区域)
+      </div>
+      <p style="color: red; font-size: 0.8rem; margin-top: 15px;">❌ 问题：边框生硬，重叠导致颜色混浊，交互不明。</p>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">优化：无边框 & 互斥分配 (Clear)</div>
+    <div class="mockup-body" style="background: white; padding: 20px; font-family: serif;">
+      <div style="background: rgba(255, 225, 0, 0.4); border-radius: 3px; padding: 2px 5px; display: inline-block;">
+        知识点 A：神经网络基础概念
+      </div>
+      <div style="background: rgba(59, 130, 246, 0.2); border-radius: 3px; padding: 2px 5px; display: inline-block; margin-top: 5px;">
+        知识点 B：反向传播算法
+      </div>
+      <p style="color: green; font-size: 0.8rem; margin-top: 15px;">✅ 优点：马克笔质感，无边框遮挡。每个 ID 仅归属于唯一知识点。</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>实现细则：</h3>
+  <ul>
+    <li><strong>视觉</strong>：移除 <code>PdfViewer.tsx</code> 中的 <code>border</code> 属性，使用 <code>mix-blend-mode: multiply</code> 增强文字可读性。</li>
+    <li><strong>分配逻辑</strong>：
+      <pre style="background: #f0f0f0; padding: 10px; border-radius: 5px; font-size: 0.8rem;">
+// 前端去重逻辑伪代码
+const usedIds = new Set();
+const cleanKnowledgePoints = kps.map(kp => {
+  const uniqueIds = kp.relevantIds.filter(id => !usedIds.has(id));
+  uniqueIds.forEach(id => usedIds.add(id));
+  return { ...kp, relevantIds: uniqueIds };
+});</pre>
+    </li>
+  </ul>
+</div>
+
+<p>这种纯净的高亮效果是否符合您的预期？</p>

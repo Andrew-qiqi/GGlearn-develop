@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:developers.openai.com)",
+      "WebFetch(domain:geminicli.com)",
+      "Skill(update-config)",
+      "Bash(node ~/.claude/hooks/notify.js)",
+      "Bash(python -m scripts.package_skill /c/Users/hoo/.claude/skills/multi-agent-cli)",
+      "Bash(python:*)",
+      "Bash(tar:*)",
+      "Bash(zip:*)",
+      "Bash(codex exec:*)",
+      "Bash(grep -E \"\\\\.\\(md|txt\\)$\")",
+      "mcp__MiniMax__understand_image",
+      "Bash(grep -E '\\\\.\\(jpg|png|jpeg\\)$')",
+      "Bash(npm run:*)",
+      "mcp__MiniMax__web_search"
+    ]
+  }
+}

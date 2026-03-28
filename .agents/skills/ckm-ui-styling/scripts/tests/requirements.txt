@@ -1,0 +1,9 @@
+<<<<<<< HEAD
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-mock>=3.11.1
+=======
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-mock>=3.11.1
+>>>>>>> 224796e27cbf769eef073c82fd8d527e4624ad25
