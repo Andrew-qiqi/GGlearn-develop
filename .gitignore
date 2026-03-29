@@ -6,7 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
-SlideTutor-AI/
 
 # GSD / Planning (Ensuring these are NOT ignored)
 !.planning/
