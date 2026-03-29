@@ -7,17 +7,18 @@
 ---
 ## [2026-03-29] Editorial Redesign of Quick Explain (Focus Mode)
 
-**What**: Redesigned the visual representation of "Quick Explain" (formerly known as cheatsheet) in Focus Mode. Replaced the standard card-based container with an open, editorial-style layout featuring a vertical guiding line, improved typography (Lora font), and staggered paragraph entry animations.
+**What**: Redesigned the visual representation of "Quick Explain" (formerly known as cheatsheet) in Focus Mode. Replaced the earlier plain block rendering with an editorial-style reading layout, added a lightweight paragraph-formatting helper for single-block quick explains, and introduced lead-paragraph emphasis plus staggered paragraph entry animations.
 
 **Why**: To align the UI with the "Teacher's Voice" product positioning. The previous card design was too structured and mechanical, making the content feel like a "data summary" rather than a natural classroom explanation. The new design creates a more immersive, lecture-like reading experience that is easier on the eyes and feels more personal.
 
 **Impact**:
 - Enhanced reading rhythm and focus in Focus Mode.
-- Improved visual hierarchy: Lead paragraphs are now more prominent to capture immediate attention.
-- Theme-aware design: Uses semantic tokens (`text-primary`, `bg-surface`) to maintain high "ink-on-paper" contrast in all modes (Light, Eyecare, Glass, Rainy).
+- Improved visual hierarchy: lead paragraphs are now more prominent to capture immediate attention.
+- Quick Explain content may now be lightly re-paragraphed at render time for readability, while the stored `cheatSheet` value remains unchanged.
+- Theme-aware design still relies on semantic tokens for contrast, with a few local accent styles in the component.
 - No changes to data structure, prompt logic, or backend services.
 
-**Files**: `SlideTutor-AI/src/components/CanvasTutor.tsx`
+**Files**: `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/lib/ai/quickExplainFormat.ts`, `SlideTutor-AI/src/lib/ai/quickExplainFormat.test.ts`
 
 ## [2026-03-29] Added Drag-and-Drop and Copy-Paste PDF Upload
 

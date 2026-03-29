@@ -53,6 +53,8 @@ The UI no longer extracts cheat sheet text from the explanation payload. Instead
 
 This removes the old coupling where non-explanation content was embedded inside the explanation stream.
 
+For presentation only, Focus Mode may lightly re-paragraph a single-block `cheatSheet` string before rendering it as `Quick Explain`. This formatting step is intentionally view-only: it does not change the stored page state, the distill output contract, or the prompt structure.
+
 ### Generation strategy update
 
 The artifact split still exists at the page-state level, but the generation pipeline is now intentionally two-stage instead of three independent slide-generation requests:

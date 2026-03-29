@@ -44,6 +44,8 @@ The per-page state contract now looks like this in practice:
 
 The frontend no longer parses `>>>CheatSheet` blocks out of the explanation text. That parsing path was removed so each artifact has one clear producer and one clear consumer.
 
+In the current UI, `Quick Explain` may pass through a lightweight presentation formatter before render. This formatter only splits a dense single paragraph into 2 to 3 readable paragraphs when needed. It does not write back to page state and does not alter the upstream `distill` response.
+
 ### Resource reuse note
 
 The current design does not cache `layoutBlocks` for low-frequency regenerate scenarios. Instead, it optimizes the high-frequency path:
