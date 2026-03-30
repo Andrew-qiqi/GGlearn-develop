@@ -2,7 +2,7 @@
 
 本文档描述 SlideTutor 项目的前端架构、状态管理和 API 客户端设计。
 
-最后更新：2026-03-29
+最后更新：2026-03-30
 
 ---
 
@@ -30,6 +30,11 @@ The `explanation` prompt now requires a mandatory first card. That first card ac
 
 After the intro card, the remaining cards cover the actual knowledge units on the page.
 
+The explanation format also has two parser-facing constraints now:
+
+- knowledge cards must emit `>>>Intent: [ymin, xmin, ymax, xmax]` using integer `0..1000` coordinates
+- `###` is reserved for card title lines only, so card bodies must not introduce additional `###` headings
+
 ### Context Memory contract
 
 The value still stored in `summary` is now semantically treated as `Context Memory`. It is a short handoff for the next page and is designed to be readable by both humans and the model.
@@ -50,6 +55,7 @@ The UI no longer extracts cheat sheet text from the explanation payload. Instead
 - tutor cards render from `explanation`
 - focus mode reads `currentPageState.cheatSheet`
 - follow-up chunk parsing reads only explanation card boundaries
+- the intro card `### This Slide at a Glance` is not treated as a regenerate-able knowledge card in the chunk UI
 
 This removes the old coupling where non-explanation content was embedded inside the explanation stream.
 

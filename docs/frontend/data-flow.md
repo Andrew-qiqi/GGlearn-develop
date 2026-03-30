@@ -2,7 +2,7 @@
 
 本文档描述 SlideTutor 项目的数据流和持久化策略。
 
-最后更新：2026-03-29
+最后更新：2026-03-30
 
 ---
 
@@ -57,6 +57,8 @@ The current design does not cache `layoutBlocks` for low-frequency regenerate sc
 ### Follow-up implications
 
 Follow-up logic now splits explanation cards only from the explanation payload. This keeps follow-up question context aligned with the actual teaching cards and avoids mixing in fast-scan content.
+
+Because the chunk pipeline still uses markdown card boundaries, the explanation contract now explicitly reserves `###` for card titles only. This protects chunk parsing for highlighting, follow-up targeting, and chunk regeneration without requiring a structured JSON explanation format.
 
 
 ### PDF 分析流程

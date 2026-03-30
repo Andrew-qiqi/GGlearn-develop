@@ -5,6 +5,20 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-03-30] Tightened Explanation Highlight Contract
+
+**What**: Tightened the `explain` prompt contract for `>>>Intent` so knowledge-card highlight boxes must use integer `0..1000` coordinates in `[ymin, xmin, ymax, xmax]` order, and clarified that `###` is reserved for card title lines only. Also disabled chunk regeneration for the intro card `### This Slide at a Glance` in the tutor UI.
+
+**Why**: The highlight pipeline depends on parsing `>>>Intent` back out of the explanation text. Tightening the output contract improves highlight precision without changing the broader teaching prompt shape, and disabling intro-card regeneration removes a contract mismatch where the intro card could be forced into a knowledge-card regenerate flow.
+
+**Impact**:
+- explanation cards now have a stricter, more parser-safe highlight contract
+- card-body `###` headings are now explicitly disallowed to protect existing chunk splitting
+- intro cards no longer expose the chunk regenerate action in the UI
+- no backend API shape changes and no new dependencies
+
+**Files**: `SlideTutor-AI/src/lib/ai/prompts.ts`, `SlideTutor-AI/src/lib/ai/prompts.test.ts`, `SlideTutor-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/components/CanvasTutor.test.tsx`
+
 ## [2026-03-29] Editorial Redesign of Quick Explain (Focus Mode)
 
 **What**: Redesigned the visual representation of "Quick Explain" (formerly known as cheatsheet) in Focus Mode. Replaced the earlier plain block rendering with an editorial-style reading layout, added a lightweight paragraph-formatting helper for single-block quick explains, and introduced lead-paragraph emphasis plus staggered paragraph entry animations.

@@ -11,3 +11,6 @@ coverage/
 !.planning/
 !.gemini/
 !.agents/
+!.claude/
+!.codex/
+!.superpower/
