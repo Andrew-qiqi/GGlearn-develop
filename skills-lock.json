@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "design-dna": {
+      "source": "zanwei/design-dna",
+      "sourceType": "github",
+      "computedHash": "b076f018c986e039bd256ae44975cd68db33f195bdd84a2a0c5c9198f56ae120"
+    }
+  }
+}

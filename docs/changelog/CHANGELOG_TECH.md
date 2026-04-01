@@ -5,6 +5,149 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-01] Twilight Zen Theme Visual Refinement and Reading Comfort Update
+
+**What**: Refined the `twilight-zen` theme visual layer to align with the "mid-tone dusk" design DNA. Lifted the background atmosphere from "charcoal navy" to a softer "misted indigo" and implemented a specific reading comfort override for tutor and note cards.
+
+**Why**: User feedback indicated that the previous version of `twilight-zen` was too high-contrast, with bright white text on a very dark background causing eye fatigue during long reading sessions.
+
+**Impact**:
+- **Improved Reading Comfort**: Main explanation prose in tutor cards and note cards now uses a soft cool mist gray-blue (`#B8C9E1`) instead of slate-200 white.
+- **Enhanced Atmosphere**: Updated background with mid-tone base `#233755` and atmospheric radial haze using mist pink (`#DBAEC8`) and mist purple (`#9D9DD4`) at low opacity.
+- **Strict Semantic Protection**: Used a "Direct Override + Explicit Restoration" strategy to protect the `Thinking Prompt` and shared product accents from theme-specific color bleeding.
+- **Visual Hierarchy**: Card titles now naturally contrast with the softer body text by inheriting the conservatively tuned `--text-primary` (`#D1DBE8`).
+
+**Files**: `SlideTutor-AI/src/index.css`, `docs/frontend/architecture.md`
+
+---
+## [2026-04-01] Centralized Runtime Theme-Color Source for PWA Title Bar Sync
+
+**What**: Removed the duplicated runtime theme-color tables between `index.html` and `uiStore.ts`. Theme-specific title-bar colors now come from dedicated `<meta name="slidetutor-theme-color-*">` entries in `index.html`, and both the early boot script and `updateMetaThemeColor` read from that same DOM metadata. Added regression tests covering both boot-time and store-driven updates to `<meta name="theme-color">`.
+
+**Why**: The previous PWA title-bar fix worked, but the same theme-color mapping lived in multiple places. That made future theme tweaks easy to drift: the installed window color could regress back to a mismatched shade even while tests stayed green.
+
+**Impact**:
+- `theme-color` updates now have one runtime source of truth
+- startup and post-boot theme synchronization stay aligned
+- regression coverage now checks both `index.html` boot behavior and `uiStore` theme changes
+
+**Files**: `SlideTutor-AI/index.html`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/store/uiStore.test.ts`, `SlideTutor-AI/src/test/themeBootScript.test.ts`
+
+---
+## [2026-04-01] Synchronized PWA Title Bar with Active Theme
+
+**What**: Updated the application to dynamically synchronize the `<meta name="theme-color">` tag with the currently active theme. Also updated the default PWA `manifest.json` `theme_color` and `background_color` to match the default light theme.
+
+**Why**: When users installed the app as a PWA (e.g., via Chrome), the window title bar remained a static purple color (`#4f46e5`), which clashed visually with the top navigation bar, especially when switching between different themes (`eyecare`, `twilight-zen`, `spring-meadow`). Synchronizing the meta tag ensures a native, polished feel across all themes.
+
+**Impact**:
+- The window title bar in PWA mode now seamlessly matches the application's header color.
+- Added a `updateMetaThemeColor` helper in `uiStore.ts` to push theme color updates to the DOM immediately upon theme change.
+- The early-boot script in `index.html` now reads `localStorage` to set the `theme-color` meta tag synchronously, eliminating any purple flash before React boots.
+
+**Files**: `SlideTutor-AI/public/manifest.json`, `SlideTutor-AI/index.html`, `SlideTutor-AI/src/store/uiStore.ts`
+
+---
+## [2026-04-01] Refined Theme Icon Contrast and Reverted Highlight Color
+
+**What**: Removed overly broad `.lucide` icon color overrides from the `spring-meadow` and `twilight-zen` themes, allowing shared product controls (like "Upload PDF" and the active toggle) to correctly inherit contrasting text colors. Additionally, reverted the global PDF explanation highlight color from purple to the previously used comfortable light gray (`rgba(39, 39, 42, 0.1)`), applied uniformly across all themes.
+
+**Why**: In `spring-meadow` and `twilight-zen`, aggressive CSS overrides forced all icons to a theme-specific color (e.g., dark text in `spring-meadow`). When these icons appeared inside dark accent buttons, they became unreadable. Removing these overrides enforces the Theme Visual Consistency Contract by letting shared controls manage their own text contrast. Furthermore, the purple highlight introduced recently was found to be less comfortable than the original light gray.
+
+**Impact**:
+- Icons in shared product components (e.g., top header buttons, `Thinking Prompt`) now retain proper contrast against their backgrounds across all themes.
+- PDF explanation highlights use a uniform, borderless light gray overlay with a multiply blend mode, ensuring visual consistency and reading comfort regardless of the active theme.
+
+**Files**: `SlideTutor-AI/src/index.css`
+
+---
+## [2026-04-01] Restored Shared Product Accents and Finalized Borderless Highlight Contract
+
+**What**: Corrected the follow-up theme refinement so product-level accent UI is shared again across themes instead of being recolored per theme. The top-header actions (`Upload PDF` / `Change PDF`, active library toggle, product badge) now use one stable semantic accent treatment, `Thinking Prompt` stays on the shared purple product accent, and PDF highlights now use one borderless fill-only design across all themes.
+
+**Why**: The previous refinement drifted away from the intended theme boundary. It made shared product controls theme-colored again, reintroduced a pink `Thinking Prompt` accent in `twilight-zen`, and treated highlight behavior as theme-aware instead of truly unified. That conflicted with the design rule that atmosphere may vary by theme, but shared teaching and product semantics should stay stable.
+
+**Impact**:
+- `spring-meadow` and `twilight-zen` keep their own backgrounds and glass surfaces, but no longer redefine shared product accent tokens.
+- Header CTA/readability is more stable because accent controls use one calm neutral product treatment instead of theme-specific colors.
+- Highlight overlays are now consistently borderless and fill-only in every theme, with one shared visual meaning.
+- Added a CSS contract regression test so future theme edits are less likely to reintroduce theme-specific overrides for shared accent tokens.
+
+**Files**: `SlideTutor-AI/src/index.css`, `SlideTutor-AI/src/components/Header/AppHeader.tsx`, `SlideTutor-AI/src/components/Header/AppHeader.test.tsx`, `SlideTutor-AI/src/lib/themeVisualContract.test.ts`, `docs/changelog/CHANGELOG_TECH.md`, `docs/frontend/architecture.md`
+
+## [2026-04-01] Unified Theme Accent Semantics and Fixed Spring Meadow Header Contrast
+
+**What**: Refined the multi-theme visual contract so `twilight-zen` and `spring-meadow` now share the same semantic treatment for typography, PDF highlight overlays, and `Thinking Prompt` accent styling while still keeping their own background atmosphere and glassmorphism. Also fixed a `spring-meadow` contrast regression in the top header where dark accent surfaces could render icons and text as a hard-to-read dark block.
+
+**Why**: Recent theme experiments improved mood and visual personality, but they also introduced cross-theme inconsistency in three places users repeatedly see: title typography, slide highlight appearance, and the `Thinking Prompt` label color. On top of that, `spring-meadow` had a local contrast bug in header accent controls because theme-level icon overrides were fighting component-level dark accent buttons.
+
+**Impact**:
+- `twilight-zen` no longer uses a separate pink `Thinking Prompt` title accent; it now uses a theme-adapted purple accent closer to the default product language.
+- `twilight-zen` and `spring-meadow` highlight overlays now follow one shared semantic highlight system instead of custom per-theme treatments.
+- Header accent controls now use explicit semantic classes, which prevents theme-wide icon color overrides from breaking readability on dark accent surfaces.
+- No feature behavior, theme toggle logic, persistence flow, or PDF interaction logic changed.
+
+**Files**: `SlideTutor-AI/src/index.css`, `SlideTutor-AI/src/components/Header/AppHeader.tsx`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/components/PdfViewer.tsx`, `SlideTutor-AI/src/components/Header/AppHeader.test.tsx`
+
+## [2026-04-01] Replaced Unfriendly Themes with "Twilight Zen" Theme
+
+**What**: Removed the `windowsill` ("morning mist") and `rainy` ("cloudy rainy") themes and introduced a new `twilight-zen` ("暮色禅意") theme.
+- The new theme applies a deep, twilight-inspired background gradient with soft sunset pink highlights, modeled after a calming sky reference image.
+- Updated the theme toggle sequence: `light` -> `eyecare` -> `twilight-zen` -> `spring-meadow` -> `light`.
+
+**Why**: Addressed user feedback stating that the "morning mist" and "cloudy rainy" themes were harsh and caused eye fatigue. The new "Twilight Zen" theme is designed to be highly legible and "healing/calming" (治愈), using softer glassmorphic overlays and high-contrast light text against a subdued dark backdrop.
+
+**Impact**:
+- Removed old CSS classes and background images for `windowsill` and `rainy`.
+- Added `.twilight-zen` theme definition with custom glassmorphism and subtle screen-blend highlights.
+- Global theme state (`uiStore.ts`) and UI components (`ThemeToggle`, `SettingsModal`) updated.
+- No new external dependencies added.
+
+**Files**: `SlideTutor-AI/src/index.css`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/components/ThemeToggle.tsx`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/index.html`
+
+## [2026-03-31] Added "Spring Meadow" Theme
+
+**What**: Implemented a new UI theme called `spring-meadow` (春日草甸) alongside existing ones. The theme features a multi-radial CSS background mimicking a natural 3D meadow landscape, paired with high-blur glassmorphic panels and high-contrast dark text.
+
+**Why**: Addressed user feedback regarding eye fatigue from reading white text on dark backgrounds in existing themes (like Morning Mist and Cloudy Rainy). The new theme preserves an immersive, natural aesthetic while drastically improving readability and comfort for long sessions.
+
+**Impact**:
+- Added `.spring-meadow` theme definition in `src/index.css`.
+- Updated `uiStore.ts` to include the new theme in the type definition and persistence logic.
+- Updated `ThemeToggle` to cycle through the new theme and added a `Leaf` icon.
+- Settings modal now lists all five themes.
+- No changes to existing themes or core architecture.
+
+**Files**: `SlideTutor-AI/src/index.css`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/components/ThemeToggle.tsx`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/index.html`, `docs/frontend/architecture.md`
+
+## [2026-04-01] Smoothed Tutor Card Input Panel Open/Close Motion
+
+**What**: Refactored the tutor-card action input panel state and animation flow. The panel now closes in two phases: first it exits visually, then the draft text is cleared on `AnimatePresence` exit completion. The panel open/close motion also switched from a spring-based `height: auto` sequence to a short tween with animated `marginTop`, and explanation chunk wrappers now use position-only layout animation.
+
+**Why**: The previous interaction stacked three sources of motion work on the same frame boundary: `height: auto` spring measurement inside the panel, parent chunk layout animation, and synchronous focus/reset side effects. That combination caused a visible hitch at the end of expand/collapse.
+
+**Impact**:
+- tutor-card input drawers for `follow-up`, `add note`, and `regenerate` should feel more continuous at the end of open/close
+- drafts are preserved during the exit animation and cleared only after the panel fully leaves
+- chunk rows still animate positional shifts, but no longer compound panel-size animation with full layout-size interpolation
+- added regression coverage for the new panel state and animation contract
+
+**Files**: `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/lib/tutorCardInputPanel.ts`, `SlideTutor-AI/src/lib/tutorCardInputPanel.test.ts`
+
+## [2026-03-31] Stabilized Note Drag Boundaries Across PDF and Tutor Views
+
+**What**: Added a shared note drag utility to formalize two interaction rules: PDF canvas panning must not start from `.spatial-note` targets, and tutor note drop resolution must skip the dragged note subtree before choosing a new chunk target. Wired the PDF viewer and tutor note card drag logic to that utility, and tightened tutor note drag physics with `dragMomentum={false}` and `dragElastic={0}`.
+
+**Why**: Two note regressions shared the same root theme: drag ownership was ambiguous. On the PDF side, zoomed-page panning and note dragging could start together. On the tutor side, `elementsFromPoint()` could resolve the dragged note back to its source chunk because the note remained mounted under the original chunk in the DOM during drag.
+
+**Impact**:
+- dragging a PDF note no longer also starts PDF pan
+- dragging a tutor note to a different knowledge card now resolves targets more reliably
+- note drag behavior is now covered by dedicated regression tests
+- frontend note interaction rules are documented in `docs/frontend/architecture.md`
+
+**Files**: `SlideTutor-AI/src/lib/noteDragUtils.ts`, `SlideTutor-AI/src/lib/noteDragUtils.test.ts`, `SlideTutor-AI/src/components/PdfViewer.tsx`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `docs/frontend/architecture.md`
+
 ## [2026-03-30] Tightened Explanation Highlight Contract
 
 **What**: Tightened the `explain` prompt contract for `>>>Intent` so knowledge-card highlight boxes must use integer `0..1000` coordinates in `[ymin, xmin, ymax, xmax]` order, and clarified that `###` is reserved for card title lines only. Also disabled chunk regeneration for the intro card `### This Slide at a Glance` in the tutor UI.

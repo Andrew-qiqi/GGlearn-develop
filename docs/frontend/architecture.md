@@ -70,6 +70,64 @@ The artifact split still exists at the page-state level, but the generation pipe
 
 This keeps `explanation` visually grounded while avoiding a second image-based request just to produce `Quick Explain`. In practice, `cheatSheet` is now a text-only distillation product derived from the explanation rather than a second visual interpretation pass.
 
+## 2026-03-31 Note Interaction Contract
+
+The note system now has two frontend note modes per page:
+
+- `spatialNotes`: free-position notes created on the PDF surface
+- `notes`: explanation-attached notes grouped by explanation chunk index
+
+### PDF-side drag contract
+
+PDF panning and note dragging share the same visual surface, so their event boundaries must stay explicit:
+
+- dragging a `.spatial-note` must not start the PDF canvas pan interaction
+- the PDF pan container should only activate from neutral page content, not from note UI, buttons, or textareas
+- note drag should stay local to the note item even when the PDF is zoomed and scroll-pannable
+
+### Tutor-side reattach contract
+
+Explanation notes can be dragged between chunk containers, but drop-target resolution must ignore the dragged note itself. Because the dragged note still belongs to its source chunk in the DOM tree during drag, using the first `elementsFromPoint()` match can incorrectly resolve back to the source chunk.
+
+The live contract is:
+
+- note cards expose a stable `data-note-id`
+- chunk wrappers expose `data-chunk-index`
+- drop resolution scans hit-tested elements, skips the dragged note subtree, and then finds the first valid chunk target
+- dragged explanation notes use tight drag settings (`dragMomentum={false}`, `dragElastic={0}`) to keep pointer tracking predictable
+
+## 2026-04-01 Tutor Card Action Panel Motion Contract
+
+Tutor cards expose small action drawers for `follow-up`, `add note`, and `regenerate`. These drawers live inside explanation cards, so their animation has to cooperate with both the card itself and the surrounding chunk layout.
+
+### State contract
+
+The live interaction now follows a two-phase close model:
+
+- opening a drawer sets the active panel and requests textarea focus
+- closing a drawer hides it immediately, but does not clear the draft synchronously
+- draft text is cleared only after `AnimatePresence` reports that the exit animation is complete
+
+This prevents the exit animation from changing both panel visibility and textarea content height in the same frame.
+
+### Motion contract
+
+The action panel no longer relies on a spring-based `height: auto` transition. Instead, it uses a short tween animation for:
+
+- `height`
+- `opacity`
+- `marginTop`
+
+This keeps the drawer visually soft without introducing the end-of-animation hitch that came from repeated spring re-measurement.
+
+### Layout contract
+
+Explanation chunk wrappers now use position-only layout animation while the action panel opens or closes. That means:
+
+- chunk rows can still shift smoothly when cards grow or shrink
+- the parent chunk wrapper no longer interpolates full size layout at the same time as the nested drawer
+- nested drawer animation and outer list reflow are less likely to fight each other
+
 
 ## 前端架构
 
@@ -141,13 +199,18 @@ const response = await apiGenerate({
 
 ### 主题管理 (Theme Management)
 
-SlideTutor 提供多主题支持，包括浅色 (Light)、护眼 (Eyecare)、晨雾 (Morning Mist) 和雨天 (Rainy) 模式。
+SlideTutor 提供多主题支持，包括浅色 (Light)、护眼 (Eyecare)、暮色禅意 (Twilight Zen) 和春日草甸 (Spring Meadow) 模式。
 
 **实现机制：**
 - **全局状态**：主题状态存储在 `uiStore.ts` (Zustand) 中，使用 `Theme` 类型。
 - **持久化**：通过 `src/lib/db.ts` 的 `setSetting` 和 `getSetting` 存储在 IndexedDB 中。
 - **即时应用**：应用启动时在 `useUiStore.init()` 中异步读取主题，并立即应用到 `document.documentElement` 类名。
 - **组件同步**：`ThemeToggle` 组件通过全局 Store 获取和更新主题，不再依赖本地状态。
+- **PWA 元数据同步**：通过 `updateMetaThemeColor` 和 `index.html` 中的早期注入脚本，根据当前主题实时更新 `<meta name="theme-color">`，确保 PWA 独立窗口的标题栏颜色与应用导航栏和整体氛围融为一体，且避免在 React 启动前出现颜色闪烁。
+- **暮色禅意 (Twilight Zen) 优化 (2026-04-01)**：
+  - **设计 DNA**：采用了中调暮色 (`#233755`, `#2C456A`) 作为基础，通过低对比度的雾化背景 (`#DBAEC8` 暖雾粉, `#9D9DD4` 雾紫) 营造“治愈感”。
+  - **阅读舒适度**：为解决深色模式下亮白文字刺眼的问题，将 tutor-card 和 note-card 的长文正文颜色单独降至 cool mist gray-blue (`#B8C9E1`)。
+  - **语义保护策略**：采用“显式覆盖 + 显式恢复”策略，确保 `Thinking Prompt` 等共享产品语义不被主题色“误伤”，保持全局视觉一致性。
 
 **PDF 渲染同步：**
 - `PdfViewer.tsx` 使用 `MutationObserver` 监听根元素的类名变化，根据 `eyecare` 等类名的存在与否动态调整 PDF 渲染层（如混合模式），确保 UI 与 PDF 内容风格统一。
@@ -184,3 +247,38 @@ SlideTutor 提供多主题支持，包括浅色 (Light)、护眼 (Eyecare)、晨
 ---
 
 ## 数据流
+## 2026-04-01 Theme Visual Consistency Contract
+
+This note records the current theme-layer contract after the twilight / meadow visual cleanup pass.
+
+### Shared semantic layer
+
+The app now treats several recurring visual cues as cross-theme semantics rather than per-theme decoration:
+
+- explanation highlight overlays
+- `Thinking Prompt` accent box and label color
+- header accent controls such as the active library toggle, product badge, and upload/change-PDF button
+
+These elements should read as the same product system in every theme, even when the surrounding atmosphere changes.
+
+### Theme individuality boundary
+
+`twilight-zen` and `spring-meadow` still keep their own:
+
+- page background gradients
+- glass-panel material treatment
+- theme-specific surface opacity and shadow tuning
+
+They should not introduce separate typography systems or unrelated accent colors for shared teaching UI unless the change is required for accessibility.
+
+### Typography contract
+
+Global typography remains driven by the shared theme fonts (`--font-sans`, `--font-display`, `--font-serif`). Theme styles may tune contrast, opacity, or surface presentation, but should not silently fork the main font family or heading personality for one theme only.
+
+### Highlight contract
+
+PDF explanation highlights now rely on shared semantic tokens instead of theme-specific one-off CSS blocks. The current contract is intentionally stricter than "theme-aware highlight styling": every theme uses the same borderless, fill-only highlight treatment so learners do not need to re-interpret the meaning of a highlighted region after switching themes.
+
+### Header contrast contract
+
+Header accent controls now use dedicated semantic classes instead of relying only on generic `bg-text-primary text-bg-elevated` combinations. These controls are product-level accents, not theme-local decoration, so they should keep one stable shared treatment across themes. This isolates high-contrast accent controls from broad theme-level icon overrides and prevents regressions like the `spring-meadow` dark-block header bug where icons and labels became difficult to read on dark accent surfaces.
