@@ -110,6 +110,13 @@ The live interaction now follows a two-phase close model:
 
 This prevents the exit animation from changing both panel visibility and textarea content height in the same frame.
 
+Textarea focus is intentionally decoupled from animation completion:
+
+- focus is requested on the next animation frame after mount, not on the final animation callback
+- the focus call uses `preventScroll` when supported, with a fallback for older browsers
+
+This avoids a last-frame scroll/reflow hitch when the browser tries to bring the textarea caret into view.
+
 ### Motion contract
 
 The action panel no longer relies on a spring-based `height: auto` transition. Instead, it uses a short tween animation for:

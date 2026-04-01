@@ -5,6 +5,19 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-02] Removed End-of-Expand Jitter from Tutor Card Input Panels
+
+**What**: Moved tutor-card textarea focus out of the panel's `onAnimationComplete` hook and into a mount-time `requestAnimationFrame` effect that uses `focus({ preventScroll: true })` with a fallback path. Added regression coverage for the no-scroll focus helper.
+
+**Why**: After the 2026-04-01 panel motion refactor, close jitter stayed fixed but a smaller jump remained at the very end of expand. Reviewing the changelog and git history showed that the panel motion contract itself was still intact. The remaining hitch lined up with the delayed textarea focus firing exactly at animation completion, which could trigger an extra browser scroll/reflow step on the last frame.
+
+**Impact**:
+- tutor-card drawers for `follow-up`, `add note`, and `regenerate` should no longer twitch at the final moment of expansion
+- focus is still deferred until after mount, but now avoids browser scroll jumps when supported
+- no theme tokens, note behavior, or panel timing constants changed
+
+**Files**: `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/lib/focusWithoutScroll.ts`, `SlideTutor-AI/src/lib/focusWithoutScroll.test.ts`
+
 ## [2026-04-01] Twilight Zen Theme Visual Refinement and Reading Comfort Update
 
 **What**: Refined the `twilight-zen` theme visual layer to align with the "mid-tone dusk" design DNA. Lifted the background atmosphere from "charcoal navy" to a softer "misted indigo" and implemented a specific reading comfort override for tutor and note cards.
