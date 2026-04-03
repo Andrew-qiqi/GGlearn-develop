@@ -2,9 +2,134 @@
 
 本文档描述 SlideTutor 项目的前端架构、状态管理和 API 客户端设计。
 
-最后更新：2026-03-30
+最后更新：2026-04-03
 
 ---
+
+## 2026-04-03 Provider-Native Structured Output Layer
+
+The analysis stack now has a provider-aware structured-output adapter instead of relying only on prompt wording.
+
+## 2026-04-03 Phase 2 Artifact-First Runtime
+
+Phase 2 is now complete. The app no longer treats projected markdown or summary strings as live runtime state.
+
+### Runtime authority
+
+Each analyzed page is now driven by two structured artifacts only:
+
+- `explanationArtifact`
+- `distillArtifact`
+
+These are the only runtime sources for:
+
+- tutor card rendering
+- quick explain rendering
+- follow-up targeting
+- chunk regeneration
+- cross-page context handoff
+- persisted page-state writes
+
+### Legacy bridge removal
+
+The old compatibility fields are no longer part of the normal runtime contract:
+
+- `explanation`
+- `cheatSheet`
+- `summary`
+
+They are not continuously projected anymore, and new saves do not write them back to IndexedDB.
+
+### Legacy recovery boundary
+
+Backward compatibility now exists only at the persistence recovery boundary:
+
+- older saved page states may still contain `explanation`
+- older saved page states may still contain `cheatSheet` / `summary`
+- `usePdfLibrary.ts` performs a one-time legacy-to-artifact normalization when those records are loaded
+
+After recovery, the in-memory page state is normalized back into artifact-first shape and legacy fields are dropped.
+
+### Provider split
+
+The current architecture intentionally treats providers in two families:
+
+- `gemini`
+- `openai-compatible`
+
+`Gemini` stays on its own adapter because it uses native `responseJsonSchema` and `thinkingConfig`.
+
+All current and future OpenAI-compatible providers share one structured-output adapter layer. Today that includes:
+
+- `qwen`
+- `doubao`
+- future user-supplied OpenAI-compatible endpoints
+
+### Task coverage
+
+The native structured-output layer currently covers these tasks:
+
+- `explain`
+- `distill`
+- `generate_questions`
+- `evaluate_answers`
+
+This means the system now treats these tasks as schema-first generation, not "best-effort JSON by prompt convention".
+
+### Task-level thinking policy
+
+Thinking intensity is now a task concern, not a provider-specific accident.
+
+The live policy is:
+
+- `distill`: Gemini uses `thinkingLevel = "minimal"` because this is a compact restructuring task and high thinking was wasting token budget
+- `explain`: structured output is enabled, but thinking is not force-reduced yet because card splitting, visual intent, and teacher-style explanation still need quality monitoring
+- `generate_questions` / `evaluate_answers`: structured output is enabled, but thinking stays conservative until quality baselines are re-evaluated across providers
+
+## 2026-04-03 Structured Explain / Distill Artifact Contract
+
+This note records the current frontend state contract after migrating the main analysis pipeline to structured JSON outputs.
+
+### Page-state authority
+
+Each analyzed page now keeps two structured artifacts as the primary machine-readable state:
+
+- `explanationArtifact`
+- `distillArtifact`
+
+The current shapes are:
+
+- `explanationArtifact.version = "explain_v1"`
+- `explanationArtifact.introCard.body`
+- `explanationArtifact.knowledgeCards[] = { title, intent, body, socraticProbe }`
+- `distillArtifact.version = "distill_v1"`
+- `distillArtifact.quickExplain.body`
+- `distillArtifact.contextMemory = { established, progress, bridge, avoidRepeat }`
+
+### Intro / knowledge card boundary
+
+The intro card title is no longer model-authored. The system always renders it as:
+
+- `This Slide at a Glance`
+
+The model only fills `introCard.body`. Knowledge cards continue to own:
+
+- concept title
+- highlight intent box
+- teaching body
+- optional Socratic probe string
+
+### Frontend consumption
+
+The tutor UI now consumes only structured artifacts:
+
+- `CanvasTutor` renders explanation cards from `explanationArtifact`
+- focus mode prefers `distillArtifact.quickExplain.body`
+- follow-up target chunk selection resolves from artifact chunk order instead of splitting `###` blocks
+- chunk regeneration writes back into the matching `knowledgeCards[index]` entry from a structured single-card response
+- note editing and quiz context assembly also read artifact fields directly
+
+Legacy markdown parsing remains only for old saved-state recovery and is not used by runtime consumers anymore.
 
 ## 2026-03-29 Context Continuity and Teaching Artifacts
 

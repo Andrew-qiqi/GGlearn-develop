@@ -2,9 +2,120 @@
 
 本文档描述 SlideTutor 项目的数据流和持久化策略。
 
-最后更新：2026-03-30
+最后更新：2026-04-03
 
 ---
+
+## 2026-04-03 Provider Structured-Output Routing
+
+Structured JSON is no longer only a prompt convention. The backend now routes schema-enabled tasks through provider-native configuration.
+
+## 2026-04-03 Phase 2 Artifact-First Data Flow
+
+The frontend data flow is now fully artifact-first.
+
+### Live page-state writes
+
+`useSlideAnalysis.ts` now writes:
+
+- `explanationArtifact` during explain streaming
+- `distillArtifact` after distill completion
+
+It no longer projects runtime markdown or summary strings back into page state.
+
+### Downstream consumers
+
+The following consumers now read artifacts directly instead of compatibility strings:
+
+- `CanvasTutor.tsx`
+- `useFollowUp.ts`
+- `useChunkRegenerate.ts`
+- `PdfViewer.tsx`
+- `useQuiz.ts`
+- global analysis completion checks
+
+### Persistence behavior
+
+IndexedDB page-state updates now persist artifact-first page state only.
+
+- new saves do not continuously write legacy `explanation` / `cheatSheet` / `summary`
+- older records are normalized on load
+- legacy parsing exists only inside the recovery path
+
+### Current routing model
+
+There are now two provider families in the generation path:
+
+- `gemini`
+- `openai-compatible`
+
+`Gemini` uses:
+
+- `responseMimeType`
+- `responseJsonSchema`
+- task-level `thinkingConfig`
+
+OpenAI-compatible providers use:
+
+- `response_format.type = "json_schema"`
+- a shared schema adapter for every supported task
+
+This keeps provider-specific transport details on the backend while giving the frontend one stable contract.
+
+### Structured task set
+
+The current structured-output task set is:
+
+- `explain`
+- `distill`
+- `regenerate_chunk`
+- `generate_questions`
+- `evaluate_answers`
+
+Non-structured conversational tasks still flow as plain streamed text:
+
+- `followup`
+- `regenerate_followup`
+
+## 2026-04-03 Structured JSON Analysis Flow
+
+This section records the current analysis flow after migrating `explain` and `distill` to structured JSON contracts.
+
+### Explain stage
+
+`useSlideAnalysis.ts` still streams the `explain` response, but it no longer treats the payload as display markdown. Instead:
+
+1. the frontend accumulates a raw JSON buffer
+2. it extracts only fully closed units from that buffer
+3. the smallest live render unit is now a complete card object
+
+The current live units are:
+
+- `introCard`
+- one fully closed `knowledgeCards[i]`
+
+This means the learner no longer sees half-written protocol markers. A card appears only after its JSON object is complete enough to validate.
+
+### Distill stage
+
+`distill` is now parsed as one strict JSON object after the full response arrives. The stored artifact contains:
+
+- `quickExplain.body`
+- `contextMemory.established`
+- `contextMemory.progress`
+- `contextMemory.bridge`
+- `contextMemory.avoidRepeat`
+
+`progress` is treated as mandatory in the parser-facing contract. The other fields stay present but may be empty strings.
+
+### Persistence flow
+
+Per-page persistence now stores structured artifacts as the primary saved contract:
+
+- `explanationArtifact`
+- `distillArtifact`
+
+Old compatibility strings are no longer re-derived on write. Only old records loaded from IndexedDB may still be converted forward during recovery.
 
 ## 2026-03-29 Analysis Pipeline Update
 

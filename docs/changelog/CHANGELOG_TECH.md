@@ -5,6 +5,52 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-03] Completed Phase 2 Artifact-First Downstream Migration
+
+**What**: Finished the downstream JSON migration so runtime state, persistence writes, follow-up targeting, chunk regeneration, quick-explain rendering, quiz context assembly, and global analysis completion now consume `explanationArtifact` / `distillArtifact` directly. `regenerate_chunk` was also promoted into the provider-native structured-output layer and now returns a single structured knowledge-card object instead of legacy markdown text.
+
+**Why**: Phase 1 stabilized upstream JSON generation, but downstream code was still projecting artifacts back into compatibility strings. That left the old markdown bridge alive in major runtime paths and made the architecture harder to reason about. Phase 2 removes that split and makes artifacts the real source of truth end-to-end.
+
+**Impact**:
+- runtime no longer depends on `explanation`, `cheatSheet`, or `summary`
+- new IndexedDB writes are artifact-first and do not re-project legacy string fields
+- old saved records are only normalized once at load time through a migration boundary
+- `followup` / `regenerate_followup` now receive structured explanation context
+- `regenerate_chunk` now uses native structured output for Gemini and OpenAI-compatible providers
+
+**Files**: `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `SlideTutor-AI/src/hooks/useFollowUp.ts`, `SlideTutor-AI/src/hooks/useChunkRegenerate.ts`, `SlideTutor-AI/src/hooks/usePdfLibrary.ts`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/components/PdfViewer.tsx`, `SlideTutor-AI/src/hooks/useQuiz.ts`, `SlideTutor-AI/api/lib/structuredOutputConfig.ts`
+
+---
+## [2026-04-03] Added Provider-Native Structured Output Adapters and Gemini Token Diagnostics
+
+**What**: Introduced a shared structured-output configuration layer for generation tasks. `Gemini` now uses native `responseJsonSchema` plus task-level thinking controls, while all OpenAI-compatible providers now share one `json_schema` response-format adapter for `explain`, `distill`, `generate_questions`, and `evaluate_answers`. Also added Gemini stream diagnostics for `finishReason`, token usage, and tail previews, and expanded frontend parse-failure logging for invalid `explain` / `distill` payloads.
+
+**Why**: Weak-model failures had split into two classes: schema drift on OpenAI-compatible models and `MAX_TOKENS` truncation on Gemini `distill`. The old prompt-only JSON approach was not stable enough. Native structured-output APIs reduce protocol drift, and Gemini diagnostics confirmed that task-level thinking policy matters for token budgeting.
+
+**Impact**:
+- OpenAI-compatible providers now have one shared schema-first path instead of provider-specific JSON prompt conventions
+- `distill` on Gemini now uses `thinkingLevel = "minimal"` to preserve output budget for the final JSON payload
+- `generate_questions` and `evaluate_answers` are now covered by the same structured-output infrastructure as `explain` / `distill`
+- this provider-native layer now also powers `regenerate_chunk` after the downstream Phase 2 migration
+
+**Files**: `SlideTutor-AI/api/lib/structuredOutputConfig.ts`, `SlideTutor-AI/api/generate.ts`, `SlideTutor-AI/api/lib/geminiStreamDiagnostics.ts`, `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `SlideTutor-AI/src/lib/ai/artifacts.ts`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+
+---
+## [2026-04-03] Migrated Explain / Distill Generation to Structured JSON Artifacts
+
+**What**: Replaced the main `explain` and `distill` output contracts with structured JSON schemas. Added `explanationArtifact` and `distillArtifact` to page state, introduced parser / serializer utilities for structured artifacts, switched `CanvasTutor` to artifact-first rendering, and moved follow-up / chunk-regenerate targeting to artifact chunk selection instead of direct markdown splitting. Gemini `explain` requests now also explicitly request `application/json`.
+
+**Why**: Several weaker models could produce acceptable teaching content but often broke the mixed markdown protocol by leaking `Intent` / probe markers into prose or by returning incomplete context memory blocks. Moving structure into JSON fields reduces formatting burden on the model while keeping the teaching prompt content intact.
+
+**Impact**:
+- explain streaming now updates the UI only when a full card object closes, rather than on arbitrary text fragments
+- page state now keeps structured artifacts as the primary machine-readable form while legacy `explanation` / `cheatSheet` / `summary` strings remain as temporary compatibility projections
+- `summary` compatibility text is now serialized as a fixed-order multiline context-memory block instead of a flattened single line
+- follow-up and chunk regeneration now resolve target cards from artifact order, which prepares the rest of the app for fully native JSON consumption
+
+**Files**: `SlideTutor-AI/src/lib/ai/artifacts.ts`, `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/hooks/useFollowUp.ts`, `SlideTutor-AI/src/hooks/useChunkRegenerate.ts`, `SlideTutor-AI/api/generate.ts`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+
+---
 ## [2026-04-02] Removed End-of-Expand Jitter from Tutor Card Input Panels
 
 **What**: Moved tutor-card textarea focus out of the panel's `onAnimationComplete` hook and into a mount-time `requestAnimationFrame` effect that uses `focus({ preventScroll: true })` with a fallback path. Added regression coverage for the no-scroll focus helper.
