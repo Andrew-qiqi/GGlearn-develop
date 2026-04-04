@@ -4,21 +4,21 @@
 
 See: `.planning/PROJECT.md`
 
-**Core Value:** Immersive Learning Excellence (Distraction-free, AI-assisted reading)
-**Current Focus:** Ready to define the next milestone or phase
+**Core Value:** Teacher-like PDF tutoring with controllable model access
+**Current Focus:** Prepare the next GSD work around minimal Cloudflare migration and a BYOK-first public launch
 
 ## Current Position
 
 **Current Phase:** Not started
 **Current Phase Name:** None
-**Total Phases:** 2
+**Total Phases:** 7
 **Completed Phases:** 2
 **Current Plan:** Not started
 **Total Plans in Phase:** 0
-**Status:** Ready to plan
-**Last Activity:** 2026-03-28
-**Last Activity Description:** Cleared reverted and cancelled roadmap work; completed history retained for Phase 1-2
-**Progress:** 100%
+**Status:** Ready to plan the next milestone
+**Last Activity:** 2026-04-04
+**Last Activity Description:** Reset project direction around Cloudflare, BYOK-first launch, parser bootstrap, and hosted-API sequencing
+**Progress:** Foundational phases complete; next milestone not yet planned
 
 ## Performance Metrics
 
@@ -30,21 +30,28 @@ See: `.planning/PROJECT.md`
 
 ### Decisions
 
-- Focus on fine-grained interaction refinement rather than feature bloat.
-- Prioritize security and stability before UX expansion.
-- IndexedDB replaced localStorage for reliable persistence.
-- Async Zustand store initialization is part of the current persistence architecture.
+- The first public version should be BYOK-first.
+- Minimal Cloudflare migration should happen before the next commercialization-critical features.
+- Platform-hosted APIs remain a future parallel track for paid users.
+- Early document parsing can be platform-funded to reduce activation friction.
+- `/docs` is the canonical long-term record; `.planning` should stay focused on active GSD work.
 
 ### Pending Todos
 
-None recorded.
+- Define the exact minimum scope of the Cloudflare migration.
+- Write a dedicated phase brief for Minimal Cloudflare Migration.
+- Write a dedicated phase brief for BYOK-First Access Layer.
+- Decide the early BYOK pricing posture.
+- Define parser bootstrap guardrails.
 
 ### Blockers/Concerns
 
-No active GSD blockers. Awaiting definition of the next task set.
+- The exact minimum Cloudflare migration boundary is not yet locked.
+- Early BYOK pricing is not yet locked.
+- Hosted-API launch mode remains intentionally deferred.
 
 ## Session Continuity
 
-**Last session:** 2026-03-28
-**Stopped At:** GSD unfinished future work cleared; repository ready for new planning
+**Last session:** 2026-04-04
+**Stopped At:** Project direction reset completed; repository ready for the next phase brief and planning cycle
 **Resume file:** None
