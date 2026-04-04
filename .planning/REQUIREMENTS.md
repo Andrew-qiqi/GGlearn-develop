@@ -16,6 +16,7 @@
 - [ ] **PARSE-01**: Early users should be able to use platform-managed document parsing with low setup friction.
 - [ ] **PARSE-02**: Parser usage and cost must become observable and controllable instead of relying on accidental free quota.
 - [ ] **PARSE-03**: Parser providers must be abstracted so Azure is no longer the only implicit path.
+- [ ] **PARSE-04**: Users who do not provide their own parser access should be subject to explicit platform-managed parsing limits.
 
 ### Accounts and Hosted Access
 - [ ] **ACCT-01**: The system must be able to add login and user identity without undoing the BYOK-first launch path.
@@ -25,6 +26,7 @@
 ### China-User Operational Fit
 - [ ] **CN-01**: Re-check actual reliability bottlenecks for China-based users across model access, parser access, and streaming.
 - [ ] **CN-02**: Re-check operator-side realities for payments, support, and deployment convenience before deeper infra commitments.
+- [ ] **CN-03**: China-based requests must avoid assuming Gemini API availability, because Gemini can reject requests with `User location is not supported for the API use`.
 
 ## Validated Requirements
 - [x] **DATA-01**: IndexedDB-based local persistence replaced the old fragile localStorage path.
@@ -34,9 +36,12 @@
 - [x] **STAB-02**: A regression baseline exists for core functionality.
 
 ## Open Commercial Questions
-- [ ] Should BYOK be free in the earliest public phase, donation-supported, or carry a small service fee?
 - [ ] Should hosted APIs launch as waitlist-only, invite-only, or direct paid access?
 - [ ] How long should parser cost stay platform-funded before introducing stricter usage controls?
+
+## Locked Commercial Decisions
+- [x] Early BYOK is fully free.
+- [x] Platform-funded parsing remains available in the early public version, but users who do not provide their own parser access will have explicit request limits.
 
 ## Out of Scope for the Next Milestone
 - [ ] Full commercialization stack in one implementation phase.

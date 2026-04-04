@@ -6,6 +6,37 @@
 
 ---
 
+## 2026-04-04 Phase 04 BYOK-First Access Layer
+
+The frontend now separates `model selection` from `model access`.
+
+### Runtime split
+
+- `selectedModel` answers "which provider family / model should this task use?"
+- `aiAccess` answers "how does the app reach that provider right now?"
+
+This separation matters because the next hosted-access phase should reuse the model selection path without forcing another UI reset.
+
+### Current BYOK shape
+
+- `gemini` uses a local API key field
+- `openai-compatible` uses one shared credential shape:
+  - endpoint preset or custom base URL
+  - API key
+  - model id
+
+Legacy `qwen` / `doubao` selections are normalized into the `openai-compatible` family during store initialization so older local settings do not break.
+
+### Persistence boundary
+
+BYOK credentials are persisted locally through the existing IndexedDB `appSettings` store.
+
+- no account sync
+- no hosted vault
+- no parser credential storage
+
+That boundary is intentional for Phase 04: parsing remains platform-funded while model access becomes user-configurable.
+
 ## 2026-04-03 Provider-Native Structured Output Layer
 
 The analysis stack now has a provider-aware structured-output adapter instead of relying only on prompt wording.

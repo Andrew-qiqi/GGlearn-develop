@@ -44,9 +44,9 @@
   2. Streaming reliability, environment-variable handling, and core request protection still work after the move.
   3. Migration scope stays minimal: hosted accounts, payments, and parser abstraction are not forced into the same phase.
 **Plans**: 3 plans
-- [ ] 03-01-PLAN.md - Establish the Cloudflare Worker shell, route-scoped runtime helpers, and Worker foundation tests.
-- [ ] 03-02-PLAN.md - Move `/api/get-token`, `/api/parse`, and `/api/generate` onto Worker handlers without changing teaching contracts.
-- [ ] 03-03-PLAN.md - Finish the single-Worker cutover, remove Vercel-first runtime assumptions, and resolve feedback explicitly.
+- [x] 03-01-PLAN.md - Establish the Cloudflare Worker shell, route-scoped runtime helpers, and Worker foundation tests. (COMPLETED)
+- [x] 03-02-PLAN.md - Move `/api/get-token`, `/api/parse`, and `/api/generate` onto Worker handlers without changing teaching contracts. (COMPLETED)
+- [x] 03-03-PLAN.md - Finish the single-Worker cutover, remove Vercel-first runtime assumptions, and resolve feedback explicitly. (COMPLETED)
 
 ### Phase 4: BYOK-First Access Layer
 **Goal**: Ship the first public user path around user-supplied model APIs.
@@ -56,7 +56,9 @@
   1. A user can configure their own model access and start using the product without platform-hosted inference.
   2. OpenAI-compatible BYOK is supported through one clean adapter path.
   3. Gemini remains functional through its separate adapter without breaking structured-output guarantees.
-**Plans**: 0 plans
+**Plans**: 2 plans
+- [x] 04-01-PLAN.md - Persist BYOK access state, expose settings UI, and attach normalized access metadata from the frontend. (COMPLETED)
+- [x] 04-02-PLAN.md - Resolve BYOK access on the backend, preserve migration-safe fallback paths, and update docs. (COMPLETED)
 
 ### Phase 5: Parser Bootstrap and Provider Abstraction
 **Goal**: Keep parser cost platform-funded for early growth while making parser choice and cost an explicit architectural concern.
@@ -93,10 +95,10 @@
 Current recommendation: work the next milestone in this order.
 
 ### Immediate Task List
-- [ ] Sync the project-direction reset into the human-readable brief and GSD planning files.
-- [ ] Define the exact minimum scope of the Cloudflare migration.
-- [ ] Produce a dedicated phase brief for Minimal Cloudflare Migration.
-- [ ] Produce a dedicated phase brief for BYOK-First Access Layer.
+- [x] Sync the project-direction reset into the human-readable brief and GSD planning files.
+- [x] Define the exact minimum scope of the Cloudflare migration.
+- [x] Produce a dedicated phase brief for Minimal Cloudflare Migration.
+- [x] Produce a dedicated phase brief for BYOK-First Access Layer.
 - [ ] Decide the early BYOK pricing posture: free, donation-supported, or small service fee.
 - [ ] Define the parser bootstrap guardrails: usage monitoring, limits, and fallback behavior.
 - [ ] Defer hosted-API launch mechanics until after the Cloudflare base and BYOK path are concrete.
@@ -107,8 +109,8 @@ Current recommendation: work the next milestone in this order.
 |-------|----------------|--------|-----------|
 | 1. Environment & Core Stability | 2/2 | Completed | 2026-03-27 |
 | 2. Data Persistence Migration | 2/2 | Completed | 2026-03-26 |
-| 3. Minimal Cloudflare Migration | 0/0 | Planned | - |
-| 4. BYOK-First Access Layer | 0/0 | Planned | - |
+| 3. Minimal Cloudflare Migration | 3/3 | Completed | 2026-04-04 |
+| 4. BYOK-First Access Layer | 2/2 | Completed | 2026-04-04 |
 | 5. Parser Bootstrap and Provider Abstraction | 0/0 | Planned | - |
 | 6. Accounts and Platform-Hosted APIs | 0/0 | Planned | - |
 | 7. China-User Operational Fit | 0/0 | Planned | - |

@@ -23,6 +23,30 @@ Request headers:
 - `Content-Type: application/json`
 - `X-API-Token: <token>` when token auth is enabled
 
+Request body highlights:
+
+```json
+{
+  "providerId": "gemini | openai-compatible",
+  "modelId": "provider-model-id",
+  "endpointPreset": "qwen | doubao | custom",
+  "access": {
+    "mode": "byok",
+    "providerId": "gemini | openai-compatible",
+    "apiKey": "user-supplied-key",
+    "baseURL": "https://provider.example/v1",
+    "endpointPreset": "qwen | doubao | custom"
+  }
+}
+```
+
+BYOK routing rules:
+
+- `gemini` accepts a user-provided API key or falls back to `GEMINI_API_KEY` when present for migration compatibility.
+- `openai-compatible` accepts a user-provided `apiKey + baseURL` pair through one shared adapter path.
+- preset `openai-compatible` routes (`qwen`, `doubao`) may still fall back to the matching server env secret during the migration window.
+- malformed BYOK inputs are treated as request validation problems, not teaching-logic failures.
+
 Response contract:
 
 - content type: `text/plain; charset=utf-8`
@@ -32,6 +56,7 @@ Notes:
 
 - Worker route applies origin checks, optional token auth, rate limiting, and request logging.
 - Teaching prompts, structured artifacts, and frontend parsing contracts are intentionally unchanged by the Cloudflare migration.
+- In Phase 04, BYOK model access and platform-funded parsing are intentionally split concerns.
 
 ### `GET /api/get-token`
 

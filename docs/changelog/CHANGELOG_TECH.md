@@ -5,6 +5,22 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-04] Completed Phase 04 BYOK-First Access Layer
+
+**What**: Introduced a BYOK-first access layer that separates model choice from model credentials. The frontend now persists normalized `aiAccess` settings in IndexedDB, migrates legacy `qwen` / `doubao` selections into one `openai-compatible` provider family, exposes local BYOK fields in the settings modal, and automatically attaches normalized access metadata to `/api/generate` requests. The backend now resolves Gemini and OpenAI-compatible access through one shared routing boundary, while preserving migration-safe env fallback for preset OpenAI-compatible endpoints.
+
+**Why**: Phase 04 needed to make user-supplied model APIs the real public entry path without touching mature teaching logic. The key architectural risk was mixing provider selection, BYOK credentials, and future hosted access into one flat state model. Splitting access from model choice keeps the public path simple now and leaves room for hosted access later.
+
+**Impact**:
+- users can configure Gemini BYOK or OpenAI-compatible BYOK locally from the existing settings modal
+- OpenAI-compatible access now has one shared adapter path driven by `apiKey + baseURL`, with preset shortcuts for `qwen` and `doubao`
+- legacy local selections are normalized during store init instead of breaking after the provider-family cleanup
+- `/api/generate` can prefer BYOK credentials while still falling back to preset env secrets during the migration window
+- parser setup is still not required from users in this phase because parsing remains platform-funded
+
+**Files**: `SlideTutor-AI/src/config/models.ts`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/lib/api/apiClient.ts`, `SlideTutor-AI/api/lib/env.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/src/store/uiStore.test.ts`, `SlideTutor-AI/src/lib/api/apiClient.test.ts`, `SlideTutor-AI/src/components/SettingsModal.test.tsx`, `SlideTutor-AI/api/security.test.ts`, `SlideTutor-AI/test/workers/generate-stream.worker.test.ts`, `SlideTutor-AI/README.md`, `docs/backend/api-design.md`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+
+---
 ## [2026-04-04] Completed Cloudflare-First Public Runtime Cutover
 
 **What**: Switched the default public runtime assumptions from Vercel-first to Cloudflare Worker-first. Added Worker-side `/api/feedback`, introduced an HTTP-based notification adapter for feedback and security alerts, removed the Vercel analytics bootstrap import, changed the default dev/deploy scripts to Worker-oriented commands, deleted `vercel.json`, and updated deployment/API/token-auth docs to match the new runtime.

@@ -60,11 +60,14 @@ The product is now moving from pre-launch experimentation toward real user-facin
   - platform-provided APIs for paid users
 - The first public user-facing version should be BYOK-first.
 - In the first public version, platform-hosted APIs are a secondary track, not the primary product entry.
+- Early BYOK is fully free; there is no launch-stage service fee for user-supplied model APIs.
 - Preferred sequencing is to complete a minimal Cloudflare migration before building the next commercialization-critical features on top.
 - A donation entry can exist, but it is secondary to a clear core usage model.
 - Document parsing should be reconsidered as a configurable provider layer, not assumed to be permanently platform-funded through Azure.
 - In the early user-acquisition stage, document parsing can be platform-funded by default, with later guardrails and provider abstraction work.
+- Early public parsing should stay platform-funded by default, but users who do not bring their own parser access should be subject to explicit request limits.
 - Current website/domain reachability is not the main China-user blocker; the user reports the domain is already managed via Cloudflare and can be accessed in China without VPN.
+- Gemini availability is a real China-user risk because China-based requests can fail with `User location is not supported for the API use`.
 
 ## Agent Discretion
 
@@ -119,7 +122,6 @@ The product is now moving from pre-launch experimentation toward real user-facin
 ## Open Questions
 
 - How small can the first Cloudflare migration be while still de-risking later BYOK, login, and payment work?
-- Should early BYOK be free, donation-supported, or include a small service fee?
 - Should document parsing stay fully platform-managed through the first public version, or expose limited controls earlier?
 - What is the minimum viable login/payment system for China-based users if platform-hosted APIs are introduced?
 - How should model capability differences be represented long-term, especially for Gemini variants with inconsistent thinking-control support?

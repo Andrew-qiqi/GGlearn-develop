@@ -6,6 +6,31 @@
 
 ---
 
+## 2026-04-04 BYOK Access Metadata Flow
+
+Generation requests now carry normalized access metadata from the frontend API client.
+
+### Request assembly
+
+`apiClient.ts` still owns token fetching and retry behavior, but it now also reads persisted `aiAccess` from `uiStore` and attaches an `access` object when local BYOK configuration is complete.
+
+### Access rules
+
+- `gemini` sends `{ mode: "byok", providerId: "gemini", apiKey }` when a local key exists
+- `openai-compatible` sends `{ mode: "byok", providerId: "openai-compatible", apiKey, baseURL, endpointPreset }` when both key and base URL exist
+- incomplete BYOK settings do not fabricate partial access payloads
+
+### Why this matters
+
+This keeps teaching hooks unchanged:
+
+- `useSlideAnalysis.ts`
+- `useFollowUp.ts`
+- `useChunkRegenerate.ts`
+- `useQuiz.ts`
+
+They still call one shared `apiGenerate(...)` helper, while provider access policy stays centralized.
+
 ## 2026-04-03 Provider Structured-Output Routing
 
 Structured JSON is no longer only a prompt convention. The backend now routes schema-enabled tasks through provider-native configuration.
