@@ -5,6 +5,22 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-04] Completed Cloudflare-First Public Runtime Cutover
+
+**What**: Switched the default public runtime assumptions from Vercel-first to Cloudflare Worker-first. Added Worker-side `/api/feedback`, introduced an HTTP-based notification adapter for feedback and security alerts, removed the Vercel analytics bootstrap import, changed the default dev/deploy scripts to Worker-oriented commands, deleted `vercel.json`, and updated deployment/API/token-auth docs to match the new runtime.
+
+**Why**: Phase 03 needed to stop carrying hidden Vercel-only dependencies into the upcoming BYOK-first work. The remaining blockers were not teaching logic, but public runtime assumptions: frontend bootstrap, feedback delivery, deployment scripts, and operator docs.
+
+**Impact**:
+- the intended public base is now one Cloudflare Worker serving the SPA and critical-path APIs
+- `/api/feedback` is no longer an accidental Vercel SMTP holdout
+- feedback and security alerts now use a Worker-compatible HTTP notification path with a log-only local fallback
+- local operators should use `NOTIFICATION_PROVIDER`, `RESEND_API_KEY`, `NOTIFICATION_FROM_EMAIL`, `FEEDBACK_TO_EMAIL`, and `SECURITY_ALERT_TO_EMAIL` instead of legacy SMTP env vars
+- `@vercel/analytics` is no longer part of the frontend bootstrap path
+
+**Files**: `SlideTutor-AI/src/worker/routes/feedback.ts`, `SlideTutor-AI/src/worker/lib/notifications.ts`, `SlideTutor-AI/src/worker/index.ts`, `SlideTutor-AI/src/worker/routes/generate.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/package.json`, `SlideTutor-AI/src/main.tsx`, `SlideTutor-AI/.env.example`, `SlideTutor-AI/README.md`, `docs/architecture/deployment.md`, `docs/backend/api-design.md`, `docs/security/token-authentication.md`
+
+---
 ## [2026-04-03] Completed Phase 2 Artifact-First Downstream Migration
 
 **What**: Finished the downstream JSON migration so runtime state, persistence writes, follow-up targeting, chunk regeneration, quick-explain rendering, quiz context assembly, and global analysis completion now consume `explanationArtifact` / `distillArtifact` directly. `regenerate_chunk` was also promoted into the provider-native structured-output layer and now returns a single structured knowledge-card object instead of legacy markdown text.

@@ -1,97 +1,110 @@
-# 部署架构
+# Deployment Architecture
 
-本文档描述 SlideTutor 项目的部署架构、性能优化和监控告警策略。
+Last updated: 2026-04-04
 
-最后更新：2026-03-28
+## Current Target
 
----
+SlideTutor AI is now intended to ship from one Cloudflare Worker base URL.
 
-## 部署架构
+The Worker is responsible for:
 
-### Vercel Serverless 部署
+- serving the built SPA assets
+- handling `/api/get-token`
+- handling `/api/parse`
+- handling `/api/generate`
+- handling `/api/feedback`
 
-**架构特点：**
-- 无状态函数（每个请求独立）
-- 自动扩展
-- 全球 CDN 分发
-- 零配置 HTTPS
+This removes the old Vercel-first split between static hosting and serverless API routes.
 
-**部署配置：**
+## Runtime Topology
 
-```json
-// vercel.json
-{
-  "functions": {
-    "api/**/*.ts": {
-      "maxDuration": 60  // 60秒超时（支持流式响应）
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
-    }
-  ]
-}
+```text
+Browser
+  -> Cloudflare Worker
+       -> Static asset response for app routes
+       -> /api/get-token
+       -> /api/parse
+       -> /api/generate
+       -> /api/feedback
 ```
 
-**环境变量：**
+API paths are dispatched before SPA fallback, so direct navigation to `/api/*` must return API responses or JSON errors instead of `index.html`.
+
+## Local Development
+
+Primary path:
+
 ```bash
-# AI 服务
-GEMINI_API_KEY=<key>
-OPENAI_API_KEY=<key>
-DOUBAO_API_KEY=<key>
-QWEN_API_KEY=<key>
-
-# Azure 服务
-AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT=<endpoint>
-AZURE_DOCUMENT_INTELLIGENCE_KEY=<key>
-
-# 安全配置
-ENABLE_TOKEN_AUTH=true
-API_TOKEN_SECRET=<secret>
-ALLOWED_ORIGINS=https://www.slidetutor-ai.com
-
-# 邮件服务
-SMTP_HOST=<host>
-SMTP_PORT=<port>
-SMTP_USER=<user>
-SMTP_PASS=<pass>
+npm run dev
 ```
 
-### 性能优化
+This uses the Cloudflare/Vite worker-oriented setup.
 
-**前端优化：**
-- Vite 构建优化（代码分割、Tree Shaking）
-- React.lazy() 组件懒加载
-- IndexedDB 缓存减少 API 调用
-- Token 缓存（5分钟重用）
+Legacy Node shell:
 
-**后端优化：**
-- 流式响应（降低首字节时间）
-- 速率限制（防止滥用）
-- 无状态设计（水平扩展）
+```bash
+npm run dev:node
+```
 
-**性能指标：**
-- 首次 API 调用：+100ms（Token 获取）
-- 后续调用：+<1ms（Token 验证）
-- Token 缓存命中率：~95%
-- 用户体验：无明显影响
+The Node shell still exists only as a compatibility path while migration work is finishing. It is no longer the default runtime assumption.
 
-### 监控和告警
+## Build And Deploy
 
-**关键指标：**
-- Token 生成成功率（应为 ~100%）
-- Token 验证成功率（应 >95%）
-- 401 错误率（应 <5%，有自动重试）
-- API 响应时间（不应增加 >5%）
-- 速率限制触发频率
+Build:
 
-**告警阈值：**
-- **高优先级**：Token 验证失败率 >10%（5分钟窗口）
-- **高优先级**：INVALID_SIGNATURE 错误 >10/分钟（可能攻击）
-- **中优先级**：API 响应时间增加 >50%
-- **低优先级**：EXPIRED_TOKEN 错误 >100/小时（UX 问题）
+```bash
+npm run build
+```
 
----
+Deploy:
 
+```bash
+npm run deploy
+```
+
+Worker configuration lives in [wrangler.jsonc](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/wrangler.jsonc).
+
+## Required Secrets
+
+Core runtime secrets:
+
+- `APP_URL`
+- `SHARED_APP_URL` if a secondary public origin is used
+- `GEMINI_API_KEY`
+- `DOUBAO_API_KEY` when that provider is enabled
+- `QWEN_API_KEY` when that provider is enabled
+- `AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT`
+- `AZURE_DOCUMENT_INTELLIGENCE_KEY`
+- `ENABLE_TOKEN_AUTH`
+- `API_TOKEN_SECRET`
+
+Notification secrets:
+
+- `NOTIFICATION_PROVIDER`
+- `RESEND_API_KEY` when `NOTIFICATION_PROVIDER=resend`
+- `NOTIFICATION_FROM_EMAIL`
+- `FEEDBACK_TO_EMAIL`
+- `SECURITY_ALERT_TO_EMAIL`
+
+Local development can use `NOTIFICATION_PROVIDER=log` to avoid external delivery.
+
+## Observability
+
+Worker logs and traces are enabled in Wrangler config.
+
+Important signals to watch after deployment:
+
+- `/api/generate` request volume and status distribution
+- token-auth `401` frequency
+- origin-check `403` frequency
+- rate-limit `429` frequency
+- feedback delivery failures
+
+## Cutover Checklist
+
+- confirm Worker secrets are present
+- confirm `/api/get-token` returns JSON
+- confirm `/api/parse` returns JSON or a route-specific JSON error
+- confirm `/api/generate` streams plain text
+- confirm `/api/feedback` returns the existing success contract on successful delivery
+- confirm direct browser navigation to `/api/*` does not return the SPA shell

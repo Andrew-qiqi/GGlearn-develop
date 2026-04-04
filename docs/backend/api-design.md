@@ -1,85 +1,123 @@
-# API 设计
+# API Design
 
-本文档描述 SlideTutor 项目的 API 设计规范和核心端点。
+Last updated: 2026-04-04
 
-最后更新：2026-03-28
+## Public Base
 
----
+The canonical public base is the Cloudflare Worker that serves both the SPA and the public APIs.
 
+## Endpoints
 
-## API 设计
+### `POST /api/generate`
 
-### 核心端点
+Purpose:
 
-#### 1. POST /api/generate
-**用途**：AI 内容生成（解释、追问、测验）
+- explanation generation
+- follow-up answers
+- chunk regeneration
+- distill flow
+- quiz generation and evaluation
 
-**请求头：**
-```
-X-API-Token: <token>  // 必需（如果启用认证）
-Content-Type: application/json
-```
+Request headers:
 
-**请求体：**
-```json
-{
-  "task": "explain|followup|quiz|regenerate",
-  "pageNumber": 1,
-  "imageBase64": "data:image/png;base64,...",
-  "textContent": "幻灯片文本内容",
-  "layoutBlocks": [...],  // Azure 文档智能布局
-  "context": {...}        // 上下文信息
-}
-```
+- `Content-Type: application/json`
+- `X-API-Token: <token>` when token auth is enabled
 
-**响应：**
-- 流式响应（Server-Sent Events）
-- 内容类型：`text/event-stream`
+Response contract:
 
-#### 2. GET /api/get-token
-**用途**：获取 API 认证 Token
+- content type: `text/plain; charset=utf-8`
+- body: streamed plain-text chunks in the same order the frontend hooks consume today
 
-**响应：**
+Notes:
+
+- Worker route applies origin checks, optional token auth, rate limiting, and request logging.
+- Teaching prompts, structured artifacts, and frontend parsing contracts are intentionally unchanged by the Cloudflare migration.
+
+### `GET /api/get-token`
+
+Purpose:
+
+- mint a short-lived API token for `/api/generate`
+
+Response:
+
 ```json
 {
   "token": "base64(payload).base64(signature)",
-  "expiresIn": 300  // 秒
+  "expiresIn": 300
 }
 ```
 
-#### 3. POST /api/parse
-**用途**：使用 Azure Document Intelligence 解析 PDF 布局
+### `POST /api/parse`
 
-**请求体：**
+Purpose:
+
+- run Azure Document Intelligence layout extraction for a slide image
+
+Request body:
+
 ```json
 {
-  "imageBase64": "data:image/png;base64,..."
+  "base64Image": "data:image/jpeg;base64,..."
 }
 ```
 
-**响应：**
+Response:
+
 ```json
 {
   "blocks": [
     {
-      "type": "text|table|figure",
-      "content": "...",
-      "boundingBox": [x1, y1, x2, y2, ...]
+      "id": "b0",
+      "type": "text",
+      "text": "Example block",
+      "bbox": [0, 0, 100, 100]
     }
   ]
 }
 ```
 
-#### 4. POST /api/feedback
-**用途**：收集用户反馈
+Notes:
 
-**请求体：**
+- the Worker route preserves the existing block shape
+- unauthorized origins return a route-specific JSON `403`
+
+### `POST /api/feedback`
+
+Purpose:
+
+- collect user feedback from the settings modal
+
+Request body:
+
 ```json
 {
-  "type": "bug|feature|other",
-  "message": "用户反馈内容",
-  "email": "user@example.com"  // 可选
+  "type": "Suggestion",
+  "reason": "Please add keyboard shortcuts.",
+  "images": [],
+  "contactAgreed": true,
+  "email": "student@example.com"
 }
 ```
 
----
+Success response:
+
+```json
+{
+  "success": true,
+  "message": "Feedback sent successfully"
+}
+```
+
+Failure response:
+
+```json
+{
+  "error": "Notification provider is not configured."
+}
+```
+
+Notes:
+
+- feedback delivery now runs through the Worker notification adapter
+- local development can use log-only notification mode
