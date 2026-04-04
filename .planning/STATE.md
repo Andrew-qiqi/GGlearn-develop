@@ -5,26 +5,26 @@
 See: `.planning/PROJECT.md`
 
 **Core Value:** Teacher-like PDF tutoring with controllable model access
-**Current Focus:** Prepare the next GSD work around minimal Cloudflare migration and a BYOK-first public launch
+**Current Focus:** Plan the parser bootstrap and provider abstraction phase on top of the completed Cloudflare-first and BYOK-first base
 
 ## Current Position
 
 **Current Phase:** Not started
 **Current Phase Name:** None
 **Total Phases:** 7
-**Completed Phases:** 2
+**Completed Phases:** 4
 **Current Plan:** Not started
 **Total Plans in Phase:** 0
 **Status:** Ready to plan the next milestone
-**Last Activity:** 2026-04-04
-**Last Activity Description:** Reset project direction around Cloudflare, BYOK-first launch, parser bootstrap, and hosted-API sequencing
-**Progress:** Foundational phases complete; next milestone not yet planned
+**Last Activity:** 2026-04-05
+**Last Activity Description:** Completed Cloudflare-first rollout and BYOK-first access layer, then locked Phase 05 parser guardrails for planning
+**Progress:** Foundational runtime and BYOK phases are complete; Phase 05 planning is in progress
 
 ## Performance Metrics
 
-- Total completed phases: 2
-- Total completed plans: 4
-- Latest completed phase: 02 Data Persistence Migration
+- Total completed phases: 4
+- Total completed plans: 9
+- Latest completed phase: 04 BYOK-First Access Layer
 
 ## Accumulated Context
 
@@ -38,20 +38,17 @@ See: `.planning/PROJECT.md`
 
 ### Pending Todos
 
-- Define the exact minimum scope of the Cloudflare migration.
-- Write a dedicated phase brief for Minimal Cloudflare Migration.
-- Write a dedicated phase brief for BYOK-First Access Layer.
-- Decide the early BYOK pricing posture.
-- Define parser bootstrap guardrails.
+- Plan Phase 05 parser bootstrap and provider abstraction.
+- Execute D1-backed parser quota enforcement and parser abstraction.
+- Defer accounts/hosted access planning until Phase 05 is stable.
 
 ### Blockers/Concerns
 
-- The exact minimum Cloudflare migration boundary is not yet locked.
-- Early BYOK pricing is not yet locked.
+- Parser quota truth and downgrade behavior now need to be implemented without disturbing mature teaching logic.
 - Hosted-API launch mode remains intentionally deferred.
 
 ## Session Continuity
 
-**Last session:** 2026-04-04
-**Stopped At:** Project direction reset completed; repository ready for the next phase brief and planning cycle
+**Last session:** 2026-04-05
+**Stopped At:** Phase 05 brief finalized; planning context is being generated
 **Resume file:** None

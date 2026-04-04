@@ -63,12 +63,14 @@
 ### Phase 5: Parser Bootstrap and Provider Abstraction
 **Goal**: Keep parser cost platform-funded for early growth while making parser choice and cost an explicit architectural concern.
 **Depends on**: Phase 3
-**Requirements**: PARSE-01, PARSE-02, PARSE-03
+**Requirements**: PARSE-01, PARSE-02, PARSE-03, PARSE-04
 **Success Criteria** (what must be TRUE):
   1. Early users can rely on platform-managed parsing with low setup friction.
   2. Parser usage is observable and guardrailed instead of treated as a hidden free dependency.
   3. The codebase is prepared for alternative parser providers later.
-**Plans**: 0 plans
+**Plans**: 2 plans
+- [ ] 05-01-PLAN.md - Add D1-backed parser quota truth, a shared parser access layer, and downgrade metadata. (PLANNED)
+- [ ] 05-02-PLAN.md - Add Settings quota visibility, downgraded-analysis warning UX, and supporting docs/tests. (PLANNED)
 
 ### Phase 6: Accounts and Platform-Hosted APIs
 **Goal**: Introduce login and paid hosted-model access as a second product track.
@@ -111,6 +113,6 @@ Current recommendation: work the next milestone in this order.
 | 2. Data Persistence Migration | 2/2 | Completed | 2026-03-26 |
 | 3. Minimal Cloudflare Migration | 3/3 | Completed | 2026-04-04 |
 | 4. BYOK-First Access Layer | 2/2 | Completed | 2026-04-04 |
-| 5. Parser Bootstrap and Provider Abstraction | 0/0 | Planned | - |
+| 5. Parser Bootstrap and Provider Abstraction | 0/2 | Planned | - |
 | 6. Accounts and Platform-Hosted APIs | 0/0 | Planned | - |
 | 7. China-User Operational Fit | 0/0 | Planned | - |

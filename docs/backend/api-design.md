@@ -1,6 +1,6 @@
 # API Design
 
-Last updated: 2026-04-04
+Last updated: 2026-04-05
 
 ## Public Base
 
@@ -51,12 +51,17 @@ Response contract:
 
 - content type: `text/plain; charset=utf-8`
 - body: streamed plain-text chunks in the same order the frontend hooks consume today
+- response headers may include:
+  - `x-slidetutor-parse-mode: normal | degraded`
+  - `x-slidetutor-parser-remaining: <number>`
 
 Notes:
 
 - Worker route applies origin checks, optional token auth, rate limiting, and request logging.
 - Teaching prompts, structured artifacts, and frontend parsing contracts are intentionally unchanged by the Cloudflare migration.
 - In Phase 04, BYOK model access and platform-funded parsing are intentionally split concerns.
+- In Phase 05, `explain` requests resolve document parsing through a shared parser-access layer instead of calling Azure directly.
+- If parser quota is exhausted or the parser is unavailable, the response still streams teaching output, but `x-slidetutor-parse-mode` becomes `degraded`.
 
 ### `GET /api/get-token`
 
@@ -78,6 +83,7 @@ Response:
 Purpose:
 
 - run Azure Document Intelligence layout extraction for a slide image
+- deduct one daily platform-funded parser use only after a successful parse
 
 Request body:
 
@@ -98,7 +104,38 @@ Response:
       "text": "Example block",
       "bbox": [0, 0, 100, 100]
     }
-  ]
+  ],
+  "used": 1,
+  "remaining": 9,
+  "limit": 10,
+  "dateKey": "2026-04-05",
+  "parseMode": "normal"
+}
+```
+
+Quota reached response:
+
+```json
+{
+  "error": "Daily document parsing limit reached",
+  "code": "PARSER_LIMIT_REACHED",
+  "used": 10,
+  "remaining": 0,
+  "limit": 10,
+  "dateKey": "2026-04-05"
+}
+```
+
+Unavailable response:
+
+```json
+{
+  "error": "Document parsing is unavailable",
+  "code": "PARSER_UNAVAILABLE",
+  "used": 0,
+  "remaining": 10,
+  "limit": 10,
+  "dateKey": "2026-04-05"
 }
 ```
 
@@ -106,6 +143,30 @@ Notes:
 
 - the Worker route preserves the existing block shape
 - unauthorized origins return a route-specific JSON `403`
+- quota is enforced server-side through Cloudflare D1 using an anonymous identity derived from `ip_hash + date_key`
+- the current daily parser limit is `10`
+
+### `GET /api/parser-usage`
+
+Purpose:
+
+- report the current anonymous user's daily platform-funded parser usage
+
+Response:
+
+```json
+{
+  "used": 3,
+  "remaining": 7,
+  "limit": 10,
+  "dateKey": "2026-04-05"
+}
+```
+
+Notes:
+
+- this endpoint is designed for the settings modal, not a persistent quota banner
+- if D1 or `USAGE_HASH_SECRET` is missing, the route returns an empty summary and parsing degrades elsewhere
 
 ### `POST /api/feedback`
 

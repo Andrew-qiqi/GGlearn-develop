@@ -445,3 +445,51 @@ PDF explanation highlights now rely on shared semantic tokens instead of theme-s
 ### Header contrast contract
 
 Header accent controls now use dedicated semantic classes instead of relying only on generic `bg-text-primary text-bg-elevated` combinations. These controls are product-level accents, not theme-local decoration, so they should keep one stable shared treatment across themes. This isolates high-contrast accent controls from broad theme-level icon overrides and prevents regressions like the `spring-meadow` dark-block header bug where icons and labels became difficult to read on dark accent surfaces.
+
+## 2026-04-05 Parser Usage Visibility and Accuracy State
+
+The frontend now treats platform-funded document parsing as a separate runtime concern from BYOK model access.
+
+### UI boundary
+
+- parser quota is visible only inside `SettingsModal`
+- the settings modal fetches `GET /api/parser-usage` when the `AI Settings` tab opens
+- the product does not keep a persistent quota counter in the main study surface
+
+### Page-state contract
+
+`useSlideAnalysis.ts` now records parser-quality metadata on each analyzed page:
+
+- `analysisAccuracy = "normal" | "low"`
+- `analysisAccuracyReason = "parser-unavailable" | undefined`
+
+These values are derived from Worker response headers instead of local quota guessing.
+
+### Rendering rule
+
+`CanvasTutor.tsx` shows the inline `Low accuracy` warning only when the finished analysis actually ran in degraded mode.
+
+- no warning for normal analyses
+- no warning just because the user is close to quota
+- hover text explains that document parsing was unavailable for that analysis, so precision may be lower
+
+### Architecture intent
+
+This keeps the reading experience calm while still making degraded output legible:
+
+- settings owns quota awareness
+- page state owns analysis quality truth
+- the tutor surface only reacts to actual degraded results
+
+## 2026-04-05 Frontend Parser Access Integration
+
+The parser bootstrap phase intentionally did not change teaching logic or analysis artifact structure.
+
+What changed is the boundary around parser access:
+
+- `apiClient.ts` now has a dedicated `getParserUsageSummary(...)` helper
+- `SettingsModal.tsx` reads exact parser usage such as `7/10`
+- `useSlideAnalysis.ts` reads `x-slidetutor-parse-mode`
+- `CanvasTutor.tsx` renders a minimal warning badge for degraded analyses
+
+This means the frontend no longer assumes platform parsing is always available, but it still keeps the learner-facing teaching flow continuous.

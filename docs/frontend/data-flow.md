@@ -6,6 +6,48 @@
 
 ---
 
+## 2026-04-05 Platform Parser Quota and Degraded Explain Flow
+
+Phase 05 adds a dedicated parser-access branch ahead of the existing explain pipeline.
+
+### Explain flow
+
+For `task = explain`, the runtime now behaves like this:
+
+1. frontend calls `/api/generate`
+2. Worker asks the shared parser-access service whether the current anonymous identity can still use platform parsing today
+3. if allowed, the parser provider runs and successful usage is recorded in D1
+4. if quota is exhausted or the parser provider is unavailable, explain continues in degraded mode without layout blocks
+5. Worker returns `x-slidetutor-parse-mode`
+6. frontend stores `analysisAccuracy` on the current page state
+7. tutor UI shows `Low accuracy` only when the analysis actually degraded
+
+### Identity and counting
+
+The current anonymous identity is server-side only:
+
+- `ip_hash + date_key`
+- hash secret from `USAGE_HASH_SECRET`
+- date key in `Asia/Shanghai`
+
+The current counting rule is intentionally strict:
+
+- deduct only after a real successful platform parse
+- do not deduct for degraded explains
+- do not deduct for failed parser calls
+
+### Settings flow
+
+Settings reads a parallel summary path:
+
+1. `SettingsModal.tsx` opens the AI tab
+2. frontend calls `GET /api/parser-usage`
+3. Worker resolves the same anonymous identity
+4. Worker returns `{ used, remaining, limit, dateKey }`
+5. settings renders exact usage like `7/10`
+
+This keeps parser quota truth centralized on the server while avoiding main-surface quota anxiety.
+
 ## 2026-04-04 BYOK Access Metadata Flow
 
 Generation requests now carry normalized access metadata from the frontend API client.

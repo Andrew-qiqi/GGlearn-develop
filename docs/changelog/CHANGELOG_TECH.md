@@ -5,6 +5,22 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-05] Completed Phase 05 Parser Bootstrap and Provider Abstraction
+
+**What**: Added a shared parser-access layer that wraps platform-funded document parsing behind one quota-aware service. The backend now routes `explain` and direct `/api/parse` requests through a common parser provider boundary, stores daily successful parser usage in Cloudflare D1, exposes `GET /api/parser-usage`, and reports parser degradation to the frontend through response headers. The frontend now shows exact `Document Parsing` usage in settings and renders a minimal `Low accuracy` warning only for degraded analyses.
+
+**Why**: Phase 05 needed to keep early-user parsing platform-funded without pretending the parser is infinitely available. We also needed a clean abstraction before future hosted-access and login work, so parser policy could evolve without touching mature teaching logic.
+
+**Impact**:
+- platform-funded document parsing is now server-governed with a daily limit of `10` successful page parses per anonymous identity
+- quota is deducted only after a real successful parser call
+- over-quota or parser-unavailable explains still stream teaching output, but now degrade gracefully instead of pretending parser precision exists
+- parser usage truth now lives in Cloudflare D1 and depends on `USAGE_HASH_SECRET`
+- settings owns quota visibility, while the tutor canvas only reacts to actual degraded analysis results
+
+**Files**: `SlideTutor-AI/api/lib/parser/provider.ts`, `SlideTutor-AI/api/lib/parser/azureProvider.ts`, `SlideTutor-AI/api/lib/parser/usageStore.ts`, `SlideTutor-AI/api/lib/parser/accessService.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/src/worker/routes/generate.ts`, `SlideTutor-AI/src/worker/routes/parse.ts`, `SlideTutor-AI/src/worker/routes/parser-usage.ts`, `SlideTutor-AI/src/worker/index.ts`, `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/wrangler.jsonc`, `SlideTutor-AI/migrations/001_parser_usage_daily.sql`, `SlideTutor-AI/README.md`, `docs/backend/api-design.md`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+
+---
 ## [2026-04-04] Completed Phase 04 BYOK-First Access Layer
 
 **What**: Introduced a BYOK-first access layer that separates model choice from model credentials. The frontend now persists normalized `aiAccess` settings in IndexedDB, migrates legacy `qwen` / `doubao` selections into one `openai-compatible` provider family, exposes local BYOK fields in the settings modal, and automatically attaches normalized access metadata to `/api/generate` requests. The backend now resolves Gemini and OpenAI-compatible access through one shared routing boundary, while preserving migration-safe env fallback for preset OpenAI-compatible endpoints.

@@ -63,6 +63,7 @@
 | PARSE-01 | Phase 5 | Pending |
 | PARSE-02 | Phase 5 | Pending |
 | PARSE-03 | Phase 5 | Pending |
+| PARSE-04 | Phase 5 | Pending |
 | ACCT-01 | Phase 6 | Pending |
 | HOST-01 | Phase 6 | Pending |
 | HOST-02 | Phase 6 | Pending |
