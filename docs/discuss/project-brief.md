@@ -2,130 +2,123 @@
 
 ## Metadata
 
-- Status: Draft
-- Last Updated: 2026-04-04
+- Status: Active
+- Last Updated: 2026-04-05
 - Owner: Agent-authored, user-approved
 - Impacts Existing Plans: Yes
-- Change Summary: Consolidates recent product, infrastructure, and commercialization discussion into a clean handoff brief for the next planning window, including BYOK-first public launch, minimal Cloudflare-first sequencing, and platform-funded parser bootstrap.
+- Change Summary: 同步已完成的 Cloudflare-first 与 BYOK-first 阶段、已落地的 Clerk + credits 基础、以及最新锁定的 parser 与 hosted access 决策；明确下一次回到 GSD 时应先完成 Phase 05 的剩余 parser provider 工作，而不是直接把 parser、payment、hosted access 混做一团。
 
 ## Project Identity
 
 - Project Name: SlideTutor AI
-- One-line Summary: A PDF-centered AI learning assistant that explains slides, preserves teaching continuity, supports follow-up tutoring, and helps students study efficiently.
-- Core Value: Turn static course slides into a guided, teacher-like learning experience with strong explanation quality, continuity, and controllable model/provider choices.
+- One-line Summary: 一个以 PDF 课件为中心的 AI 学习助手，帮助学生解释 slide、保持上下文连续、做 follow-up 学习与 quiz 自测。
+- Core Value: 把静态课件变成更像老师带学的体验，同时给用户明确的接入边界：既支持 `My API`，也支持未来的 `Platform API`。
 
 ## Why This Project Exists
 
-Slide decks and lecture PDFs are often compressed, context-light, and hard to study alone. Students do not just need OCR or summarization; they need a guided explanation flow that reconstructs reasoning, points to the right visual regions, and carries context across pages.
+课件和 lecture PDF 通常信息压缩严重、上下文断裂、缺少讲解线索。学生需要的不是普通 OCR 或摘要，而是能围绕页面内容、视觉区域和跨页上下文持续解释的学习助手。
 
-The product is now moving from pre-launch experimentation toward real user-facing deployment. That shifts the main problem from "can the tutoring interaction work?" to "how do we ship this sustainably for real users, especially China-based users, without making the stack too expensive or too hard to maintain?"
+现在项目已经从“内部试验是否可用”进入“如何真实发布并可持续运营”的阶段。问题不再只是解释效果够不够好，而是：
+
+- 如何在不破坏教学体验的前提下上线真实产品
+- 如何为中国用户和中国运营者选择更实际的 provider 与支付路径
+- 如何把 parser、hosted access、credits 这些成本边界做成可维护的产品能力
 
 ## True Needs
 
-- Keep the core tutoring experience high quality, especially `explain`, `distill`, follow-up, and context continuity.
-- Preserve strong output stability across both strong and weaker models through structured JSON contracts.
-- Support two user modes in the future:
-  - user-supplied model API keys
-  - platform-hosted API service for paid users
-- Support real deployment beyond the current "developer personally funds the APIs" stage.
-- Reduce long-term dependency on Vercel Hobby assumptions for a future commercial product.
-- Revisit document parsing as a first-class product cost center rather than an invisible background service.
-- Optimize for China-based users and China-based operator convenience wherever practical.
+- 保持 `explain`、`distill`、follow-up、quiz 等核心学习体验的质量与连续性。
+- 用结构化输出维持不同模型下的结果稳定性。
+- 让首个公开版本可以低门槛使用，优先支持用户自带模型。
+- 给不想折腾 API key 的用户保留后续 `Platform API` 路线。
+- 把文档解析成本从“背景免费假设”变成显式可控的系统能力。
+- 尽量选择更适合中国用户与中国运营者的模型、解析与支付方案。
 
 ## Non-Goals
 
-- Do not immediately implement the entire commercialization stack in one step.
-- Do not treat Cloudflare migration, BYOK, login, payments, hosted APIs, and parser-provider abstraction as one coding phase.
-- Do not lock into one permanent document parser provider today.
-- Do not design a pricing model that assumes infinite platform-funded inference or parsing.
-- Do not rush to fix every model-specific edge case before the product-direction decisions are settled.
+- 不在一个 phase 里同时做完 parser、hosted access、payment、billing back office。
+- 不把首个公开版本做成必须登录、必须充值、必须自配 parser 的高门槛产品。
+- 不为了后续扩展而过度设计当前小用户量阶段的系统。
+- 不因为 provider 切换或计费改造而破坏成熟的教学主链路。
 
 ## Constraints
 
-- The product is still pre-launch and currently uses the user's own API keys/services.
-- Teaching prompt intent, tone, and explanation quality must remain protected; output-contract work must not dilute the educational experience.
-- Most future users are expected to be in China, and the operator is also China-based.
-- Platform choice must consider not only static site reachability, but also model API reliability, streaming behavior, document parsing cost, and operational simplicity.
-- Current document parsing relies on Azure free quota, which is already exhausted; this cannot be treated as a durable default.
-- Future architecture should prefer maintainable provider abstractions over many hard-coded one-off branches.
+- 项目仍处于早期公开前阶段，代码和产品方向都在收口中。
+- 教学 prompt 意图、语气、解释结构和前端消费契约必须优先保护。
+- 目标用户和运营者都偏中国场景，provider 选择必须考虑可获取性、成本和稳定性。
+- Cloudflare 已是当前运行底座，后续 auth、quota、credits、payment 都应尽量贴合这条路线。
+- 文档解析不再能依赖 Azure 的免费额度假设。
 
 ## Locked Decisions
 
-- Structured JSON output is now the long-term direction for major generation tasks; prompt-only formatting control is not sufficient.
-- Gemini remains a separate provider adapter; OpenAI-compatible providers should be unified as much as possible.
-- Long-term architecture should support user-supplied OpenAI-compatible APIs rather than building custom logic per provider.
-- Cloudflare is the leading candidate for future deployment, replacing reliance on Vercel Hobby for a commercial product path.
-- Future product strategy should support two parallel modes:
-  - BYOK for user-supplied model APIs
-  - platform-provided APIs for paid users
-- The first public user-facing version should be BYOK-first.
-- In the first public version, platform-hosted APIs are a secondary track, not the primary product entry.
-- Early BYOK is fully free; there is no launch-stage service fee for user-supplied model APIs.
-- Preferred sequencing is to complete a minimal Cloudflare migration before building the next commercialization-critical features on top.
-- A donation entry can exist, but it is secondary to a clear core usage model.
-- Document parsing should be reconsidered as a configurable provider layer, not assumed to be permanently platform-funded through Azure.
-- In the early user-acquisition stage, document parsing can be platform-funded by default, with later guardrails and provider abstraction work.
-- Early public parsing should stay platform-funded by default, but users who do not bring their own parser access should be subject to explicit request limits.
-- Current website/domain reachability is not the main China-user blocker; the user reports the domain is already managed via Cloudflare and can be accessed in China without VPN.
-- Gemini availability is a real China-user risk because China-based requests can fail with `User location is not supported for the API use`.
+- Cloudflare-first 迁移已完成，不再以 Vercel-first 为后续前提。
+- 首个公开版本仍然是 `BYOK-first`。
+- `BYOK` 继续免费，不强制登录。
+- 用户自己的模型密钥默认只保存在浏览器本地，不上传云端。
+- 用户可以在 `My API` 和 `Platform API` 之间切换。
+- `Platform API` 是第二条产品路径，需要登录。
+- 认证方案采用成熟外部方案，当前锁定为 `Clerk`。
+- hosted access 相关产品/业务数据以 Cloudflare 原生存储为主，当前基线是 `D1`。
+- 新用户获得一次性 `10 credits`，不做每周赠送。
+- credits 不过期。
+- 充值方式不是套餐包，而是自由充值；`1 RMB` 起充。
+- 固定兑换率为 `1 RMB = 30 credits`。
+- 不做用户侧的扣费记录页和充值记录页；后端保留必要账务数据即可。
+- hosted action 计费权重锁定为：
+  - `Analyze = 3 credits`
+  - `Follow-up = 1 credit`
+  - `Quiz 生成 = 1 credit`
+  - `Quiz 答案分析 = 1 credit`
+- `Analyze` 被视为一个整体动作，包含 parse、explain、distill；只有整体成功才扣费。
+- 所有 hosted action 都遵循“成功才扣费”。
+- 平台自带文档解析服务的目标 provider 锁定为 `Volcengine`，核心原因是成本更低且更适合当前需求。
+- 当前 SlideTutor 的 parser 只需要稳定提供页面级文本块、块类型和规范化坐标，不需要追求 Azure 全量能力对等。
+- parser BYOK 不是当前回到 GSD 的目标；如果未来真的要做中国用户友好的 parser BYOK，`MinerU` 是值得优先评估的候选，但暂不进入本轮实现范围。
+- 支付方向锁定为 `ZPAY`，但 payment 接入属于后续 Phase 06 收尾工作，不应混入当前 parser phase。
+- 下一次回到 GSD 时，应优先完成 Phase 05 的剩余工作：平台 parser provider 从 Azure 收口到 Volcengine，并清理遗留 Azure 路径。
 
 ## Agent Discretion
 
-- The exact migration path from Vercel to Cloudflare is not yet locked beyond the minimal-first direction.
-- The exact split between free features, one-time purchase, subscription, or usage-based charging is not yet locked.
-- Whether BYOK should include a small service fee in early versions is still open.
-- The exact launch mode for platform-hosted APIs is still open: waitlist, invite-only, or direct paid rollout.
-- The long-term parser evolution path is still open: platform-funded baseline, hybrid model, or optional parser BYOK.
-- The exact provider shortlist for China-friendly document parsing can be refined later.
-- Model-specific capability matrices, such as which Gemini models support which thinking controls, can be decided in later implementation phases.
+- Volcengine 返回结果如何最小映射到现有 `LayoutBlock[]` 契约，可在不破坏前端的前提下由 agent 自主设计。
+- 未来 parser BYOK 是否只支持 MinerU，或再增加其他 provider，暂未锁定。
+- hosted access 的首发开放方式仍可后续决定：直接开放、invite-only、或其他更克制的节奏。
+- ZPAY 的具体 webhook、防重和订单字段方案可以在 Phase 06 规划时细化。
 
 ## Success Conditions
 
-- The product has a realistic deployment path that does not depend on non-commercial assumptions.
-- There is a clear architecture for supporting both BYOK and paid platform-hosted usage.
-- Document parsing has a sustainable provider strategy and no longer depends on accidental free quota.
-- China-based users can access and use the service with acceptable reliability and low setup friction.
-- The system remains maintainable: provider differences are abstracted cleanly and educational quality remains protected.
+- 首个公开版本继续以 BYOK 为主，不被 hosted access 反客为主。
+- 平台 parser 不再依赖 Azure 的隐形默认真相。
+- parser、auth、credits、payment 的边界清晰，后续每个 phase 可以独立推进。
+- 中国用户侧的模型、解析和支付路径比之前更现实、更低摩擦。
+- 系统仍然保持可维护，provider 差异被收敛在明确边界内。
 
-## Initial Phase Direction
+## Current Phase Direction
 
-- Phase A: Minimal Cloudflare migration
-  - Move the public deployment path off the current Vercel-first assumption.
-  - Prioritize the minimum viable production topology rather than a full infrastructure rewrite.
-  - Verify core frontend delivery and `/api/generate` streaming reliability on the new base.
-- Phase B: BYOK-first usage architecture
-  - Define how user-supplied model APIs are configured, validated, and routed.
-  - Prioritize OpenAI-compatible BYOK while preserving Gemini as a separate adapter.
-  - Decide whether early BYOK carries a small service fee.
-- Phase C: Parser bootstrap and provider abstraction
-  - Keep parser cost platform-funded in the early growth stage.
-  - Add guardrails so parser cost is observable and controllable.
-  - Abstract parser providers so Azure is no longer an invisible default dependency.
-- Phase D: Account system and platform-hosted APIs
-  - Add login and user identity infrastructure.
-  - Define how paid platform-hosted model access coexists with BYOK.
-  - Decide the first launch mode for hosted APIs: waitlist, invite-only, or direct paid release.
-- Phase E: China-user operations
-  - Re-check actual bottlenecks for users in China: model providers, parser providers, streaming, login, payments, and deployment path.
-  - Only then choose whether deeper mainland-specific infrastructure work is necessary.
+- Phase 05 remaining work:
+  - 完成平台 parser provider 从 Azure 到 Volcengine 的切换。
+  - 保持现有 `LayoutBlock[]` 契约、quota 规则、degraded fallback 和前端使用方式不变。
+  - 清理旧的直接 Azure 路径，避免后面出现“双 parser 真相”。
+- Phase 06 later work:
+  - 基于已经落地的 Clerk + credits 基础继续完成 hosted access。
+  - 用 ZPAY 替换当前 mock payment adapter。
+  - 收口 hosted action、payment webhook 和生产配置。
 
 ## Canonical References
 
 - `AGENTS.md`
-- `docs/frontend/architecture.md`
-- `docs/frontend/data-flow.md`
+- `docs/discuss/phases/05-parser-bootstrap-and-provider-abstraction-brief.md`
+- `docs/discuss/phases/06-login-hosted-access-and-credit-brief.md`
+- `.planning/ROADMAP.md`
+- `.planning/STATE.md`
+- `docs/backend/api-design.md`
 - `docs/changelog/CHANGELOG_TECH.md`
-- `SlideTutor-AI/src/config/models.ts`
-- `SlideTutor-AI/api/generate.ts`
-- `SlideTutor-AI/api/lib/structuredOutputConfig.ts`
 
 ## Open Questions
 
-- How small can the first Cloudflare migration be while still de-risking later BYOK, login, and payment work?
-- Should document parsing stay fully platform-managed through the first public version, or expose limited controls earlier?
-- What is the minimum viable login/payment system for China-based users if platform-hosted APIs are introduced?
-- How should model capability differences be represented long-term, especially for Gemini variants with inconsistent thinking-control support?
+- Volcengine 的返回数据应采用怎样的最小映射，才能既保留现有前端契约又给未来 parser BYOK 留出空间？
+- Phase 06 在完成 ZPAY 后，hosted access 首发是直接开放还是更克制地灰度开放？
 
 ## Next Step
 
-Use this brief as the upstream reference for the next product-direction discussion window or for `/gsd:new-project` if the project is being re-entered through a formal planning workflow.
+使用本 brief 作为总入口，但下一次具体回到 GSD 时，优先执行：
+
+`gsd-plan-phase 05 --prd docs/discuss/phases/05-parser-bootstrap-and-provider-abstraction-brief.md`

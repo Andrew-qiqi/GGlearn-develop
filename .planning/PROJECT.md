@@ -18,14 +18,17 @@ A high-quality slide learning assistant that turns static lecture PDFs into a gu
 - [x] **API Security** (SEC-01): environment-variable handling and protected generation access exist.
 - [x] **Stability Guard** (STAB-01, STAB-02): core logic guardrails and a regression baseline exist.
 - [x] **Data Persistence** (DATA-01, DATA-02): local persistence migrated to IndexedDB with compatibility handling.
+- [x] **Minimal Cloudflare Migration**: the public app and core APIs no longer depend on a Vercel-first runtime assumption.
+- [x] **BYOK-First Public Launch Base**: user-supplied model APIs are now the primary public product path.
+- [x] **OpenAI-Compatible BYOK Architecture**: user-supplied OpenAI-compatible endpoints use one shared adapter path while Gemini remains separate.
+- [x] **Parser Guardrail Baseline**: parser quota truth, degraded fallback, and settings visibility exist.
+- [x] **Hosted Access Baseline**: Clerk auth wiring and D1-backed hosted credits foundations exist.
 
 ### Active
-- [ ] **Minimal Cloudflare Migration**: establish a non-Vercel-first deployment base before building the next commercial features.
-- [ ] **BYOK-First Public Launch**: make user-supplied model APIs the primary entry path for the first public version.
-- [ ] **OpenAI-Compatible BYOK Architecture**: support user-supplied OpenAI-compatible endpoints cleanly while keeping Gemini on its own adapter.
-- [ ] **Parser Bootstrap Strategy**: keep document parsing platform-funded in the early user-acquisition stage, but turn it into an explicit costed subsystem.
-- [ ] **Parser Provider Abstraction**: remove the hidden Azure-default assumption and prepare for alternative parsers later.
-- [ ] **Account and Hosted API Foundation**: prepare login, entitlement, and hosted-API architecture as a follow-on track after the Cloudflare base and BYOK path are stable.
+- [ ] **Parser Provider Replacement**: finish the platform parser transition from Azure to Volcengine and remove legacy Azure runtime dependencies.
+- [ ] **Parser Provider Abstraction Completion**: make parser abstraction real enough that Azure is no longer the implicit live default.
+- [ ] **Account and Hosted API Completion**: finish hosted access on top of the existing Clerk + credits baseline.
+- [ ] **Payment Provider Integration**: replace mock payment with ZPAY without turning the product into a full billing platform.
 - [ ] **China-User Operational Fit**: re-check practical reliability bottlenecks for China-based users across model access, parser access, streaming, and payment.
 
 ### Out of Scope
@@ -44,6 +47,10 @@ A high-quality slide learning assistant that turns static lecture PDFs into a gu
 | Platform-hosted APIs remain a parallel long-term track | Needed for less technical paid users, but not first-launch primary path. | Locked |
 | Parser cost can be platform-funded early | Reduce setup friction and improve activation during user acquisition. | Locked |
 | Parser providers must become an explicit abstraction | Azure free quota exhaustion proves the current hidden default is not durable. | Locked |
+| Platform-managed parser should use Volcengine | Lower expected parsing cost and better fit for the current narrow block-extraction need. | Locked |
+| Future parser BYOK is deferred | Avoid mixing provider-choice UX into the current parser cleanup phase. | Locked |
+| Hosted access uses credits, not subscription-first packaging | Validate willingness to pay with minimal product complexity. | Locked |
+| ZPAY is the payment direction | Better fit for the current China-heavy operator context. | Locked |
 
 ## Evolution
 This document evolves at phase transitions and milestone boundaries.
@@ -61,4 +68,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update the document so roadmap and requirements stay aligned.
 
 ---
-*Last updated: April 4, 2026 after project-direction reset for Cloudflare, BYOK, and commercialization sequencing*
+*Last updated: April 5, 2026 after re-syncing project direction, parser/provider scope, and hosted-access decisions before returning to GSD*

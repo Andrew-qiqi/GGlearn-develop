@@ -2,6 +2,132 @@
 
 Last updated: 2026-04-05
 
+## 2026-04-05 Platform API and Credits
+
+### `POST /api/generate` platform-mode additions
+
+Request headers:
+
+- `Authorization: Bearer <clerk-session-token>` when `access.mode = "platform"`
+
+Request body access modes:
+
+```json
+{
+  "access": {
+    "mode": "platform"
+  }
+}
+```
+
+or
+
+```json
+{
+  "access": {
+    "mode": "byok",
+    "providerId": "gemini | openai-compatible",
+    "apiKey": "user-supplied-key",
+    "baseURL": "https://provider.example/v1",
+    "endpointPreset": "qwen | doubao | custom"
+  }
+}
+```
+
+Hosted/platform rules:
+
+- `Platform API` requires Clerk auth before the Worker calls generation logic
+- hosted `Analyze` is treated as one billable action even though the frontend still runs `explain -> distill`
+- hosted `Analyze` returns `x-slidetutor-analyze-attempt-id` from the successful `explain` preflight
+- hosted `distill` must send `taskData.hostedAnalyzeAttemptId`
+- hosted `Analyze` charges exactly once after successful `parse + explain + distill`
+- if hosted parser access degrades, the Worker rejects before streaming with `code = "PLATFORM_ANALYZE_UNAVAILABLE"`
+- hosted `followup`, `generate_questions`, and `evaluate_answers` preflight credits before execution and deduct only after successful stream completion
+- hosted unsupported actions currently return `code = "UNSUPPORTED_PLATFORM_ACTION"`:
+  - `regenerate_chunk`
+  - `regenerate_followup`
+  - `evaluate_note`
+
+Hosted billing errors:
+
+```json
+{
+  "error": "Not enough credits to continue.",
+  "code": "INSUFFICIENT_CREDITS",
+  "requiredCredits": 1,
+  "currentBalance": 0
+}
+```
+
+### `GET /api/credits/balance`
+
+Purpose:
+
+- lazily create a hosted credit account for the signed-in user
+- grant the one-time starter credits on first lookup
+
+Response:
+
+```json
+{
+  "balance": 10,
+  "starterCredits": 10,
+  "currency": "credits"
+}
+```
+
+### `POST /api/recharge-intent`
+
+Purpose:
+
+- create a recharge order from RMB input
+- return provider checkout metadata
+
+Request body:
+
+```json
+{
+  "amountRmb": 1
+}
+```
+
+Response:
+
+```json
+{
+  "orderId": "ord_123",
+  "amountRmb": 1,
+  "credits": 30,
+  "provider": "mock",
+  "checkoutUrl": "https://slidetutor.ai/mock-pay/ord_123"
+}
+```
+
+### `POST /api/payment-webhook`
+
+Current mock adapter contract:
+
+- header: `x-payment-webhook-secret: <PAYMENT_WEBHOOK_SECRET>`
+- body:
+
+```json
+{
+  "orderId": "ord_123",
+  "providerOrderId": "mock_ord_123",
+  "status": "paid"
+}
+```
+
+Response:
+
+```json
+{
+  "ok": true,
+  "balance": 40,
+  "alreadyCompleted": false
+}
+```
+
 ## Public Base
 
 The canonical public base is the Cloudflare Worker that serves both the SPA and the public APIs.
@@ -42,10 +168,10 @@ Request body highlights:
 
 BYOK routing rules:
 
-- `gemini` accepts a user-provided API key or falls back to `GEMINI_API_KEY` when present for migration compatibility.
-- `openai-compatible` accepts a user-provided `apiKey + baseURL` pair through one shared adapter path.
-- preset `openai-compatible` routes (`qwen`, `doubao`) may still fall back to the matching server env secret during the migration window.
-- malformed BYOK inputs are treated as request validation problems, not teaching-logic failures.
+- `gemini` requires a user-provided local API key when `My API` is selected.
+- `openai-compatible` requires a user-provided `apiKey + baseURL` pair through one shared adapter path.
+- platform-mode requests use server-held provider secrets and do not read browser-local credentials.
+- malformed or incomplete BYOK inputs are treated as request validation problems, not teaching-logic failures.
 
 Response contract:
 
@@ -54,14 +180,16 @@ Response contract:
 - response headers may include:
   - `x-slidetutor-parse-mode: normal | degraded`
   - `x-slidetutor-parser-remaining: <number>`
+  - `x-slidetutor-analyze-attempt-id: <attempt-id>` for hosted `task = explain`
 
 Notes:
 
 - Worker route applies origin checks, optional token auth, rate limiting, and request logging.
 - Teaching prompts, structured artifacts, and frontend parsing contracts are intentionally unchanged by the Cloudflare migration.
-- In Phase 04, BYOK model access and platform-funded parsing are intentionally split concerns.
+- In Phase 06, `My API` and `Platform API` are now explicit frontend modes.
+- In Phase 06, BYOK requests no longer fall back to server-side model secrets.
 - In Phase 05, `explain` requests resolve document parsing through a shared parser-access layer instead of calling Azure directly.
-- If parser quota is exhausted or the parser is unavailable, the response still streams teaching output, but `x-slidetutor-parse-mode` becomes `degraded`.
+- In hosted `Analyze`, degraded parser results do not stream teaching output and do not become a paid success.
 
 ### `GET /api/get-token`
 

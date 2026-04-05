@@ -6,6 +6,66 @@
 
 ---
 
+## 2026-04-05 Phase 06 Platform API Access Modes
+
+The frontend now has an explicit access-mode split above the older BYOK model-access layer.
+
+### Runtime state
+
+`uiStore.ts` now persists:
+
+- `accessMode = "byok" | "platform"`
+- ephemeral `hostedCreditsBalance`
+- global `insufficientCreditsDialog`
+
+This keeps account/credits UI separate from model-selection state:
+
+- `selectedModel` still answers which model to use
+- `aiAccess` still answers the local credential shape for `My API`
+- `accessMode` answers whether the request should use browser-local credentials or hosted account credits
+
+### Clerk boundary
+
+The React app is mounted under `ClerkAppProvider`, and the app now uses a small session bridge so non-React helpers such as `apiClient.ts` can fetch a Clerk bearer token for platform-mode requests.
+
+Important behavior:
+
+- clicking `Platform API` in settings triggers sign-in immediately if the user is not authenticated
+- the app does not persist platform mode before Clerk auth is available
+- platform-mode API calls attach `Authorization: Bearer <session-token>`
+
+### Settings boundary
+
+`SettingsModal.tsx` no longer treats the AI tab as BYOK-only configuration.
+
+The AI tab now contains:
+
+- a neutral `My API` / `Platform API` mode switch
+- model selection
+- BYOK credentials only when `My API` is active
+- current hosted balance and `Buy Credits` only when `Platform API` is active
+- a compact action-price summary instead of a billing dashboard
+
+Recharge and deduction history remain backend-only in this phase.
+
+### Global insufficient-credit UX
+
+`App.tsx` now mounts a global `CreditsRequiredDialog`.
+
+This dialog appears when hosted preflight returns `INSUFFICIENT_CREDITS` for:
+
+- `Analyze`
+- `Follow-up`
+- `Quiz generation`
+- `Quiz answer analysis`
+
+The dialog offers:
+
+- `Buy Credits`
+- `Switch to My API`
+
+It does not auto-switch the user out of `Platform API`.
+
 ## 2026-04-04 Phase 04 BYOK-First Access Layer
 
 The frontend now separates `model selection` from `model access`.
@@ -35,7 +95,7 @@ BYOK credentials are persisted locally through the existing IndexedDB `appSettin
 - no hosted vault
 - no parser credential storage
 
-That boundary is intentional for Phase 04: parsing remains platform-funded while model access becomes user-configurable.
+That boundary is still intentional for `My API` in Phase 06: local credentials remain browser-local and are never synced into hosted account state.
 
 ## 2026-04-03 Provider-Native Structured Output Layer
 

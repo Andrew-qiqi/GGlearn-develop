@@ -5,25 +5,25 @@
 See: `.planning/PROJECT.md`
 
 **Core Value:** Teacher-like PDF tutoring with controllable model access
-**Current Focus:** Plan the parser bootstrap and provider abstraction phase on top of the completed Cloudflare-first and BYOK-first base
+**Current Focus:** Re-enter GSD on the remaining Phase 05 parser provider work: swap the platform parser from Azure to Volcengine and clean legacy Azure paths before continuing Phase 06
 
 ## Current Position
 
-**Current Phase:** Not started
-**Current Phase Name:** None
+**Current Phase:** 05
+**Current Phase Name:** Parser Bootstrap and Provider Abstraction
 **Total Phases:** 7
 **Completed Phases:** 4
 **Current Plan:** Not started
-**Total Plans in Phase:** 0
-**Status:** Ready to plan the next milestone
+**Total Plans in Phase:** 3
+**Status:** Ready to plan Phase 05 remaining work
 **Last Activity:** 2026-04-05
-**Last Activity Description:** Completed Cloudflare-first rollout and BYOK-first access layer, then locked Phase 05 parser guardrails for planning
-**Progress:** Foundational runtime and BYOK phases are complete; Phase 05 planning is in progress
+**Last Activity Description:** Verified the local Clerk + hosted credits happy path, then re-synced briefs and planning files so GSD can resume from the remaining parser-provider work instead of mixing parser and payment scopes
+**Progress:** Foundational runtime, BYOK, parser guardrails, and hosted-access baseline are in place; the next structured planning step is Phase 05-03
 
 ## Performance Metrics
 
 - Total completed phases: 4
-- Total completed plans: 9
+- Total completed plans: 11
 - Latest completed phase: 04 BYOK-First Access Layer
 
 ## Accumulated Context
@@ -32,23 +32,26 @@ See: `.planning/PROJECT.md`
 
 - The first public version should be BYOK-first.
 - Minimal Cloudflare migration should happen before the next commercialization-critical features.
-- Platform-hosted APIs remain a future parallel track for paid users.
+- Platform-hosted APIs remain a secondary track for paid users.
 - Early document parsing can be platform-funded to reduce activation friction.
+- Platform-managed parser should move to Volcengine.
+- Future parser BYOK, if it happens, should prefer China-friendly options such as MinerU, but it is not the next implementation target.
+- Hosted payment direction is ZPAY.
 - `/docs` is the canonical long-term record; `.planning` should stay focused on active GSD work.
 
 ### Pending Todos
 
-- Plan Phase 05 parser bootstrap and provider abstraction.
-- Execute D1-backed parser quota enforcement and parser abstraction.
-- Defer accounts/hosted access planning until Phase 05 is stable.
+- Plan Phase 05-03: replace Azure-backed platform parsing with Volcengine.
+- Remove legacy Azure direct parser usage from the runtime path.
+- Defer the remaining Phase 06 hosted-access hardening and ZPAY integration until Phase 05 is stable.
 
 ### Blockers/Concerns
 
-- Parser quota truth and downgrade behavior now need to be implemented without disturbing mature teaching logic.
-- Hosted-API launch mode remains intentionally deferred.
+- The parser quota and downgrade baseline exists, but the live provider path is still not cleanly off Azure.
+- Hosted payment is still on a mock adapter and must not be mixed into the current parser cleanup.
 
 ## Session Continuity
 
 **Last session:** 2026-04-05
-**Stopped At:** Phase 05 brief finalized; planning context is being generated
+**Stopped At:** Project brief, Phase 05 brief, and Phase 06 brief were re-synced; next resume point is `gsd-plan-phase 05` using the updated Phase 05 brief
 **Resume file:** None

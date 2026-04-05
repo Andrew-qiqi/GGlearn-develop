@@ -5,6 +5,23 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-05] Completed Phase 06 Platform API Credits and Recharge Boundary
+
+**What**: Added explicit `My API` / `Platform API` access modes, Clerk-backed platform auth, D1-backed hosted credit balance routes, hosted analyze attempt tracking, success-only hosted billing for `Analyze`, `followup`, and quiz actions, a settings-only `Buy Credits` flow, and a mock payment adapter with idempotent webhook application. The frontend now persists `accessMode`, shows hosted balance only in AI settings, opens a global insufficient-credits dialog, and blocks unsupported hosted actions from silently using platform capacity.
+
+**Why**: Phase 06 needed to turn the earlier BYOK-first model-access work into a dual-access product without regressing mature teaching flows. The main constraints were: no billing dashboard clutter, no automatic mode switching on low balance, and no partial charging for hosted `Analyze` when parser quality degrades or only one sub-step succeeds.
+
+**Impact**:
+- `Platform API` now requires Clerk sign-in at mode-switch time and sends bearer auth on hosted requests
+- new users receive a one-time starter grant of `10` credits
+- hosted pricing is fixed at `Analyze = 3`, `followup = 1`, `generate_questions = 1`, `evaluate_answers = 1`
+- hosted `Analyze` now uses a pending-attempt lifecycle so the final charge happens only once after successful `parse + explain + distill`
+- recharge uses a provider-agnostic adapter boundary; the current `mock` adapter supports route verification and replay-safe webhook handling
+- no frontend recharge history or deduction history was added
+
+**Files**: `SlideTutor-AI/src/lib/auth/clerk.tsx`, `SlideTutor-AI/src/lib/api/apiClient.ts`, `SlideTutor-AI/src/lib/platformAccess/pricing.ts`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/components/settings/PlatformApiSection.tsx`, `SlideTutor-AI/src/components/settings/BuyCreditsDialog.tsx`, `SlideTutor-AI/src/components/CreditsRequiredDialog.tsx`, `SlideTutor-AI/src/App.tsx`, `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `SlideTutor-AI/src/hooks/useFollowUp.ts`, `SlideTutor-AI/src/hooks/useQuiz.ts`, `SlideTutor-AI/src/hooks/useChunkRegenerate.ts`, `SlideTutor-AI/api/lib/platformAccess/service.ts`, `SlideTutor-AI/api/lib/platformAccess/store.ts`, `SlideTutor-AI/api/lib/platformAccess/paymentAdapter.ts`, `SlideTutor-AI/api/lib/platformAccess/mockPaymentAdapter.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/src/worker/routes/generate.ts`, `SlideTutor-AI/src/worker/routes/credits-balance.ts`, `SlideTutor-AI/src/worker/routes/recharge-intent.ts`, `SlideTutor-AI/src/worker/routes/payment-webhook.ts`, `SlideTutor-AI/src/worker/index.ts`, `SlideTutor-AI/migrations/002_platform_access_credits.sql`, `SlideTutor-AI/.env.example`, `SlideTutor-AI/wrangler.jsonc`, `docs/backend/api-design.md`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+
+---
 ## [2026-04-05] Completed Phase 05 Parser Bootstrap and Provider Abstraction
 
 **What**: Added a shared parser-access layer that wraps platform-funded document parsing behind one quota-aware service. The backend now routes `explain` and direct `/api/parse` requests through a common parser provider boundary, stores daily successful parser usage in Cloudflare D1, exposes `GET /api/parser-usage`, and reports parser degradation to the frontend through response headers. The frontend now shows exact `Document Parsing` usage in settings and renders a minimal `Low accuracy` warning only for degraded analyses.

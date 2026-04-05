@@ -3,10 +3,10 @@
 ## Phases
 - [x] **Phase 1: Environment & Core Stability** - Secure API keys and establish regression safety.
 - [x] **Phase 2: Data Persistence Migration** - Transition from LocalStorage to IndexedDB for robust data handling.
-- [ ] **Phase 3: Minimal Cloudflare Migration** - Establish the next deployment base before commercial feature work.
-- [ ] **Phase 4: BYOK-First Access Layer** - Make user-supplied model APIs the first public product path.
-- [ ] **Phase 5: Parser Bootstrap and Provider Abstraction** - Keep parser use platform-funded initially while removing the hidden Azure-default assumption.
-- [ ] **Phase 6: Accounts and Platform-Hosted APIs** - Add login and paid hosted access after the platform base and BYOK path are stable.
+- [x] **Phase 3: Minimal Cloudflare Migration** - Establish the next deployment base before commercial feature work.
+- [x] **Phase 4: BYOK-First Access Layer** - Make user-supplied model APIs the first public product path.
+- [ ] **Phase 5: Parser Bootstrap and Provider Abstraction** - Finish parser guardrails by replacing the Azure-backed platform parser path with Volcengine and cleaning legacy Azure runtime paths.
+- [ ] **Phase 6: Accounts and Platform-Hosted APIs** - Build on the existing Clerk + credits baseline to finish hosted access and replace mock payment with ZPAY.
 - [ ] **Phase 7: China-User Operational Fit** - Re-check the real bottlenecks for China-based users and operators before deeper infra commitments.
 
 ## Phase Details
@@ -61,25 +61,28 @@
 - [x] 04-02-PLAN.md - Resolve BYOK access on the backend, preserve migration-safe fallback paths, and update docs. (COMPLETED)
 
 ### Phase 5: Parser Bootstrap and Provider Abstraction
-**Goal**: Keep parser cost platform-funded for early growth while making parser choice and cost an explicit architectural concern.
+**Goal**: Keep parser cost platform-funded for early growth while making parser choice and cost an explicit architectural concern, and finish the provider transition away from Azure.
 **Depends on**: Phase 3
 **Requirements**: PARSE-01, PARSE-02, PARSE-03, PARSE-04
 **Success Criteria** (what must be TRUE):
   1. Early users can rely on platform-managed parsing with low setup friction.
   2. Parser usage is observable and guardrailed instead of treated as a hidden free dependency.
   3. The codebase is prepared for alternative parser providers later.
-**Plans**: 2 plans
-- [ ] 05-01-PLAN.md - Add D1-backed parser quota truth, a shared parser access layer, and downgrade metadata. (PLANNED)
-- [ ] 05-02-PLAN.md - Add Settings quota visibility, downgraded-analysis warning UX, and supporting docs/tests. (PLANNED)
+  4. The platform-managed parser runtime no longer depends on Azure as the live default provider.
+**Plans**: 3 plans
+- [x] 05-01-PLAN.md - Add D1-backed parser quota truth, a shared parser access layer, and downgrade metadata. (COMPLETED OUTSIDE GSD)
+- [x] 05-02-PLAN.md - Add Settings quota visibility, downgraded-analysis warning UX, and supporting docs/tests. (COMPLETED OUTSIDE GSD)
+- [ ] 05-03-PLAN.md - Replace the Azure-backed platform parser with Volcengine, preserve the block contract, and remove legacy Azure runtime paths. (NEXT)
 
 ### Phase 6: Accounts and Platform-Hosted APIs
-**Goal**: Introduce login and paid hosted-model access as a second product track.
+**Goal**: Introduce login and paid hosted-model access as a second product track, using the existing Clerk + credits baseline as the starting point.
 **Depends on**: Phase 3, Phase 4
 **Requirements**: ACCT-01, HOST-01, HOST-02
 **Success Criteria** (what must be TRUE):
   1. User identity, entitlement, and hosted access can be managed consistently.
   2. Hosted-model access coexists cleanly with BYOK instead of replacing it.
   3. The launch mode for hosted access is intentionally scoped: waitlist, invite-only, or direct paid rollout.
+  4. Mock payment is replaced by ZPAY without turning the product into a full billing platform.
 **Plans**: 0 plans
 
 ### Phase 7: China-User Operational Fit
@@ -97,13 +100,14 @@
 Current recommendation: work the next milestone in this order.
 
 ### Immediate Task List
-- [x] Sync the project-direction reset into the human-readable brief and GSD planning files.
-- [x] Define the exact minimum scope of the Cloudflare migration.
-- [x] Produce a dedicated phase brief for Minimal Cloudflare Migration.
-- [x] Produce a dedicated phase brief for BYOK-First Access Layer.
-- [ ] Decide the early BYOK pricing posture: free, donation-supported, or small service fee.
-- [ ] Define the parser bootstrap guardrails: usage monitoring, limits, and fallback behavior.
-- [ ] Defer hosted-API launch mechanics until after the Cloudflare base and BYOK path are concrete.
+- [x] Complete the Cloudflare-first migration.
+- [x] Complete the BYOK-first access layer.
+- [x] Land the parser quota/degraded/settings baseline.
+- [x] Land the Clerk + hosted credits local baseline.
+- [x] Lock the hosted product decisions: starter credits, success-only charging, 1 RMB = 30 credits, and ZPAY direction.
+- [ ] Re-enter GSD on Phase 05 and plan only the remaining parser provider replacement to Volcengine.
+- [ ] After Phase 05 is stable, re-enter GSD on Phase 06 to replace the mock payment adapter with ZPAY and finish hosted-access hardening.
+- [ ] Keep parser BYOK and MinerU discussion deferred until after the platform-managed parser path is clean.
 
 ## Progress Table
 
@@ -113,6 +117,6 @@ Current recommendation: work the next milestone in this order.
 | 2. Data Persistence Migration | 2/2 | Completed | 2026-03-26 |
 | 3. Minimal Cloudflare Migration | 3/3 | Completed | 2026-04-04 |
 | 4. BYOK-First Access Layer | 2/2 | Completed | 2026-04-04 |
-| 5. Parser Bootstrap and Provider Abstraction | 0/2 | Planned | - |
+| 5. Parser Bootstrap and Provider Abstraction | 2/3 | In Progress | - |
 | 6. Accounts and Platform-Hosted APIs | 0/0 | Planned | - |
 | 7. China-User Operational Fit | 0/0 | Planned | - |

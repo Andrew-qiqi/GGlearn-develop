@@ -6,6 +6,56 @@
 
 ---
 
+## 2026-04-05 Hosted Analyze and Credits Flow
+
+Phase 06 adds a hosted credits path without changing the mature two-step analysis UI contract.
+
+### Hosted `Analyze`
+
+For `Platform API`, the runtime flow is now:
+
+1. `useSlideAnalysis.ts` calls `/api/generate` with `task = explain` and `access.mode = "platform"`
+2. Worker verifies Clerk auth from the bearer token
+3. backend parser access runs first
+4. if parser access degrades, the request fails early with `PLATFORM_ANALYZE_UNAVAILABLE`
+5. if parser access is healthy and credits are sufficient, the backend creates a pending analyze attempt and returns `x-slidetutor-analyze-attempt-id`
+6. frontend stores that attempt id only in memory for the current analyze action
+7. frontend calls `/api/generate` again with `task = distill` and `taskData.hostedAnalyzeAttemptId`
+8. only after successful distill stream completion does the Worker commit the single `Analyze = 3` ledger deduction
+
+This keeps the learner-facing `Analyze` action whole while still preserving success-only billing.
+
+### Hosted `Follow-up` and quiz actions
+
+For `followup`, `generate_questions`, and `evaluate_answers`:
+
+1. frontend sends `access.mode = "platform"`
+2. Worker verifies Clerk auth
+3. backend preflights credits before generation starts
+4. stream runs normally
+5. credits are deducted only after the stream completes successfully
+
+If credits are insufficient, the Worker returns structured JSON before any model execution.
+
+### Unsupported hosted actions
+
+Some mature actions remain `My API` only for now:
+
+- `regenerate_chunk`
+- `regenerate_followup`
+- `evaluate_note`
+
+The frontend blocks or redirects these flows back toward AI settings instead of silently spending hosted capacity.
+
+### Recharge flow
+
+1. user opens `Buy Credits` from settings or from the insufficient-credit dialog
+2. frontend previews the fixed quote using `1 RMB = 30 credits`
+3. frontend calls `POST /api/recharge-intent`
+4. Worker creates a recharge order and returns mock checkout metadata
+5. provider webhook calls `POST /api/payment-webhook`
+6. backend applies the credit ledger entry exactly once even if the webhook is replayed
+
 ## 2026-04-05 Platform Parser Quota and Degraded Explain Flow
 
 Phase 05 adds a dedicated parser-access branch ahead of the existing explain pipeline.
