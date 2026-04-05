@@ -1,55 +1,55 @@
 # Phase 05: Parser Bootstrap and Provider Abstraction - Context
 
-**Gathered:** 2026-04-05
+**Gathered:** 2026-04-06
 **Status:** Ready for planning
-**Source:** PRD Express Path (`docs/discuss/phases/05-parser-bootstrap-and-provider-abstraction-brief.md`)
+**Source:** Updated phase brief (`docs/discuss/phases/05-parser-bootstrap-and-provider-abstraction-brief.md`)
 
 <domain>
 ## Phase Boundary
 
-This phase makes document parsing an explicit, controlled product capability instead of a hidden Azure-backed default. Early users should still be able to use platform-managed `Document Parsing` with very low setup friction, but parser cost and usage must now be observable, limited, and intentionally degraded when the free platform path is unavailable.
+Phase 05 is no longer about introducing parser quota and degraded fallback from zero. That baseline already exists in the codebase. The remaining Phase 05 work is to finish the provider transition so the platform-managed parser runtime no longer depends on Azure as the live default implementation.
 
-The phase should introduce only the minimum backend and UI changes needed to support platform-funded parsing with daily limits, provider abstraction, and graceful fallback. It must not turn into parser commercialization, parser BYOK, login-based quota sync, or a large anti-abuse system.
+This phase should:
+
+- keep platform-managed `Document Parsing` as the default early-user experience
+- preserve the current D1-backed parser usage truth, `10/day` rule, and successful-only counting
+- preserve the existing degraded-analysis behavior and Settings visibility already shipped
+- replace the live platform parser provider from Azure to Volcengine
+- remove or neutralize legacy Azure direct parser paths so the runtime has one parser truth
+
+This phase must not expand into parser BYOK, parser provider selection UI, payment integration, or hosted-access hardening.
 
 </domain>
 
 <decisions>
 ## Implementation Decisions
 
-### Product posture
+### Current product posture
 - Early public BYOK remains fully free.
-- The platform continues to provide `Document Parsing` by default during the early public stage.
-- Users should not be forced to configure their own parser provider in this phase.
+- Platform-managed `Document Parsing` remains available by default.
+- Parser quota, degraded fallback, and parser usage visibility are already part of the baseline.
 
-### Parser limit policy
-- Platform-funded parsing is limited to `10` successful page-level parsing operations per natural day.
-- Quota deduction is based on a real successful platform parser call, not on button clicks or failed attempts.
-- When the parser limit is exhausted, AI analysis must continue, but it should run without document parsing and therefore with lower precision.
+### Locked provider direction
+- The platform-managed parser provider for the live path must be `Volcengine`.
+- Azure should no longer remain the implicit runtime default after this phase.
+- Product-facing UI and copy should continue to say `Document Parsing`; users should not see provider names.
 
-### User experience
-- Quota visibility should live in the Settings entry, not in the main analysis flow.
-- The settings display should show an exact numeric format such as `7/10`.
-- Only analyses that are actually downgraded due to parser unavailability should show a lightweight warning.
-- The warning text should be `Low accuracy`.
-- The hover detail should read: `Document parsing is unavailable for this analysis, so precision may be lower.`
-- Product-facing copy should say `Document Parsing` and should not expose `Azure`.
+### Contract and compatibility
+- Existing frontend-facing `LayoutBlock[]` expectations must remain stable in this phase.
+- `/api/parse` and integrated explain parsing should continue to return the same effective block shape to downstream consumers.
+- Successful parser calls still count against usage; failed or skipped calls do not.
+- Existing degraded-analysis semantics, including `Low accuracy`, must keep working.
 
-### Service truth and storage
-- Quota truth must be enforced server-side, not in local storage.
-- The minimal implementation should use Cloudflare `D1` as the source of truth for anonymous parser quota tracking.
-- The anonymous identity key for this phase should be `ip_hash + date_key`.
-- IP hashing must use a dedicated `USAGE_HASH_SECRET`, not `API_TOKEN_SECRET` or another existing secret.
-- Because current user volume is very small, the first version should avoid complex anti-abuse, multi-device reconciliation, or large-scale fallback design.
-
-### Architecture boundary
-- This phase must introduce a clean parser abstraction boundary so Azure is no longer the only implicit implementation path.
-- Azure may remain the internal first provider implementation for now, but it must sit behind that abstraction.
-- Mature teaching business logic must not be changed in this phase.
+### Scope control
+- Parser BYOK is not part of this phase.
+- MinerU is a possible future BYOK-friendly parser candidate for China users, but it is explicitly deferred.
+- ZPAY, hosted access, and other Phase 06 concerns are out of scope here.
+- Mature teaching logic must not be reworked as part of the provider swap.
 
 ### the agent's Discretion
-- The exact D1 schema, helper names, and service layering may be chosen during planning if they preserve the locked product behavior above.
-- The exact placement and styling of the settings quota row may be chosen during planning if it stays lightweight and non-anxious.
-- The parser abstraction can be implemented with the smallest viable interface as long as later provider replacement does not require re-cutting the main business path.
+- The exact Volcengine-to-`LayoutBlock[]` normalization layer can be designed pragmatically if the output contract stays stable.
+- The exact module split for provider normalization can be chosen if later provider additions do not require re-cutting the main chain.
+- If a thin compatibility adapter is helpful during the migration, it is acceptable as long as the live platform path is clearly Volcengine-backed.
 
 </decisions>
 
@@ -59,53 +59,60 @@ The phase should introduce only the minimum backend and UI changes needed to sup
 **Downstream agents MUST read these before planning or implementing.**
 
 ### Product and phase scope
-- `docs/discuss/project-brief.md` - Project-level direction, sequencing, and commercialization boundaries.
-- `docs/discuss/phases/04-byok-first-access-layer-brief.md` - Upstream BYOK-first decisions that must remain intact.
-- `docs/discuss/phases/05-parser-bootstrap-and-provider-abstraction-brief.md` - Locked phase-specific decisions and UX wording.
+- `docs/discuss/project-brief.md` - Current project-level sequencing and locked decisions.
+- `docs/discuss/phases/05-parser-bootstrap-and-provider-abstraction-brief.md` - Updated phase-specific scope for Volcengine replacement.
+- `docs/discuss/phases/06-login-hosted-access-and-credit-brief.md` - Confirms Phase 06 work stays separate.
 
 ### GSD planning state
 - `.planning/PROJECT.md` - Active project definition for GSD.
-- `.planning/ROADMAP.md` - Phase ordering and requirement mapping.
-- `.planning/REQUIREMENTS.md` - `PARSE-01`, `PARSE-02`, `PARSE-03`, and `PARSE-04`.
-- `.planning/STATE.md` - Current planning history and recent product direction.
+- `.planning/ROADMAP.md` - Shows 05-03 as the next plan.
+- `.planning/REQUIREMENTS.md` - `PARSE-01` through `PARSE-04`.
+- `.planning/STATE.md` - Current focus and resume point.
 
-### Existing architecture and UX
-- `docs/backend/api-design.md` - Existing API surface and current parsing/generation flow.
-- `docs/frontend/architecture.md` - Frontend structure that the settings integration must respect.
-- `docs/frontend/data-flow.md` - Data flow expectations around parsing and AI analysis.
-- `docs/architecture/deployment.md` - Cloudflare runtime context and deployment base.
+### Existing implementation anchors
+- `SlideTutor-AI/api/lib/parser/accessService.ts` - Current shared parser access entry point.
+- `SlideTutor-AI/api/lib/parser/azureProvider.ts` - Current provider implementation that should cease being the live default.
+- `SlideTutor-AI/api/lib/azureParse.ts` - Legacy Azure-specific parsing implementation.
+- `SlideTutor-AI/api/generate.ts` - Legacy direct parse path still using Azure.
+- `SlideTutor-AI/src/worker/routes/parse.ts` - Current direct parse route integration.
+- `SlideTutor-AI/api/lib/generateService.ts` - Integrated explain path already using parser access semantics.
+- `SlideTutor-AI/wrangler.jsonc` - Current parser usage and credits migration bindings.
 
-### Code anchors
-- `SlideTutor-AI/api/lib/azureParse.ts` - Current parser implementation that should move behind an abstraction boundary.
-- `SlideTutor-AI/api/lib/env.ts` - Existing env access patterns that will likely need new secrets and capability checks.
-- `SlideTutor-AI/src/components/SettingsModal.tsx` - Current settings surface where parser quota should be displayed.
-- `SlideTutor-AI/src/store/tutorStore.ts` - Current state flow that may need downgraded-analysis metadata.
-- `SlideTutor-AI/wrangler.jsonc` - Cloudflare runtime config and future D1 binding surface.
+### Volcengine parser references
+- `tmp_files/volcengine_document_parse_intellgence/2.md` - Pricing and product overview copied from official docs.
+- `tmp_files/volcengine_document_parse_intellgence/3.md` - Request, response, and field details for `OCRPdf`.
+
+### Existing docs likely to update
+- `SlideTutor-AI/README.md`
+- `docs/backend/api-design.md`
+- `docs/frontend/architecture.md`
+- `docs/frontend/data-flow.md`
+- `docs/changelog/CHANGELOG_TECH.md`
 
 </canonical_refs>
 
 <specifics>
 ## Specific Ideas
 
-- Prefer one minimal parser access layer plus one minimal quota service rather than scattering quota checks through multiple handlers.
-- Protect the user reading experience: quota is visible when the user looks for it, but not pushed aggressively during normal study flow.
-- Make sure the downgraded-analysis path is easy to perceive but not framed like an error state.
-- Keep the first D1-backed quota system intentionally small and evolvable into future login-based identity.
+- Prefer a direct provider swap inside the existing parser access boundary rather than a second parallel parser path.
+- Map Volcengine `textblocks[].text`, `label`, and `norm_box` into the existing `LayoutBlock[]` contract.
+- Because the current product analyzes slide pages, the first implementation should prefer a single-page image path if it satisfies the API constraints, instead of adding TOS upload complexity prematurely.
+- Clean up `api/generate.ts` Azure direct usage so the codebase no longer has two platform parser truths.
 
 </specifics>
 
 <deferred>
 ## Deferred Ideas
 
-- Parser BYOK.
-- Multiple parser providers with a formal provider picker UI.
-- Login-based quota sync across devices.
-- Paid parser packs, subscriptions, or commercialization rules.
-- Complex anti-abuse logic beyond the very small current-user scenario.
+- parser BYOK
+- parser provider picker UI
+- MinerU adapter
+- TOS upload flow unless the implementation proves the image-base64 path is insufficient
+- payment or hosted-access work
 
 </deferred>
 
 ---
 
 *Phase: 05-parser-bootstrap-and-provider-abstraction*
-*Context gathered: 2026-04-05 via PRD Express Path*
+*Context gathered: 2026-04-06 from updated phase brief and current code state*

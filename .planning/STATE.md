@@ -5,20 +5,20 @@
 See: `.planning/PROJECT.md`
 
 **Core Value:** Teacher-like PDF tutoring with controllable model access
-**Current Focus:** Re-enter GSD on the remaining Phase 05 parser provider work: swap the platform parser from Azure to Volcengine and clean legacy Azure paths before continuing Phase 06
+**Current Focus:** Move into Phase 06 planning now that the Phase 05 Volcengine parser cutover is complete
 
 ## Current Position
 
-**Current Phase:** 05
-**Current Phase Name:** Parser Bootstrap and Provider Abstraction
+**Current Phase:** 06
+**Current Phase Name:** Accounts and Platform-Hosted APIs
 **Total Phases:** 7
-**Completed Phases:** 4
+**Completed Phases:** 5
 **Current Plan:** Not started
-**Total Plans in Phase:** 3
-**Status:** Ready to plan Phase 05 remaining work
-**Last Activity:** 2026-04-05
-**Last Activity Description:** Verified the local Clerk + hosted credits happy path, then re-synced briefs and planning files so GSD can resume from the remaining parser-provider work instead of mixing parser and payment scopes
-**Progress:** Foundational runtime, BYOK, parser guardrails, and hosted-access baseline are in place; the next structured planning step is Phase 05-03
+**Total Plans in Phase:** 0
+**Status:** Ready to plan Phase 06
+**Last Activity:** 2026-04-06
+**Last Activity Description:** Completed Phase 05-03 by cutting the live parser runtime over to Volcengine, removing Azure parser runtime remnants, and syncing docs/tests/planning artifacts
+**Progress:** Foundational runtime, BYOK, parser guardrails, and hosted-access baseline are in place; the next structured planning step is Phase 06
 
 ## Performance Metrics
 
@@ -41,17 +41,17 @@ See: `.planning/PROJECT.md`
 
 ### Pending Todos
 
-- Plan Phase 05-03: replace Azure-backed platform parsing with Volcengine.
-- Remove legacy Azure direct parser usage from the runtime path.
-- Defer the remaining Phase 06 hosted-access hardening and ZPAY integration until Phase 05 is stable.
+- Plan Phase 06 with the current Clerk + credits baseline as the starting point.
+- Replace the mock payment adapter with ZPAY without building unnecessary billing surfaces.
+- Keep parser BYOK deferred while hosted access and payment are stabilized.
 
 ### Blockers/Concerns
 
-- The parser quota and downgrade baseline exists, but the live provider path is still not cleanly off Azure.
-- Hosted payment is still on a mock adapter and must not be mixed into the current parser cleanup.
+- Hosted payment is still on a mock adapter and must be replaced carefully with ZPAY.
+- A live Volcengine AK/SK smoke test is still needed outside local unit coverage.
 
 ## Session Continuity
 
-**Last session:** 2026-04-05
-**Stopped At:** Project brief, Phase 05 brief, and Phase 06 brief were re-synced; next resume point is `gsd-plan-phase 05` using the updated Phase 05 brief
+**Last session:** 2026-04-06
+**Stopped At:** Phase 05-03 completed with code, docs, and validation synced; next resume point is `gsd-plan-phase 06 --prd docs/discuss/phases/06-login-hosted-access-and-credit-brief.md`
 **Resume file:** None

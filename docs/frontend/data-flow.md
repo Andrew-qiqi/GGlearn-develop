@@ -278,7 +278,7 @@ In the current UI, `Quick Explain` may pass through a lightweight presentation f
 
 The current design does not cache `layoutBlocks` for low-frequency regenerate scenarios. Instead, it optimizes the high-frequency path:
 
-- Azure layout analysis still runs only during `explain`
+- platform layout analysis still runs only during `explain`
 - `distill` does not send the slide image again
 - `distill` consumes `fullExplanation` and returns both downstream artifacts in one request
 
@@ -302,7 +302,7 @@ Because the chunk pipeline still uses markdown card boundaries, the explanation 
    ↓
 5. 发送请求到 /api/generate
    ↓
-6. 后端执行 Azure Document Intelligence 布局分析 (api/generate.ts)
+6. 后端执行 Volcengine OCRPdf 页面布局分析（shared parser provider）
    ↓
 7. 后端根据任务和布局构建提示词
    ↓

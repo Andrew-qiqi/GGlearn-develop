@@ -5,6 +5,21 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-06] Completed Phase 05-03 Volcengine Parser Runtime Cutover
+
+**What**: Replaced the live platform parser runtime with a Volcengine OCRPdf-backed provider, added request signing and `textblocks -> LayoutBlock[]` normalization, removed the remaining Azure parser runtime files, switched the legacy Node `/api/parse` compatibility route to the same provider, and updated env/docs/test surfaces to use Volcengine parser secrets.
+
+**Why**: Phase 05 still had a split-brain parser story: parser quota and degrade behavior were already shipped, but the actual live provider default and a legacy direct route still depended on Azure. That would have kept cost assumptions, local setup, and future parser-provider work confusing.
+
+**Impact**:
+- the platform-managed parser now has one clear live provider truth: Volcengine
+- the existing `LayoutBlock[]` contract and degraded-analysis behavior stay unchanged for downstream teaching flows
+- local and Worker parser configuration now expects `VOLCENGINE_ACCESS_KEY_ID` and `VOLCENGINE_SECRET_ACCESS_KEY`
+- the repo no longer carries Azure parser runtime code as an accidental fallback path
+
+**Files**: `SlideTutor-AI/api/lib/parser/volcengineProvider.ts`, `SlideTutor-AI/api/lib/parser/volcengineProvider.test.ts`, `SlideTutor-AI/api/lib/parser/accessService.ts`, `SlideTutor-AI/api/generate.ts`, `SlideTutor-AI/api/lib/env.ts`, `SlideTutor-AI/api/parserAccess.test.ts`, `SlideTutor-AI/api/security.test.ts`, `SlideTutor-AI/src/worker/index.ts`, `SlideTutor-AI/test/workers/parse-route.worker.test.ts`, `SlideTutor-AI/test/workers/security-observability.worker.test.ts`, `SlideTutor-AI/.env.example`, `SlideTutor-AI/README.md`, `docs/backend/api-design.md`, `docs/architecture/deployment.md`, `docs/architecture/system-overview.md`, `docs/architecture/tech-stack.md`, `docs/frontend/data-flow.md`
+
+---
 ## [2026-04-05] Completed Phase 06 Platform API Credits and Recharge Boundary
 
 **What**: Added explicit `My API` / `Platform API` access modes, Clerk-backed platform auth, D1-backed hosted credit balance routes, hosted analyze attempt tracking, success-only hosted billing for `Analyze`, `followup`, and quiz actions, a settings-only `Buy Credits` flow, and a mock payment adapter with idempotent webhook application. The frontend now persists `accessMode`, shows hosted balance only in AI settings, opens a global insufficient-credits dialog, and blocks unsupported hosted actions from silently using platform capacity.

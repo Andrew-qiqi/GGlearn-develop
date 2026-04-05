@@ -19,7 +19,7 @@
 - **运行时**：Node.js
 - **框架**：Express.js
 - **语言**：TypeScript
-- **文档分析**：Azure Document Intelligence
+- **文档分析**：Volcengine OCRPdf
 - **AI 提供商**：
   - Google Gemini（主要）
   - Doubao（字节跳动）
@@ -32,4 +32,3 @@
 - **安全**：Helmet.js、CORS、express-rate-limit
 
 ---
-

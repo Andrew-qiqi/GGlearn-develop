@@ -1,6 +1,6 @@
 # API Design
 
-Last updated: 2026-04-05
+Last updated: 2026-04-06
 
 ## 2026-04-05 Platform API and Credits
 
@@ -188,7 +188,7 @@ Notes:
 - Teaching prompts, structured artifacts, and frontend parsing contracts are intentionally unchanged by the Cloudflare migration.
 - In Phase 06, `My API` and `Platform API` are now explicit frontend modes.
 - In Phase 06, BYOK requests no longer fall back to server-side model secrets.
-- In Phase 05, `explain` requests resolve document parsing through a shared parser-access layer instead of calling Azure directly.
+- In Phase 05, `explain` requests resolve document parsing through a shared Volcengine-backed parser-access layer.
 - In hosted `Analyze`, degraded parser results do not stream teaching output and do not become a paid success.
 
 ### `GET /api/get-token`
@@ -210,7 +210,7 @@ Response:
 
 Purpose:
 
-- run Azure Document Intelligence layout extraction for a slide image
+- run Volcengine OCRPdf layout extraction for a slide image
 - deduct one daily platform-funded parser use only after a successful parse
 
 Request body:
@@ -269,7 +269,7 @@ Unavailable response:
 
 Notes:
 
-- the Worker route preserves the existing block shape
+- the Worker route preserves the existing block shape while using Volcengine as the live platform parser provider
 - unauthorized origins return a route-specific JSON `403`
 - quota is enforced server-side through Cloudflare D1 using an anonymous identity derived from `ip_hash + date_key`
 - the current daily parser limit is `10`

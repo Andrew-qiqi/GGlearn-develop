@@ -25,8 +25,8 @@ A high-quality slide learning assistant that turns static lecture PDFs into a gu
 - [x] **Hosted Access Baseline**: Clerk auth wiring and D1-backed hosted credits foundations exist.
 
 ### Active
-- [ ] **Parser Provider Replacement**: finish the platform parser transition from Azure to Volcengine and remove legacy Azure runtime dependencies.
-- [ ] **Parser Provider Abstraction Completion**: make parser abstraction real enough that Azure is no longer the implicit live default.
+- [x] **Parser Provider Replacement**: finish the platform parser transition from Azure to Volcengine and remove legacy Azure runtime dependencies.
+- [x] **Parser Provider Abstraction Completion**: make parser abstraction real enough that Azure is no longer the implicit live default.
 - [ ] **Account and Hosted API Completion**: finish hosted access on top of the existing Clerk + credits baseline.
 - [ ] **Payment Provider Integration**: replace mock payment with ZPAY without turning the product into a full billing platform.
 - [ ] **China-User Operational Fit**: re-check practical reliability bottlenecks for China-based users across model access, parser access, streaming, and payment.

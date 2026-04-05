@@ -15,7 +15,7 @@
 ### Parser Strategy
 - [x] **PARSE-01**: Early users should be able to use platform-managed document parsing with low setup friction.
 - [x] **PARSE-02**: Parser usage and cost must become observable and controllable instead of relying on accidental free quota.
-- [ ] **PARSE-03**: Parser providers must be abstracted so Azure is no longer the only implicit path.
+- [x] **PARSE-03**: Parser providers must be abstracted so Azure is no longer the only implicit path.
 - [x] **PARSE-04**: Users who do not provide their own parser access should be subject to explicit platform-managed parsing limits.
 
 ### Accounts and Hosted Access
@@ -69,7 +69,7 @@
 | BYOK-03 | Phase 4 | Completed |
 | PARSE-01 | Phase 5 | Completed |
 | PARSE-02 | Phase 5 | Completed |
-| PARSE-03 | Phase 5 | Pending |
+| PARSE-03 | Phase 5 | Completed |
 | PARSE-04 | Phase 5 | Completed |
 | ACCT-01 | Phase 6 | In Progress |
 | HOST-01 | Phase 6 | In Progress |

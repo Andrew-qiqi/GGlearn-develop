@@ -5,7 +5,7 @@
 - [x] **Phase 2: Data Persistence Migration** - Transition from LocalStorage to IndexedDB for robust data handling.
 - [x] **Phase 3: Minimal Cloudflare Migration** - Establish the next deployment base before commercial feature work.
 - [x] **Phase 4: BYOK-First Access Layer** - Make user-supplied model APIs the first public product path.
-- [ ] **Phase 5: Parser Bootstrap and Provider Abstraction** - Finish parser guardrails by replacing the Azure-backed platform parser path with Volcengine and cleaning legacy Azure runtime paths.
+- [x] **Phase 5: Parser Bootstrap and Provider Abstraction** - Finish parser guardrails by replacing the Azure-backed platform parser path with Volcengine and cleaning legacy Azure runtime paths.
 - [ ] **Phase 6: Accounts and Platform-Hosted APIs** - Build on the existing Clerk + credits baseline to finish hosted access and replace mock payment with ZPAY.
 - [ ] **Phase 7: China-User Operational Fit** - Re-check the real bottlenecks for China-based users and operators before deeper infra commitments.
 
@@ -72,7 +72,7 @@
 **Plans**: 3 plans
 - [x] 05-01-PLAN.md - Add D1-backed parser quota truth, a shared parser access layer, and downgrade metadata. (COMPLETED OUTSIDE GSD)
 - [x] 05-02-PLAN.md - Add Settings quota visibility, downgraded-analysis warning UX, and supporting docs/tests. (COMPLETED OUTSIDE GSD)
-- [ ] 05-03-PLAN.md - Replace the Azure-backed platform parser with Volcengine, preserve the block contract, and remove legacy Azure runtime paths. (NEXT)
+- [x] 05-03-PLAN.md - Replace the Azure-backed platform parser with Volcengine, preserve the block contract, and remove legacy Azure runtime paths. (COMPLETED)
 
 ### Phase 6: Accounts and Platform-Hosted APIs
 **Goal**: Introduce login and paid hosted-model access as a second product track, using the existing Clerk + credits baseline as the starting point.
@@ -105,8 +105,8 @@ Current recommendation: work the next milestone in this order.
 - [x] Land the parser quota/degraded/settings baseline.
 - [x] Land the Clerk + hosted credits local baseline.
 - [x] Lock the hosted product decisions: starter credits, success-only charging, 1 RMB = 30 credits, and ZPAY direction.
-- [ ] Re-enter GSD on Phase 05 and plan only the remaining parser provider replacement to Volcengine.
-- [ ] After Phase 05 is stable, re-enter GSD on Phase 06 to replace the mock payment adapter with ZPAY and finish hosted-access hardening.
+- [x] Re-enter GSD on Phase 05 and finish the remaining parser provider replacement to Volcengine.
+- [ ] Re-enter GSD on Phase 06 to replace the mock payment adapter with ZPAY and finish hosted-access hardening.
 - [ ] Keep parser BYOK and MinerU discussion deferred until after the platform-managed parser path is clean.
 
 ## Progress Table
@@ -117,6 +117,6 @@ Current recommendation: work the next milestone in this order.
 | 2. Data Persistence Migration | 2/2 | Completed | 2026-03-26 |
 | 3. Minimal Cloudflare Migration | 3/3 | Completed | 2026-04-04 |
 | 4. BYOK-First Access Layer | 2/2 | Completed | 2026-04-04 |
-| 5. Parser Bootstrap and Provider Abstraction | 2/3 | In Progress | - |
+| 5. Parser Bootstrap and Provider Abstraction | 3/3 | Completed | 2026-04-06 |
 | 6. Accounts and Platform-Hosted APIs | 0/0 | Planned | - |
 | 7. China-User Operational Fit | 0/0 | Planned | - |
