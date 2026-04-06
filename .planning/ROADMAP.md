@@ -6,7 +6,7 @@
 - [x] **Phase 3: Minimal Cloudflare Migration** - Establish the next deployment base before commercial feature work.
 - [x] **Phase 4: BYOK-First Access Layer** - Make user-supplied model APIs the first public product path.
 - [x] **Phase 5: Parser Bootstrap and Provider Abstraction** - Finish parser guardrails by replacing the Azure-backed platform parser path with Volcengine and cleaning legacy Azure runtime paths.
-- [ ] **Phase 6: Accounts and Platform-Hosted APIs** - Build on the existing Clerk + credits baseline to finish hosted access and replace mock payment with ZPAY.
+- [x] **Phase 6: Accounts and Platform-Hosted APIs** - Build on the existing Clerk + credits baseline to finish hosted access and replace mock payment with ZPAY.
 - [ ] **Phase 7: China-User Operational Fit** - Re-check the real bottlenecks for China-based users and operators before deeper infra commitments.
 
 ## Phase Details
@@ -84,6 +84,7 @@
   3. The launch mode for hosted access is intentionally scoped: waitlist, invite-only, or direct paid rollout.
   4. Mock payment is replaced by ZPAY without turning the product into a full billing platform.
 **Plans**: 0 plans
+**Completed**: 2026-04-06
 
 ### Phase 7: China-User Operational Fit
 **Goal**: Validate that the product can actually be used and operated reliably in the target geography before deeper commitments.
@@ -106,8 +107,9 @@ Current recommendation: work the next milestone in this order.
 - [x] Land the Clerk + hosted credits local baseline.
 - [x] Lock the hosted product decisions: starter credits, success-only charging, 1 RMB = 30 credits, and ZPAY direction.
 - [x] Re-enter GSD on Phase 05 and finish the remaining parser provider replacement to Volcengine.
-- [ ] Re-enter GSD on Phase 06 to replace the mock payment adapter with ZPAY and finish hosted-access hardening.
-- [ ] Keep parser BYOK and MinerU discussion deferred until after the platform-managed parser path is clean.
+- [x] Re-enter GSD on Phase 06 to replace the mock payment adapter with ZPAY and finish hosted-access hardening.
+- [ ] Begin Phase 7 to validate the real China-user operational bottlenecks after live Clerk + ZPAY rollout.
+- [ ] Revisit parser BYOK and MinerU only after the current platform-managed parser and hosted-access path stay stable in live use.
 
 ## Progress Table
 
@@ -118,5 +120,5 @@ Current recommendation: work the next milestone in this order.
 | 3. Minimal Cloudflare Migration | 3/3 | Completed | 2026-04-04 |
 | 4. BYOK-First Access Layer | 2/2 | Completed | 2026-04-04 |
 | 5. Parser Bootstrap and Provider Abstraction | 3/3 | Completed | 2026-04-06 |
-| 6. Accounts and Platform-Hosted APIs | 0/0 | Planned | - |
+| 6. Accounts and Platform-Hosted APIs | 0/0 | Completed | 2026-04-06 |
 | 7. China-User Operational Fit | 0/0 | Planned | - |
