@@ -5,6 +5,21 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-06] Hardened Clerk Frontend Bootstrap For Cloudflare Deploys
+
+**What**: Updated the Clerk frontend boundary so the SPA no longer crashes when the public Clerk key is missing from the built client bundle. `ClerkAppProvider` now falls back to a safe unauthenticated context, the settings UI keeps users in `My API` mode when platform sign-in is unavailable, and the Vite config now exposes both `VITE_` and `NEXT_PUBLIC_` public env prefixes for the Clerk publishable key.
+
+**Why**: A production Cloudflare deploy rendered only the background shell because the frontend tried to mount Clerk unconditionally and threw before React could render the app. We also had a naming mismatch risk between Vite-style and Next-style public env variables.
+
+**Impact**:
+- missing Clerk frontend config no longer white-screens the entire product
+- `Platform API` sign-in now degrades cleanly to BYOK until frontend Clerk config is fixed
+- Cloudflare/local builds can use either `VITE_CLERK_PUBLISHABLE_KEY` or `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- Worker-side `CLERK_SECRET_KEY` / `CLERK_JWT_KEY` are still required separately for bearer-token verification
+
+**Files**: `SlideTutor-AI/src/lib/auth/clerk.tsx`, `SlideTutor-AI/src/lib/auth/clerk.test.tsx`, `SlideTutor-AI/src/components/settings/PlatformApiSection.tsx`, `SlideTutor-AI/src/components/SettingsModal.test.tsx`, `SlideTutor-AI/vite.config.ts`, `docs/frontend/architecture.md`, `docs/architecture/deployment.md`
+
+---
 ## [2026-04-06] Completed Phase 05-03 Volcengine Parser Runtime Cutover
 
 **What**: Replaced the live platform parser runtime with a Volcengine OCRPdf-backed provider, added request signing and `textblocks -> LayoutBlock[]` normalization, removed the remaining Azure parser runtime files, switched the legacy Node `/api/parse` compatibility route to the same provider, and updated env/docs/test surfaces to use Volcengine parser secrets.

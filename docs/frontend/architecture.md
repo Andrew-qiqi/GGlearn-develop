@@ -33,6 +33,8 @@ Important behavior:
 - clicking `Platform API` in settings triggers sign-in immediately if the user is not authenticated
 - the app does not persist platform mode before Clerk auth is available
 - platform-mode API calls attach `Authorization: Bearer <session-token>`
+- if the Clerk frontend publishable key is missing, the app now stays usable in `My API` mode instead of crashing the SPA shell
+- the frontend build accepts either `VITE_CLERK_PUBLISHABLE_KEY` or `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` as the public Clerk key name
 
 ### Settings boundary
 

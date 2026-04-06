@@ -70,6 +70,8 @@ Core runtime secrets:
 
 - `APP_URL`
 - `SHARED_APP_URL` if a secondary public origin is used
+- `VITE_CLERK_PUBLISHABLE_KEY` or `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` for the SPA-side Clerk bootstrap
+- `CLERK_SECRET_KEY` or `CLERK_JWT_KEY` for Worker-side platform-session verification
 - `GEMINI_API_KEY`
 - `DOUBAO_API_KEY` when that provider is enabled
 - `QWEN_API_KEY` when that provider is enabled
@@ -87,6 +89,11 @@ Notification secrets:
 - `SECURITY_ALERT_TO_EMAIL`
 
 Local development can use `NOTIFICATION_PROVIDER=log` to avoid external delivery.
+
+Clerk note:
+
+- the Clerk publishable key is a frontend build variable, not just a Worker runtime secret
+- if the publishable key is missing, the app now degrades to `My API` mode instead of crashing at boot
 
 ## Observability
 
