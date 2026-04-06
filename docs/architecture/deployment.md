@@ -13,6 +13,9 @@ The Worker is responsible for:
 - handling `/api/parse`
 - handling `/api/generate`
 - handling `/api/feedback`
+- handling `/api/credits/balance`
+- handling `/api/recharge-intent`
+- handling `/api/payment-webhook`
 
 This removes the old Vercel-first split between static hosting and serverless API routes.
 
@@ -79,6 +82,10 @@ Core runtime secrets:
 - `VOLCENGINE_SECRET_ACCESS_KEY`
 - `ENABLE_TOKEN_AUTH`
 - `API_TOKEN_SECRET`
+- `PAYMENT_PROVIDER`
+- `ZPAY_PID` when `PAYMENT_PROVIDER=zpay`
+- `ZPAY_PKEY` when `PAYMENT_PROVIDER=zpay`
+- `ZPAY_PAYMENT_TYPE` when `PAYMENT_PROVIDER=zpay`
 
 Notification secrets:
 
@@ -94,6 +101,12 @@ Clerk note:
 
 - the Clerk publishable key is a frontend build variable, not just a Worker runtime secret
 - if the publishable key is missing, the app now degrades to `My API` mode instead of crashing at boot
+
+ZPAY note:
+
+- production recharge now uses the ZPAY page-redirect `submit.php` checkout flow
+- `APP_URL` must be the canonical public origin because the Worker derives both `return_url` and `notify_url` from it
+- `/api/payment-webhook` must remain publicly reachable and must answer successful callbacks with plain-text `success`
 
 ## Observability
 
@@ -114,4 +127,6 @@ Important signals to watch after deployment:
 - confirm `/api/parse` returns JSON or a route-specific JSON error
 - confirm `/api/generate` streams plain text
 - confirm `/api/feedback` returns the existing success contract on successful delivery
+- confirm `/api/recharge-intent` returns a ZPAY checkout URL when `PAYMENT_PROVIDER=zpay`
+- confirm `/api/payment-webhook` is reachable from the public internet and returns plain-text `success` for valid ZPAY callbacks
 - confirm direct browser navigation to `/api/*` does not return the SPA shell

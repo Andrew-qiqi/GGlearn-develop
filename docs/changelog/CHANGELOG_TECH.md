@@ -5,6 +5,21 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-06] Replaced Mock Recharge Checkout With ZPAY
+
+**What**: Replaced the temporary mock recharge adapter with a production `zpay` adapter that generates signed `submit.php` checkout URLs, validates ZPAY webhook signatures, checks callback amounts against the stored RMB order amount, accepts both `GET` and `POST` callbacks, and returns the plain-text `success` acknowledgement ZPAY expects after idempotent ledger application.
+
+**Why**: Phase 06 had already shipped the hosted-credits product boundary, but recharge still stopped at a mock provider. That was enough to test UX and ledger behavior, but not enough to actually sell credits to users.
+
+**Impact**:
+- production recharge now depends on `PAYMENT_PROVIDER=zpay`, `ZPAY_PID`, `ZPAY_PKEY`, and `ZPAY_PAYMENT_TYPE`
+- `/api/recharge-intent` now returns a real ZPAY checkout URL instead of a mock local page
+- `/api/payment-webhook` must stay publicly reachable and answer valid callbacks with plain-text `success`
+- the backend now rejects signed-but-mismatched callback amounts before crediting the account
+
+**Files**: `SlideTutor-AI/api/lib/platformAccess/paymentAdapter.ts`, `SlideTutor-AI/api/lib/platformAccess/mockPaymentAdapter.ts`, `SlideTutor-AI/api/lib/platformAccess/zpayAdapter.ts`, `SlideTutor-AI/api/lib/platformAccess/zpayAdapter.test.ts`, `SlideTutor-AI/api/lib/platformAccess/service.ts`, `SlideTutor-AI/api/lib/platformAccess/service.test.ts`, `SlideTutor-AI/src/worker/routes/payment-webhook.ts`, `SlideTutor-AI/src/worker/index.ts`, `SlideTutor-AI/test/workers/recharge.worker.test.ts`, `SlideTutor-AI/.env.example`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`, `docs/architecture/deployment.md`
+
+---
 ## [2026-04-06] Hardened Clerk Frontend Bootstrap For Cloudflare Deploys
 
 **What**: Updated the Clerk frontend boundary so the SPA no longer crashes when the public Clerk key is missing from the built client bundle. `ClerkAppProvider` now falls back to a safe unauthenticated context, the settings UI keeps users in `My API` mode when platform sign-in is unavailable, and the Vite config now exposes both `VITE_` and `NEXT_PUBLIC_` public env prefixes for the Clerk publishable key.

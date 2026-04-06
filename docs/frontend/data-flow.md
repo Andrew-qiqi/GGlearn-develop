@@ -52,9 +52,10 @@ The frontend blocks or redirects these flows back toward AI settings instead of 
 1. user opens `Buy Credits` from settings or from the insufficient-credit dialog
 2. frontend previews the fixed quote using `1 RMB = 30 credits`
 3. frontend calls `POST /api/recharge-intent`
-4. Worker creates a recharge order and returns mock checkout metadata
-5. provider webhook calls `POST /api/payment-webhook`
-6. backend applies the credit ledger entry exactly once even if the webhook is replayed
+4. Worker creates a recharge order and returns a ZPAY `submit.php` checkout URL
+5. frontend opens that checkout URL in a new tab
+6. ZPAY calls `/api/payment-webhook` and the Worker replies with plain-text `success`
+7. backend verifies the ZPAY signature and amount, then applies the credit ledger entry exactly once even if the webhook is replayed
 
 ## 2026-04-05 Platform Parser Quota and Degraded Explain Flow
 

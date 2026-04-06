@@ -98,34 +98,44 @@ Response:
   "orderId": "ord_123",
   "amountRmb": 1,
   "credits": 30,
-  "provider": "mock",
-  "checkoutUrl": "https://slidetutor.ai/mock-pay/ord_123"
+  "provider": "zpay",
+  "checkoutUrl": "https://zpayz.cn/submit.php?..."
 }
 ```
 
-### `POST /api/payment-webhook`
+Notes:
 
-Current mock adapter contract:
+- current production adapter is `zpay`
+- checkout uses the page-redirect `submit.php` flow
+- the Worker derives `notify_url = <APP_URL>/api/payment-webhook`
+- the Worker derives `return_url = <APP_URL>`
 
-- header: `x-payment-webhook-secret: <PAYMENT_WEBHOOK_SECRET>`
-- body:
+### `GET | POST /api/payment-webhook`
 
-```json
-{
-  "orderId": "ord_123",
-  "providerOrderId": "mock_ord_123",
-  "status": "paid"
-}
+Current `zpay` contract:
+
+- accepts the `notify_url` callback from ZPAY
+- verifies MD5 signature from all callback params except `sign`, `sign_type`, and empty values
+- accepts only `trade_status = TRADE_SUCCESS`
+- validates that the paid RMB amount matches the stored recharge order
+- remains idempotent when ZPAY retries the same callback
+
+Important callback fields:
+
+```text
+pid
+trade_no
+out_trade_no
+money
+trade_status
+sign
+sign_type
 ```
 
 Response:
 
-```json
-{
-  "ok": true,
-  "balance": 40,
-  "alreadyCompleted": false
-}
+```text
+success
 ```
 
 ## Public Base
