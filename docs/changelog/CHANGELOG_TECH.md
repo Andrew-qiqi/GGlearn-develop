@@ -5,6 +5,20 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-06] Split Hosted Parser Degradation Into Actionable Error Codes
+
+**What**: Replaced the single hosted analyze parser-degradation error with two stable route codes: `PLATFORM_PARSER_LIMIT_REACHED` when the current network has exhausted the daily platform parser quota, and `PLATFORM_PARSER_UNAVAILABLE` when the platform parser is unavailable for other reasons. The generic `PLATFORM_ANALYZE_UNAVAILABLE` code is no longer used for this branch.
+
+**Why**: Production debugging showed that the previous hosted analyze error was too vague. It blurred together quota exhaustion and parser unavailability, which made real operator diagnosis slower even when the underlying parser service was healthy.
+
+**Impact**:
+- hosted analyze failures now tell operators whether to check parser quota or parser availability first
+- user-visible failures become easier to interpret without reading server code
+- API docs now reflect the more specific hosted parser failure contract
+
+**Files**: `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/api/lib/generateService.platform.test.ts`, `docs/backend/api-design.md`
+
+---
 ## [2026-04-06] Added Request-Id Parity And China Operator Runbooks
 
 **What**: Extended request-level observability beyond `/api/generate` so `/api/parse`, `/api/parser-usage`, `/api/credits/balance`, `/api/recharge-intent`, and `/api/payment-webhook` now emit structured Worker logs with `requestId`. JSON error responses on those operational routes now include `requestId`, while valid ZPAY callbacks still return plain-text `success`. Added the new `docs/operations/` module with a China-operator checklist and an operational-fit report template, plus root-level docs index updates and a user-facing access-modes guide.

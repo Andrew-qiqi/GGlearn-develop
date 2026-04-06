@@ -55,7 +55,8 @@ Hosted/platform rules:
 - hosted `Analyze` returns `x-slidetutor-analyze-attempt-id` from the successful `explain` preflight
 - hosted `distill` must send `taskData.hostedAnalyzeAttemptId`
 - hosted `Analyze` charges exactly once after successful `parse + explain + distill`
-- if hosted parser access degrades, the Worker rejects before streaming with `code = "PLATFORM_ANALYZE_UNAVAILABLE"`
+- if hosted parser access degrades because the daily parser quota is exhausted for the current network, the Worker rejects before streaming with `code = "PLATFORM_PARSER_LIMIT_REACHED"`
+- if hosted parser access degrades because the platform parser is unavailable, the Worker rejects before streaming with `code = "PLATFORM_PARSER_UNAVAILABLE"`
 - hosted `followup`, `generate_questions`, and `evaluate_answers` preflight credits before execution and deduct only after successful stream completion
 - hosted unsupported actions currently return `code = "UNSUPPORTED_PLATFORM_ACTION"`:
   - `regenerate_chunk`
