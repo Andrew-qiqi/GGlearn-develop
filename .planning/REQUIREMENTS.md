@@ -19,9 +19,9 @@
 - [x] **PARSE-04**: Users who do not provide their own parser access should be subject to explicit platform-managed parsing limits.
 
 ### Accounts and Hosted Access
-- [ ] **ACCT-01**: The system must be able to add login and user identity without undoing the BYOK-first launch path.
-- [ ] **HOST-01**: Platform-hosted model access must coexist with BYOK rather than replace it.
-- [ ] **HOST-02**: Hosted access must have an intentionally scoped launch mode and cost boundary.
+- [x] **ACCT-01**: The system must be able to add login and user identity without undoing the BYOK-first launch path.
+- [x] **HOST-01**: Platform-hosted model access must coexist with BYOK rather than replace it.
+- [x] **HOST-02**: Hosted access must have an intentionally scoped launch mode and cost boundary.
 
 ### China-User Operational Fit
 - [ ] **CN-01**: Re-check actual reliability bottlenecks for China-based users across model access, parser access, and streaming.
@@ -71,11 +71,12 @@
 | PARSE-02 | Phase 5 | Completed |
 | PARSE-03 | Phase 5 | Completed |
 | PARSE-04 | Phase 5 | Completed |
-| ACCT-01 | Phase 6 | In Progress |
-| HOST-01 | Phase 6 | In Progress |
-| HOST-02 | Phase 6 | In Progress |
+| ACCT-01 | Phase 6 | Completed |
+| HOST-01 | Phase 6 | Completed |
+| HOST-02 | Phase 6 | Completed |
 | CN-01 | Phase 7 | Pending |
 | CN-02 | Phase 7 | Pending |
+| CN-03 | Phase 7 | Pending |
 | DATA-01 | Phase 2 | Completed |
 | DATA-02 | Phase 2 | Completed |
 | SEC-01 | Phase 1 | Completed |

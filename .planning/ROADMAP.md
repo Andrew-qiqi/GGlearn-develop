@@ -89,12 +89,15 @@
 ### Phase 7: China-User Operational Fit
 **Goal**: Validate that the product can actually be used and operated reliably in the target geography before deeper commitments.
 **Depends on**: Phase 3, Phase 4
-**Requirements**: CN-01, CN-02
+**Requirements**: CN-01, CN-02, CN-03
 **Success Criteria** (what must be TRUE):
   1. The real bottlenecks for China-based users are verified instead of assumed.
   2. Decisions about deeper mainland-specific infrastructure are made only after access, provider, and payment realities are rechecked.
   3. The operator has a clearer path for support, costs, and reliability management.
-**Plans**: 0 plans
+**Plans**: 3 plans
+- [ ] 07-01-PLAN.md - Normalize China-user access errors and make `My API` / `Platform API` assumptions explicit without forcing recommendations.
+- [ ] 07-02-PLAN.md - Add operator-grade observability and a China-operator smoke checklist for auth, parser, credits, and recharge.
+- [ ] 07-03-PLAN.md - Create the operational-fit report and decision gate that determines whether parser BYOK / MinerU should stay deferred.
 
 ## Next Work
 
@@ -108,7 +111,7 @@ Current recommendation: work the next milestone in this order.
 - [x] Lock the hosted product decisions: starter credits, success-only charging, 1 RMB = 30 credits, and ZPAY direction.
 - [x] Re-enter GSD on Phase 05 and finish the remaining parser provider replacement to Volcengine.
 - [x] Re-enter GSD on Phase 06 to replace the mock payment adapter with ZPAY and finish hosted-access hardening.
-- [ ] Begin Phase 7 to validate the real China-user operational bottlenecks after live Clerk + ZPAY rollout.
+- [ ] Execute Phase 7 plans to validate the real China-user operational bottlenecks after live Clerk + ZPAY rollout.
 - [ ] Revisit parser BYOK and MinerU only after the current platform-managed parser and hosted-access path stay stable in live use.
 
 ## Progress Table
@@ -121,4 +124,4 @@ Current recommendation: work the next milestone in this order.
 | 4. BYOK-First Access Layer | 2/2 | Completed | 2026-04-04 |
 | 5. Parser Bootstrap and Provider Abstraction | 3/3 | Completed | 2026-04-06 |
 | 6. Accounts and Platform-Hosted APIs | 0/0 | Completed | 2026-04-06 |
-| 7. China-User Operational Fit | 0/0 | Planned | - |
+| 7. China-User Operational Fit | 0/3 | Planned | - |

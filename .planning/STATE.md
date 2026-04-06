@@ -5,26 +5,26 @@
 See: `.planning/PROJECT.md`
 
 **Core Value:** Teacher-like PDF tutoring with controllable model access
-**Current Focus:** Move into Phase 06 planning now that the Phase 05 Volcengine parser cutover is complete
+**Current Focus:** Execute the newly planned Phase 07 operational-fit work now that Clerk, Volcengine parser, and ZPAY are live enough to validate real China-user/operator friction.
 
 ## Current Position
 
-**Current Phase:** 06
-**Current Phase Name:** Accounts and Platform-Hosted APIs
+**Current Phase:** 07
+**Current Phase Name:** China-User Operational Fit
 **Total Phases:** 7
-**Completed Phases:** 5
-**Current Plan:** Not started
-**Total Plans in Phase:** 0
-**Status:** Ready to plan Phase 06
+**Completed Phases:** 6
+**Current Plan:** Phase 07 planned
+**Total Plans in Phase:** 3
+**Status:** Ready to execute Phase 07
 **Last Activity:** 2026-04-06
-**Last Activity Description:** Completed Phase 05-03 by cutting the live parser runtime over to Volcengine, removing Azure parser runtime remnants, and syncing docs/tests/planning artifacts
-**Progress:** Foundational runtime, BYOK, parser guardrails, and hosted-access baseline are in place; the next structured planning step is Phase 06
+**Last Activity Description:** Closed Phase 06 with live ZPAY recharge verification and created Phase 07 planning artifacts for China-user operational-fit hardening
+**Progress:** Foundational runtime, BYOK, parser guardrails, hosted access, Clerk auth, and live ZPAY recharge are in place; the next structured step is to execute the three Phase 07 plans
 
 ## Performance Metrics
 
-- Total completed phases: 4
+- Total completed phases: 6
 - Total completed plans: 11
-- Latest completed phase: 04 BYOK-First Access Layer
+- Latest completed phase: 06 Accounts and Platform-Hosted APIs
 
 ## Accumulated Context
 
@@ -37,21 +37,24 @@ See: `.planning/PROJECT.md`
 - Platform-managed parser should move to Volcengine.
 - Future parser BYOK, if it happens, should prefer China-friendly options such as MinerU, but it is not the next implementation target.
 - Hosted payment direction is ZPAY.
+- Real 1 RMB ZPAY recharge has already been verified in production-like flow and credited 30.
+- Phase 07 should not recommend or auto-switch providers for the user; it should make real access constraints and fallbacks explicit.
 - `/docs` is the canonical long-term record; `.planning` should stay focused on active GSD work.
 
 ### Pending Todos
 
-- Plan Phase 06 with the current Clerk + credits baseline as the starting point.
-- Replace the mock payment adapter with ZPAY without building unnecessary billing surfaces.
-- Keep parser BYOK deferred while hosted access and payment are stabilized.
+- Execute 07-01 to normalize region/provider access failures and add low-noise access guidance.
+- Execute 07-02 to add observability parity and a China-operator smoke checklist for auth, parser, credits, and recharge.
+- Execute 07-03 to create the operational-fit report and explicit decision gate for parser BYOK / MinerU.
 
 ### Blockers/Concerns
 
-- Hosted payment is still on a mock adapter and must be replaced carefully with ZPAY.
-- A live Volcengine AK/SK smoke test is still needed outside local unit coverage.
+- `CN-03` is still real: the product must not assume Gemini API availability for China-based users.
+- Credits/recharge/parser routes do not yet have the same request-level observability parity as `/api/generate`.
+- Clerk build-time public key vs Worker runtime secret remains an operator footgun if not documented and smoke-tested together.
 
 ## Session Continuity
 
 **Last session:** 2026-04-06
-**Stopped At:** Phase 05-03 completed with code, docs, and validation synced; next resume point is `gsd-plan-phase 06 --prd docs/discuss/phases/06-login-hosted-access-and-credit-brief.md`
+**Stopped At:** Phase 07 planning completed; next resume point is `gsd-execute-phase 07`
 **Resume file:** None
