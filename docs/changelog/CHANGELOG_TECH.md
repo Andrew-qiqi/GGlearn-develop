@@ -5,6 +5,21 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-06] Added Request-Id Parity And China Operator Runbooks
+
+**What**: Extended request-level observability beyond `/api/generate` so `/api/parse`, `/api/parser-usage`, `/api/credits/balance`, `/api/recharge-intent`, and `/api/payment-webhook` now emit structured Worker logs with `requestId`. JSON error responses on those operational routes now include `requestId`, while valid ZPAY callbacks still return plain-text `success`. Added the new `docs/operations/` module with a China-operator checklist and an operational-fit report template, plus root-level docs index updates and a user-facing access-modes guide.
+
+**Why**: After live Clerk, Volcengine, D1, and ZPAY validation, the main Phase 07 risk was no longer missing product surface but missing supportability. Operators needed a consistent way to trace auth, parser, credits, and recharge failures without reopening parser BYOK or broader infrastructure work too early.
+
+**Impact**:
+- live support can now correlate most operational-route failures directly from user-visible `requestId` values
+- deployment and API docs now call out the Clerk build/runtime split and the `APP_URL` to ZPAY callback coupling
+- the repo now has one operator checklist for Cloudflare + Clerk + Volcengine + ZPAY smoke tests
+- future `parser BYOK` or `MinerU` discussions now have a dedicated evidence template instead of relying on chat memory
+
+**Files**: `SlideTutor-AI/src/worker/lib/observability.ts`, `SlideTutor-AI/src/worker/routes/parse.ts`, `SlideTutor-AI/src/worker/routes/parser-usage.ts`, `SlideTutor-AI/src/worker/routes/credits-balance.ts`, `SlideTutor-AI/src/worker/routes/recharge-intent.ts`, `SlideTutor-AI/src/worker/routes/payment-webhook.ts`, `SlideTutor-AI/test/workers/security-observability.worker.test.ts`, `SlideTutor-AI/test/workers/credits-balance.worker.test.ts`, `SlideTutor-AI/test/workers/recharge.worker.test.ts`, `docs/architecture/deployment.md`, `docs/backend/api-design.md`, `docs/README.md`, `docs/user_guide/README.md`, `docs/user_guide/access-modes.md`, `docs/operations/README.md`, `docs/operations/china-operator-checklist.md`, `docs/operations/china-operational-fit-report.md`
+
+---
 ## [2026-04-06] Replaced Mock Recharge Checkout With ZPAY
 
 **What**: Replaced the temporary mock recharge adapter with a production `zpay` adapter that generates signed `submit.php` checkout URLs, validates ZPAY webhook signatures, checks callback amounts against the stored RMB order amount, accepts both `GET` and `POST` callbacks, and returns the plain-text `success` acknowledgement ZPAY expects after idempotent ledger application.

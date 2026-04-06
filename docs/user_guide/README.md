@@ -1,11 +1,15 @@
-# 用户指南
+# User Guide
 
-本模块包含面向最终用户的使用指南和帮助文档。
+Last updated: 2026-04-06
 
-## 📚 文档列表
+This module contains end-user guidance and low-noise product usage notes.
 
-目前此模块为空。如需添加用户指南，请按照 [DOCUMENTATION_RULES.md](../DOCUMENTATION_RULES.md) 中的规范进行。
+## Documents
 
----
+- [access-modes.md](access-modes.md)
+  Explains the difference between `My API` and `Platform API`, including the China-region note for provider availability.
 
-最后更新：2026-03-29
+## Notes
+
+- Keep user-facing guidance here.
+- Keep operator runbooks and support checklists under [../operations/README.md](../operations/README.md).

@@ -4,6 +4,20 @@ Last updated: 2026-04-06
 
 ## 2026-04-05 Platform API and Credits
 
+### Operational route observability
+
+The following routes now emit structured Worker logs with `requestId`, `path`, `status`, `durationMs`, `method`, and low-sensitivity route metadata when relevant:
+
+- `/api/parse`
+- `/api/parser-usage`
+- `/api/credits/balance`
+- `/api/recharge-intent`
+- `/api/payment-webhook`
+
+For these routes, JSON error responses include `requestId` so support work can correlate the user-visible failure to Worker logs. Valid ZPAY callbacks remain the one exception because the response body must stay plain-text `success`.
+
+Operator smoke steps for these routes live in [china-operator-checklist.md](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/docs/operations/china-operator-checklist.md).
+
 ### `POST /api/generate` platform-mode additions
 
 Request headers:
@@ -66,6 +80,10 @@ Purpose:
 - lazily create a hosted credit account for the signed-in user
 - grant the one-time starter credits on first lookup
 
+Error note:
+
+- JSON failures include `requestId`
+
 Response:
 
 ```json
@@ -90,6 +108,10 @@ Request body:
   "amountRmb": 1
 }
 ```
+
+Error note:
+
+- JSON failures include `requestId`
 
 Response:
 
@@ -137,6 +159,11 @@ Response:
 ```text
 success
 ```
+
+Error note:
+
+- invalid callbacks return JSON errors with `requestId`
+- valid ZPAY callbacks still return plain-text `success`
 
 ## Public Base
 
@@ -280,9 +307,10 @@ Unavailable response:
 Notes:
 
 - the Worker route preserves the existing block shape while using Volcengine as the live platform parser provider
-- unauthorized origins return a route-specific JSON `403`
+- unauthorized origins return a route-specific JSON `403` with `requestId`
 - quota is enforced server-side through Cloudflare D1 using an anonymous identity derived from `ip_hash + date_key`
 - the current daily parser limit is `10`
+- JSON errors include `requestId`
 
 ### `GET /api/parser-usage`
 
@@ -305,6 +333,7 @@ Notes:
 
 - this endpoint is designed for the settings modal, not a persistent quota banner
 - if D1 or `USAGE_HASH_SECRET` is missing, the route returns an empty summary and parsing degrades elsewhere
+- JSON errors include `requestId`
 
 ### `POST /api/feedback`
 
