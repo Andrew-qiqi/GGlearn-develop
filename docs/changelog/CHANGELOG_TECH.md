@@ -5,6 +5,20 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-07] Added Developer Guide For Platform Model Configuration
+
+**What**: Added a backend developer guide that explains how `Platform API` model configuration currently works across frontend model selection, persisted local state, backend provider-secret resolution, and runtime generation flow. Updated the backend docs index and root docs hub so developers can find this guide directly when changing default models, adding preset providers, or extending platform-supported providers.
+
+**Why**: The current product lets users choose models themselves, but platform execution still depends on server-held provider secrets and a shared frontend model selector. Without one explicit guide, it is easy to change only the UI list or only the backend env mapping and accidentally leave a broken platform path.
+
+**Impact**:
+- developers now have one Chinese operations guide for changing platform defaults, model lists, and provider wiring
+- the repo documents the current boundary that `custom` OpenAI-compatible models remain `My API` only
+- future provider changes are less likely to miss Cloudflare env updates, frontend preset wiring, or persisted-selection caveats
+
+**Files**: `docs/backend/platform-model-configuration.md`, `docs/backend/README.md`, `docs/README.md`
+
+---
 ## [2026-04-07] Tightened Docs Hub Boundaries After Phase 07
 
 **What**: Rewrote the root documentation maintenance rules so `/docs` now explicitly recognizes `operations/`, `discuss/`, and legacy `superpowers/` as distinct modules with clear placement rules. Refreshed the docs hub index, updated the operations module README to point at the live Phase 07 evidence artifact, and rolled forward the backend API-design timestamp so the current route contract stays aligned with the latest operator-facing doc state.

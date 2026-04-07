@@ -20,6 +20,7 @@
 ### `backend/`
 
 - [api-design.md](backend/api-design.md)
+- [platform-model-configuration.md](backend/platform-model-configuration.md)
 - [error-handling.md](backend/error-handling.md)
 
 ### `security/`
@@ -66,6 +67,12 @@
 1. [architecture/deployment.md](architecture/deployment.md)
 2. [operations/china-operator-checklist.md](operations/china-operator-checklist.md)
 3. [backend/api-design.md](backend/api-design.md)
+
+### 我想修改 Platform API 的模型配置
+
+1. [backend/platform-model-configuration.md](backend/platform-model-configuration.md)
+2. [backend/api-design.md](backend/api-design.md)
+3. [operations/china-operator-checklist.md](operations/china-operator-checklist.md)
 
 ### 我想了解用户侧接入方式
 
