@@ -5,6 +5,20 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-07] Tightened Docs Hub Boundaries After Phase 07
+
+**What**: Rewrote the root documentation maintenance rules so `/docs` now explicitly recognizes `operations/`, `discuss/`, and legacy `superpowers/` as distinct modules with clear placement rules. Refreshed the docs hub index, updated the operations module README to point at the live Phase 07 evidence artifact, and rolled forward the backend API-design timestamp so the current route contract stays aligned with the latest operator-facing doc state.
+
+**Why**: The repo is transitioning from a discussion-heavy phase into steadier execution. Before starting new work in a fresh window, the documentation hub needed to become the durable source of truth again instead of relying on chat memory or treating historical `superpowers/` artifacts like active destinations for new docs.
+
+**Impact**:
+- future docs work now has a clearer home for operator evidence, project briefs, and legacy workflow artifacts
+- `/docs` is less likely to drift back into ad hoc folders or mixed user/operator content
+- Phase 07 closeout evidence is easier to discover from the docs hub without reopening planning context
+
+**Files**: `docs/DOCUMENTATION_RULES.md`, `docs/README.md`, `docs/operations/README.md`, `docs/backend/api-design.md`
+
+---
 ## [2026-04-07] Closed Phase 07 With Live China Operational Validation
 
 **What**: Filled the China operational-fit report with live production evidence, then updated roadmap, state, and requirements tracking to mark Phase 07 complete. The final report records successful production login, successful `ZPAY` recharge with `+30` credits from `1 RMB`, and successful Volcengine parser usage after the provider-side service activation delay settled.

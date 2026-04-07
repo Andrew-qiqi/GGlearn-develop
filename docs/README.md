@@ -1,6 +1,6 @@
 # SlideTutor 文档中心
 
-最后更新：2026-04-06
+最后更新：2026-04-07
 
 这个目录是项目级文档入口，按模块组织，方便查找代码架构、接口约定、运维步骤和产品讨论记录。
 
@@ -48,6 +48,10 @@
 - [project-brief.md](discuss/project-brief.md)
 - [phases/](discuss/phases/)
 
+### `superpowers/`
+
+- 历史工作流归档区，仅在维护已有资料时进入
+
 ## 快速开始
 
 ### 我想了解整体架构
@@ -73,3 +77,4 @@
 - 修改代码后，同步更新对应模块文档。
 - 重要技术变更记录到 [changelog/CHANGELOG_TECH.md](changelog/CHANGELOG_TECH.md)。
 - 修改文档结构前，先查看 [DOCUMENTATION_RULES.md](DOCUMENTATION_RULES.md)。
+- 运维检查表、线上核验结果和支持排障文档统一维护在 `operations/`。
