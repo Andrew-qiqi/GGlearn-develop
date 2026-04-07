@@ -5,6 +5,20 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-07] Closed Phase 07 With Live China Operational Validation
+
+**What**: Filled the China operational-fit report with live production evidence, then updated roadmap, state, and requirements tracking to mark Phase 07 complete. The final report records successful production login, successful `ZPAY` recharge with `+30` credits from `1 RMB`, and successful Volcengine parser usage after the provider-side service activation delay settled.
+
+**Why**: Phase 07 was no longer just a planned hardening phase. The repo needed a durable closeout artifact showing what was actually verified in production, what remained deferred, and why parser BYOK / `MinerU` should not be promoted based on one transient parser incident.
+
+**Impact**:
+- the project now has a completed operational-fit phase instead of a stale "planned" status
+- future milestone selection can start from recorded evidence instead of chat memory
+- parser BYOK, `MinerU`, and broader mainland-specific expansion remain explicitly deferred pending repeated live evidence
+
+**Files**: `docs/operations/china-operational-fit-report.md`, `.planning/ROADMAP.md`, `.planning/STATE.md`, `.planning/REQUIREMENTS.md`
+
+---
 ## [2026-04-06] Split Hosted Parser Degradation Into Actionable Error Codes
 
 **What**: Replaced the single hosted analyze parser-degradation error with two stable route codes: `PLATFORM_PARSER_LIMIT_REACHED` when the current network has exhausted the daily platform parser quota, and `PLATFORM_PARSER_UNAVAILABLE` when the platform parser is unavailable for other reasons. The generic `PLATFORM_ANALYZE_UNAVAILABLE` code is no longer used for this branch.

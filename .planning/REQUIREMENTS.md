@@ -24,9 +24,9 @@
 - [x] **HOST-02**: Hosted access must have an intentionally scoped launch mode and cost boundary.
 
 ### China-User Operational Fit
-- [ ] **CN-01**: Re-check actual reliability bottlenecks for China-based users across model access, parser access, and streaming.
-- [ ] **CN-02**: Re-check operator-side realities for payments, support, and deployment convenience before deeper infra commitments.
-- [ ] **CN-03**: China-based requests must avoid assuming Gemini API availability, because Gemini can reject requests with `User location is not supported for the API use`.
+- [x] **CN-01**: Re-check actual reliability bottlenecks for China-based users across model access, parser access, and streaming.
+- [x] **CN-02**: Re-check operator-side realities for payments, support, and deployment convenience before deeper infra commitments.
+- [x] **CN-03**: China-based requests must avoid assuming Gemini API availability, because Gemini can reject requests with `User location is not supported for the API use`.
 
 ## Validated Requirements
 - [x] **DATA-01**: IndexedDB-based local persistence replaced the old fragile localStorage path.
@@ -36,9 +36,9 @@
 - [x] **STAB-02**: A regression baseline exists for core functionality.
 
 ## Open Commercial Questions
-- [ ] Should hosted APIs launch as waitlist-only, invite-only, or direct paid access?
+- [ ] What is the smallest next milestone after Phase 07 that improves activation or retention without reopening deferred infrastructure?
 - [ ] How long should parser cost stay platform-funded before introducing stricter usage controls?
-- [ ] When Phase 06 resumes, what is the minimum ZPAY webhook/order model that keeps credits accounting safe without overbuilding billing?
+- [ ] What repeated evidence threshold should trigger parser BYOK / `MinerU` work?
 
 ## Locked Commercial Decisions
 - [x] Early BYOK is fully free.
@@ -74,9 +74,9 @@
 | ACCT-01 | Phase 6 | Completed |
 | HOST-01 | Phase 6 | Completed |
 | HOST-02 | Phase 6 | Completed |
-| CN-01 | Phase 7 | Pending |
-| CN-02 | Phase 7 | Pending |
-| CN-03 | Phase 7 | Pending |
+| CN-01 | Phase 7 | Completed |
+| CN-02 | Phase 7 | Completed |
+| CN-03 | Phase 7 | Completed |
 | DATA-01 | Phase 2 | Completed |
 | DATA-02 | Phase 2 | Completed |
 | SEC-01 | Phase 1 | Completed |

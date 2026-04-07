@@ -7,7 +7,7 @@
 - [x] **Phase 4: BYOK-First Access Layer** - Make user-supplied model APIs the first public product path.
 - [x] **Phase 5: Parser Bootstrap and Provider Abstraction** - Finish parser guardrails by replacing the Azure-backed platform parser path with Volcengine and cleaning legacy Azure runtime paths.
 - [x] **Phase 6: Accounts and Platform-Hosted APIs** - Build on the existing Clerk + credits baseline to finish hosted access and replace mock payment with ZPAY.
-- [ ] **Phase 7: China-User Operational Fit** - Re-check the real bottlenecks for China-based users and operators before deeper infra commitments.
+- [x] **Phase 7: China-User Operational Fit** - Re-check the real bottlenecks for China-based users and operators before deeper infra commitments.
 
 ## Phase Details
 
@@ -95,13 +95,14 @@
   2. Decisions about deeper mainland-specific infrastructure are made only after access, provider, and payment realities are rechecked.
   3. The operator has a clearer path for support, costs, and reliability management.
 **Plans**: 3 plans
-- [ ] 07-01-PLAN.md - Normalize China-user access errors and make `My API` / `Platform API` assumptions explicit without forcing recommendations.
-- [ ] 07-02-PLAN.md - Add operator-grade observability and a China-operator smoke checklist for auth, parser, credits, and recharge.
-- [ ] 07-03-PLAN.md - Create the operational-fit report and decision gate that determines whether parser BYOK / MinerU should stay deferred.
+- [x] 07-01-PLAN.md - Normalize China-user access errors and make `My API` / `Platform API` assumptions explicit without forcing recommendations. (COMPLETED)
+- [x] 07-02-PLAN.md - Add operator-grade observability and a China-operator smoke checklist for auth, parser, credits, and recharge. (COMPLETED)
+- [x] 07-03-PLAN.md - Create the operational-fit report and decision gate that determines whether parser BYOK / MinerU should stay deferred. (COMPLETED)
+**Completed**: 2026-04-07
 
 ## Next Work
 
-Current recommendation: work the next milestone in this order.
+Current recommendation: close Phase 07 using the live evidence, then define the next milestone from that evidence instead of reopening deferred infrastructure by default.
 
 ### Immediate Task List
 - [x] Complete the Cloudflare-first migration.
@@ -111,7 +112,9 @@ Current recommendation: work the next milestone in this order.
 - [x] Lock the hosted product decisions: starter credits, success-only charging, 1 RMB = 30 credits, and ZPAY direction.
 - [x] Re-enter GSD on Phase 05 and finish the remaining parser provider replacement to Volcengine.
 - [x] Re-enter GSD on Phase 06 to replace the mock payment adapter with ZPAY and finish hosted-access hardening.
-- [ ] Execute Phase 7 plans to validate the real China-user operational bottlenecks after live Clerk + ZPAY rollout.
+- [x] Execute Phase 7 plans to validate the real China-user operational bottlenecks after live Clerk + ZPAY rollout.
+- [x] Record the live operational-fit findings in the operator report and checklist docs.
+- [ ] Define the next milestone from the Phase 07 evidence instead of opening parser BYOK / MinerU work by default.
 - [ ] Revisit parser BYOK and MinerU only after the current platform-managed parser and hosted-access path stay stable in live use.
 
 ## Progress Table
@@ -124,4 +127,4 @@ Current recommendation: work the next milestone in this order.
 | 4. BYOK-First Access Layer | 2/2 | Completed | 2026-04-04 |
 | 5. Parser Bootstrap and Provider Abstraction | 3/3 | Completed | 2026-04-06 |
 | 6. Accounts and Platform-Hosted APIs | 0/0 | Completed | 2026-04-06 |
-| 7. China-User Operational Fit | 0/3 | Planned | - |
+| 7. China-User Operational Fit | 3/3 | Completed | 2026-04-07 |
