@@ -1,6 +1,6 @@
 # SlideTutor 文档中心
 
-最后更新：2026-04-07
+最后更新：2026-04-09
 
 这个目录是项目级文档入口，按模块组织，方便查找代码架构、接口约定、运维步骤和产品讨论记录。
 
@@ -73,6 +73,12 @@
 1. [backend/platform-model-configuration.md](backend/platform-model-configuration.md)
 2. [backend/api-design.md](backend/api-design.md)
 3. [operations/china-operator-checklist.md](operations/china-operator-checklist.md)
+
+### 我想了解 parser 边界和解析故障
+
+1. [backend/api-design.md](backend/api-design.md)
+2. [frontend/data-flow.md](frontend/data-flow.md)
+3. [backend/platform-model-configuration.md](backend/platform-model-configuration.md)
 
 ### 我想了解用户侧接入方式
 

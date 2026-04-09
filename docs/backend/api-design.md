@@ -1,6 +1,6 @@
 # API Design
 
-Last updated: 2026-04-07
+Last updated: 2026-04-09
 
 ## 2026-04-05 Platform API and Credits
 
@@ -9,7 +9,6 @@ Last updated: 2026-04-07
 The following routes now emit structured Worker logs with `requestId`, `path`, `status`, `durationMs`, `method`, and low-sensitivity route metadata when relevant:
 
 - `/api/parse`
-- `/api/parser-usage`
 - `/api/credits/balance`
 - `/api/recharge-intent`
 - `/api/payment-webhook`
@@ -43,7 +42,11 @@ or
     "providerId": "gemini | openai-compatible",
     "apiKey": "user-supplied-key",
     "baseURL": "https://provider.example/v1",
-    "endpointPreset": "qwen | doubao | custom"
+    "endpointPreset": "qwen | doubao | custom",
+    "parser": {
+      "providerId": "llamaparse",
+      "apiKey": "llx-user-key"
+    }
   }
 }
 ```
@@ -55,7 +58,7 @@ Hosted/platform rules:
 - hosted `Analyze` returns `x-slidetutor-analyze-attempt-id` from the successful `explain` preflight
 - hosted `distill` must send `taskData.hostedAnalyzeAttemptId`
 - hosted `Analyze` charges exactly once after successful `parse + explain + distill`
-- if hosted parser access degrades because the daily parser quota is exhausted for the current network, the Worker rejects before streaming with `code = "PLATFORM_PARSER_LIMIT_REACHED"`
+- if hosted parser access hits upstream Volcengine throttling, the Worker rejects before streaming with `code = "PLATFORM_PARSER_RATE_LIMITED"`
 - if hosted parser access degrades because the platform parser is unavailable, the Worker rejects before streaming with `code = "PLATFORM_PARSER_UNAVAILABLE"`
 - hosted `followup`, `generate_questions`, and `evaluate_answers` preflight credits before execution and deduct only after successful stream completion
 - hosted unsupported actions currently return `code = "UNSUPPORTED_PLATFORM_ACTION"`:
@@ -199,7 +202,11 @@ Request body highlights:
     "providerId": "gemini | openai-compatible",
     "apiKey": "user-supplied-key",
     "baseURL": "https://provider.example/v1",
-    "endpointPreset": "qwen | doubao | custom"
+    "endpointPreset": "qwen | doubao | custom",
+    "parser": {
+      "providerId": "llamaparse",
+      "apiKey": "llx-user-key"
+    }
   }
 }
 ```
@@ -208,7 +215,11 @@ BYOK routing rules:
 
 - `gemini` requires a user-provided local API key when `My API` is selected.
 - `openai-compatible` requires a user-provided `apiKey + baseURL` pair through one shared adapter path.
+- `My API` may optionally add `parser = { providerId: "llamaparse", apiKey }`.
+- if `My API` omits parser config, `explain` keeps the intentional no-parser degraded analysis path.
+- if `My API` enables `LlamaParse`, parser failures use `BYOK_PARSER_FAILED` or `BYOK_PARSER_TIMEOUT`.
 - platform-mode requests use server-held provider secrets and do not read browser-local credentials.
+- platform-mode requests keep a platform-managed Volcengine parser and do not accept parser configuration from the browser.
 - malformed or incomplete BYOK inputs are treated as request validation problems, not teaching-logic failures.
 
 Response contract:
@@ -217,16 +228,17 @@ Response contract:
 - body: streamed plain-text chunks in the same order the frontend hooks consume today
 - response headers may include:
   - `x-slidetutor-parse-mode: normal | degraded`
-  - `x-slidetutor-parser-remaining: <number>`
   - `x-slidetutor-analyze-attempt-id: <attempt-id>` for hosted `task = explain`
 
 Notes:
 
 - Worker route applies origin checks, optional token auth, rate limiting, and request logging.
+- Worker route throttling returns `code = "ROUTE_RATE_LIMITED"`.
 - Teaching prompts, structured artifacts, and frontend parsing contracts are intentionally unchanged by the Cloudflare migration.
 - In Phase 06, `My API` and `Platform API` are now explicit frontend modes.
 - In Phase 06, BYOK requests no longer fall back to server-side model secrets.
-- In Phase 05, `explain` requests resolve document parsing through a shared Volcengine-backed parser-access layer.
+- `Platform API` explain requests resolve document parsing through the platform-managed Volcengine path.
+- `My API` explain requests use `LlamaParse` only when parser BYOK is configured.
 - In hosted `Analyze`, degraded parser results do not stream teaching output and do not become a paid success.
 
 ### `GET /api/get-token`
@@ -249,7 +261,7 @@ Response:
 Purpose:
 
 - run Volcengine OCRPdf layout extraction for a slide image
-- deduct one daily platform-funded parser use only after a successful parse
+- preserve one direct platform-parser debug/ops entrypoint for the current slide image flow
 
 Request body:
 
@@ -271,24 +283,16 @@ Response:
       "bbox": [0, 0, 100, 100]
     }
   ],
-  "used": 1,
-  "remaining": 9,
-  "limit": 10,
-  "dateKey": "2026-04-05",
   "parseMode": "normal"
 }
 ```
 
-Quota reached response:
+Rate-limited response:
 
 ```json
 {
-  "error": "Daily document parsing limit reached",
-  "code": "PARSER_LIMIT_REACHED",
-  "used": 10,
-  "remaining": 0,
-  "limit": 10,
-  "dateKey": "2026-04-05"
+  "error": "Platform document parsing is temporarily rate limited",
+  "code": "PLATFORM_PARSER_RATE_LIMITED"
 }
 ```
 
@@ -296,12 +300,8 @@ Unavailable response:
 
 ```json
 {
-  "error": "Document parsing is unavailable",
-  "code": "PARSER_UNAVAILABLE",
-  "used": 0,
-  "remaining": 10,
-  "limit": 10,
-  "dateKey": "2026-04-05"
+  "error": "Platform document parsing is unavailable",
+  "code": "PLATFORM_PARSER_UNAVAILABLE"
 }
 ```
 
@@ -309,31 +309,7 @@ Notes:
 
 - the Worker route preserves the existing block shape while using Volcengine as the live platform parser provider
 - unauthorized origins return a route-specific JSON `403` with `requestId`
-- quota is enforced server-side through Cloudflare D1 using an anonymous identity derived from `ip_hash + date_key`
-- the current daily parser limit is `10`
-- JSON errors include `requestId`
-
-### `GET /api/parser-usage`
-
-Purpose:
-
-- report the current anonymous user's daily platform-funded parser usage
-
-Response:
-
-```json
-{
-  "used": 3,
-  "remaining": 7,
-  "limit": 10,
-  "dateKey": "2026-04-05"
-}
-```
-
-Notes:
-
-- this endpoint is designed for the settings modal, not a persistent quota banner
-- if D1 or `USAGE_HASH_SECRET` is missing, the route returns an empty summary and parsing degrades elsewhere
+- route throttling and platform parser failures are separate classes
 - JSON errors include `requestId`
 
 ### `POST /api/feedback`

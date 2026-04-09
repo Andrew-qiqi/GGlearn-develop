@@ -1,7 +1,7 @@
 # Project: SlideTutor AI
 
 ## Context
-SlideTutor AI is a PDF-centered AI learning assistant for slide-based study. After multiple refinement iterations, the project is now moving from internal experimentation toward a real public product path. The focus is shifting from isolated UX polish to sustainable deployment, controllable provider choices, and a commercialization-ready architecture for China-based users.
+SlideTutor AI is a PDF-centered AI learning assistant for slide-based study. After multiple refinement iterations, the project is now moving from internal experimentation toward a real public product path. The focus is shifting from isolated UX polish to stable live operation, controllable provider boundaries, and a commercialization-ready architecture for China-based users.
 
 ## What This Is
 A high-quality slide learning assistant that turns static lecture PDFs into a guided, teacher-like learning experience. The product should preserve strong explanation quality and continuity while giving users clear control over model access and future paid service paths.
@@ -22,18 +22,18 @@ A high-quality slide learning assistant that turns static lecture PDFs into a gu
 - [x] **BYOK-First Public Launch Base**: user-supplied model APIs are now the primary public product path.
 - [x] **OpenAI-Compatible BYOK Architecture**: user-supplied OpenAI-compatible endpoints use one shared adapter path while Gemini remains separate.
 - [x] **Parser Guardrail Baseline**: parser quota truth, degraded fallback, and settings visibility exist.
+- [x] **Parser Reliability Refresh**: user-visible parser quota/trial behavior is removed, parser failures are classified accurately, and the platform parser path is hardened.
+- [x] **Parser BYOK for My API**: `LlamaParse` can now be configured independently for `My API`, while no-parser degraded analysis remains available.
 - [x] **Hosted Access Baseline**: Clerk auth wiring and D1-backed hosted credits foundations exist.
 
 ### Active
-- [x] **Parser Provider Replacement**: finish the platform parser transition from Azure to Volcengine and remove legacy Azure runtime dependencies.
-- [x] **Parser Provider Abstraction Completion**: make parser abstraction real enough that Azure is no longer the implicit live default.
-- [ ] **Account and Hosted API Completion**: finish hosted access on top of the existing Clerk + credits baseline.
-- [ ] **Payment Provider Integration**: replace mock payment with ZPAY without turning the product into a full billing platform.
-- [ ] **China-User Operational Fit**: re-check practical reliability bottlenecks for China-based users across model access, parser access, streaming, and payment.
+- [ ] **Model Configuration Stability**: normalize model settings and provider-specific parameter handling after the parser phase lands.
+- [ ] **Next Milestone Framing**: decide whether model-configuration cleanup becomes the first phase of the next milestone or is introduced through a new roadmap update after milestone closeout.
 
 ### Out of Scope
 - [ ] Full commercialization stack in one phase.
-- [ ] Full parser BYOK in the first public version.
+- [ ] Multi-provider parser BYOK marketplace behavior in the first public version.
+- [ ] LiteParse, Docling, or self-hosted parser infrastructure in the current milestone.
 - [ ] Large infrastructure rewrite before proving the minimal Cloudflare path.
 - [ ] Feature bloat that dilutes the core tutoring experience.
 
@@ -45,10 +45,12 @@ A high-quality slide learning assistant that turns static lecture PDFs into a gu
 | First public version is BYOK-first | Avoid coupling first launch to hosted inference and payments. | Locked |
 | Minimal Cloudflare migration before next major features | Reduce rework across auth, payments, streaming, and provider access. | Locked |
 | Platform-hosted APIs remain a parallel long-term track | Needed for less technical paid users, but not first-launch primary path. | Locked |
-| Parser cost can be platform-funded early | Reduce setup friction and improve activation during user acquisition. | Locked |
+| Parser cost can be platform-funded early | Reduce setup friction and improve activation during user acquisition, but keep guardrails as internal infrastructure controls rather than user-visible product quotas. | Locked |
 | Parser providers must become an explicit abstraction | Azure free quota exhaustion proves the current hidden default is not durable. | Locked |
 | Platform-managed parser should use Volcengine | Lower expected parsing cost and better fit for the current narrow block-extraction need. | Locked |
-| Future parser BYOK is deferred | Avoid mixing provider-choice UX into the current parser cleanup phase. | Locked |
+| `Platform API` parser is platform-managed only | Keep the hosted path simple; parser BYOK belongs to `My API`, not the platform path. | Locked |
+| `My API` parser BYOK is now in scope and starts with `LlamaParse` | Needed to separate product boundaries cleanly while keeping parser setup realistic for users who want it. | Locked |
+| `My API` without a parser should still work via degraded analysis | Preserve low-friction usage even when users do not configure parser BYOK. | Locked |
 | Hosted access uses credits, not subscription-first packaging | Validate willingness to pay with minimal product complexity. | Locked |
 | ZPAY is the payment direction | Better fit for the current China-heavy operator context. | Locked |
 
@@ -68,4 +70,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update the document so roadmap and requirements stay aligned.
 
 ---
-*Last updated: April 5, 2026 after re-syncing project direction, parser/provider scope, and hosted-access decisions before returning to GSD*
+*Last updated: April 9, 2026 after completing Phase 08 parser cleanup, landing `LlamaParse` parser BYOK for `My API`, and keeping model-configuration cleanup as the next separate step*

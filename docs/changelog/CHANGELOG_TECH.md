@@ -667,3 +667,17 @@ signature = HMAC-SHA256(secret, payload)
 - 详细文档链接
 - 相关 issues/PRs
 ```
+## [2026-04-09] Completed Phase 08 Parser Reliability and LlamaParse BYOK
+
+**What**: Removed the old user-visible parser quota behavior, stopped `My API` from borrowing the platform parser, added persisted `LlamaParse` parser BYOK settings, introduced a dedicated `LlamaParse` adapter with bounded polling and normalized `LayoutBlock[]` output, and split parser failures into distinct route, platform-parser, and BYOK-parser error classes. The settings UI now exposes parser BYOK only for `My API`, while `Platform API` keeps the platform-managed `Volcengine` parser path.
+
+**Why**: The previous parser path mixed together product quota semantics, platform parsing, and BYOK behavior in a way that was hard to explain and easy to misdiagnose. Phase 08 needed one truthful parser boundary: platform-managed parsing for `Platform API`, optional parser BYOK for `My API`, and intentional degraded analysis when no parser is configured.
+
+**Impact**:
+- `Platform API` now uses `Volcengine` without pretending there is a daily parser-trial product
+- `My API` users can opt into `LlamaParse` cleanly or stay on degraded no-parser analysis
+- worker throttling, platform parser issues, and BYOK parser failures now surface as separate codes: `ROUTE_RATE_LIMITED`, `PLATFORM_PARSER_*`, and `BYOK_PARSER_*`
+
+**Files**: `SlideTutor-AI/api/lib/parser/accessService.ts`, `SlideTutor-AI/api/lib/parser/volcengineProvider.ts`, `SlideTutor-AI/api/lib/parser/llamaparseProvider.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/src/worker/routes/generate.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/lib/api/apiClient.ts`, `SlideTutor-AI/src/config/models.ts`, `SlideTutor-AI/src/store/uiStore.ts`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`, `docs/backend/platform-model-configuration.md`
+
+---

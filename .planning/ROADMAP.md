@@ -8,6 +8,7 @@
 - [x] **Phase 5: Parser Bootstrap and Provider Abstraction** - Finish parser guardrails by replacing the Azure-backed platform parser path with Volcengine and cleaning legacy Azure runtime paths.
 - [x] **Phase 6: Accounts and Platform-Hosted APIs** - Build on the existing Clerk + credits baseline to finish hosted access and replace mock payment with ZPAY.
 - [x] **Phase 7: China-User Operational Fit** - Re-check the real bottlenecks for China-based users and operators before deeper infra commitments.
+- [x] **Phase 8: Parser Reliability and LlamaParse BYOK** - Stabilize the live parser path, remove misleading parser quota behavior, and add a dedicated parser BYOK path for `My API`.
 
 ## Phase Details
 
@@ -100,9 +101,23 @@
 - [x] 07-03-PLAN.md - Create the operational-fit report and decision gate that determines whether parser BYOK / MinerU should stay deferred. (COMPLETED)
 **Completed**: 2026-04-07
 
+### Phase 8: Parser Reliability and LlamaParse BYOK
+**Goal**: Remove misleading parser quota behavior from the live product, harden the Volcengine platform parser path, and add `LlamaParse` as the first dedicated parser BYOK provider for `My API` without breaking degraded fallback.
+**Depends on**: Phase 4, Phase 5, Phase 7
+**Requirements**: PARSE-05, PARSE-06, PARSE-07
+**Success Criteria** (what must be TRUE):
+  1. `Platform API` long-document analysis no longer fails because of user-visible parser quota semantics, and parser-related errors are classified by their real source.
+  2. `My API` no longer borrows the platform parser; users can configure `LlamaParse`, and if no parser is configured the existing no-parser degraded analysis still works.
+  3. Parser routing, provider adapters, and settings boundaries remain simple and modular: platform parser, BYOK parser, and degraded fallback are clearly separated.
+**Plans**: 3 plans
+- [x] 08-01-PLAN.md - Remove misleading parser quota semantics, stop `My API` from borrowing the platform parser, and normalize user-facing parser errors. (COMPLETED)
+- [x] 08-02-PLAN.md - Add optional parser BYOK settings for `My API` and implement the first `LlamaParse` adapter without breaking degraded fallback. (COMPLETED)
+- [x] 08-03-PLAN.md - Harden the remaining Volcengine platform parser path, separate route vs parser failures, and sync the final parser ownership docs. (COMPLETED)
+**Completed**: 2026-04-09
+
 ## Next Work
 
-Current recommendation: close Phase 07 using the live evidence, then define the next milestone from that evidence instead of reopening deferred infrastructure by default.
+Current recommendation: Phase 08 is complete; close out the current milestone or define the next separate model-configuration cleanup phase before reopening provider-parameter tuning.
 
 ### Immediate Task List
 - [x] Complete the Cloudflare-first migration.
@@ -114,8 +129,8 @@ Current recommendation: close Phase 07 using the live evidence, then define the 
 - [x] Re-enter GSD on Phase 06 to replace the mock payment adapter with ZPAY and finish hosted-access hardening.
 - [x] Execute Phase 7 plans to validate the real China-user operational bottlenecks after live Clerk + ZPAY rollout.
 - [x] Record the live operational-fit findings in the operator report and checklist docs.
-- [ ] Define the next milestone from the Phase 07 evidence instead of opening parser BYOK / MinerU work by default.
-- [ ] Revisit parser BYOK and MinerU only after the current platform-managed parser and hosted-access path stay stable in live use.
+- [x] Plan and execute Phase 08 to remove misleading parser limits, harden the Volcengine platform parser path, and add `LlamaParse` for `My API`.
+- [ ] Define the next separate phase or milestone for Gemini/model-configuration cleanup after parser stability work lands.
 
 ## Progress Table
 
@@ -128,3 +143,22 @@ Current recommendation: close Phase 07 using the live evidence, then define the 
 | 5. Parser Bootstrap and Provider Abstraction | 3/3 | Completed | 2026-04-06 |
 | 6. Accounts and Platform-Hosted APIs | 0/0 | Completed | 2026-04-06 |
 | 7. China-User Operational Fit | 3/3 | Completed | 2026-04-07 |
+| 8. Parser Reliability and LlamaParse BYOK | 3/3 | Completed | 2026-04-09 |
+
+### Phase 8: Parser Reliability and LlamaParse BYOK
+
+**Goal**: Remove misleading parser quota behavior from the live product, harden the Volcengine platform parser path, and add `LlamaParse` as the first dedicated parser BYOK provider for `My API` without breaking degraded fallback.
+**Depends on**: Phase 4, Phase 5, Phase 7
+**Requirements**: PARSE-05, PARSE-06, PARSE-07
+**Success Criteria** (what must be TRUE):
+  1. `Platform API` long-document analysis no longer fails because of user-visible parser quota semantics, and parser-related errors are classified by their real source.
+  2. `My API` no longer borrows the platform parser; users can configure `LlamaParse`, and if no parser is configured the existing no-parser degraded analysis still works.
+  3. Parser routing, provider adapters, and settings boundaries remain simple and modular: platform parser, BYOK parser, and degraded fallback are clearly separated.
+**Plans:** 3 plans
+
+Plans:
+- [x] 08-01-PLAN.md - Remove misleading parser quota semantics, stop `My API` from borrowing the platform parser, and normalize user-facing parser errors.
+- [x] 08-02-PLAN.md - Add optional parser BYOK settings for `My API` and implement the first `LlamaParse` adapter without breaking degraded fallback.
+- [x] 08-03-PLAN.md - Harden the remaining Volcengine platform parser path, separate route vs parser failures, and sync the final parser ownership docs.
+
+**Completed:** 2026-04-09

@@ -17,7 +17,7 @@ For `Platform API`, the runtime flow is now:
 1. `useSlideAnalysis.ts` calls `/api/generate` with `task = explain` and `access.mode = "platform"`
 2. Worker verifies Clerk auth from the bearer token
 3. backend parser access runs first
-4. if parser access degrades, the request fails early with `PLATFORM_ANALYZE_UNAVAILABLE`
+4. if the platform parser is rate limited or unavailable, the request fails early with `PLATFORM_PARSER_RATE_LIMITED` or `PLATFORM_PARSER_UNAVAILABLE`
 5. if parser access is healthy and credits are sufficient, the backend creates a pending analyze attempt and returns `x-slidetutor-analyze-attempt-id`
 6. frontend stores that attempt id only in memory for the current analyze action
 7. frontend calls `/api/generate` again with `task = distill` and `taskData.hostedAnalyzeAttemptId`
@@ -57,47 +57,39 @@ The frontend blocks or redirects these flows back toward AI settings instead of 
 6. ZPAY calls `/api/payment-webhook` and the Worker replies with plain-text `success`
 7. backend verifies the ZPAY signature and amount, then applies the credit ledger entry exactly once even if the webhook is replayed
 
-## 2026-04-05 Platform Parser Quota and Degraded Explain Flow
+## 2026-04-09 Final Parser Ownership Flow
 
-Phase 05 adds a dedicated parser-access branch ahead of the existing explain pipeline.
+Phase 08 finishes the parser split and removes the old quota-shaped product behavior.
+
+### Parser ownership
+
+- `Platform API` uses the platform-managed `Volcengine` parser.
+- `Platform API` users do not configure parser providers in settings.
+- `My API` may optionally configure `LlamaParse`.
+- if `My API` omits parser config, `explain` still runs through the existing no-parser degraded analysis path.
 
 ### Explain flow
 
 For `task = explain`, the runtime now behaves like this:
 
 1. frontend calls `/api/generate`
-2. Worker asks the shared parser-access service whether the current anonymous identity can still use platform parsing today
-3. if allowed, the parser provider runs and successful usage is recorded in D1
-4. if quota is exhausted or the parser provider is unavailable, explain continues in degraded mode without layout blocks
-5. Worker returns `x-slidetutor-parse-mode`
-6. frontend stores `analysisAccuracy` on the current page state
-7. tutor UI shows `Low accuracy` only when the analysis actually degraded
+2. if `access.mode = "platform"`, backend resolves the platform-managed Volcengine parser first
+3. if Volcengine succeeds, backend injects normalized `layoutBlocks`
+4. if Volcengine is rate limited or unavailable, hosted analyze fails early with `PLATFORM_PARSER_RATE_LIMITED` or `PLATFORM_PARSER_UNAVAILABLE`
+5. if `access.mode = "byok"` and parser config is absent, explain continues without parser blocks and stays on the no-parser degraded path
+6. if `access.mode = "byok"` and parser config is present, backend calls `LlamaParse`
+7. if `LlamaParse` succeeds, backend injects normalized `layoutBlocks`
+8. if `LlamaParse` fails or times out, backend returns `BYOK_PARSER_FAILED` or `BYOK_PARSER_TIMEOUT`
+9. Worker still returns `x-slidetutor-parse-mode` only when a parser path was actually attempted
+10. frontend stores `analysisAccuracy` on the current page state and only shows `Low accuracy` when the analysis actually degraded
 
-### Identity and counting
+### Error taxonomy
 
-The current anonymous identity is server-side only:
-
-- `ip_hash + date_key`
-- hash secret from `USAGE_HASH_SECRET`
-- date key in `Asia/Shanghai`
-
-The current counting rule is intentionally strict:
-
-- deduct only after a real successful platform parse
-- do not deduct for degraded explains
-- do not deduct for failed parser calls
-
-### Settings flow
-
-Settings reads a parallel summary path:
-
-1. `SettingsModal.tsx` opens the AI tab
-2. frontend calls `GET /api/parser-usage`
-3. Worker resolves the same anonymous identity
-4. Worker returns `{ used, remaining, limit, dateKey }`
-5. settings renders exact usage like `7/10`
-
-This keeps parser quota truth centralized on the server while avoiding main-surface quota anxiety.
+- `ROUTE_RATE_LIMITED`: Worker route throttle before generation starts
+- `PLATFORM_PARSER_RATE_LIMITED`: Volcengine upstream throttled
+- `PLATFORM_PARSER_UNAVAILABLE`: platform parser unavailable for other reasons
+- `BYOK_PARSER_FAILED`: `LlamaParse` failed on the `My API` path
+- `BYOK_PARSER_TIMEOUT`: `LlamaParse` exceeded the bounded poll budget
 
 ## 2026-04-04 BYOK Access Metadata Flow
 

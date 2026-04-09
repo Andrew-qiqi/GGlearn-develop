@@ -297,3 +297,10 @@ DEEPSEEK_API_KEY=""
 - 后端决定“服务端实际上用什么密钥和 baseURL 去调用”
 
 只改其中一层，通常都会留下坑。
+## Phase 08 Parser Notes
+
+- `Platform API` keeps a platform-managed `Volcengine` parser path.
+- `Platform API` does not expose parser configuration in settings.
+- `My API` may optionally configure `LlamaParse`.
+- If `My API` omits parser config, `explain` keeps the no-parser degraded analysis path.
+- Parser errors are now separated into `ROUTE_RATE_LIMITED`, `PLATFORM_PARSER_*`, and `BYOK_PARSER_*`.
