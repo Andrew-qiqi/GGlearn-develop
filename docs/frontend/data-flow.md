@@ -275,6 +275,32 @@ The current design does not cache `layoutBlocks` for low-frequency regenerate sc
 - `distill` does not send the slide image again
 - `distill` consumes `fullExplanation` and returns both downstream artifacts in one request
 
+## 2026-04-10 Phase 09 BYOK capability and distill hardening flow
+
+### BYOK capability-check flow
+
+1. settings saves or updates BYOK access/model state
+2. frontend calls `POST /api/model-capability-check`
+3. backend returns `usable`, `unusable`, `pending`, or `stale` plus a capability summary snapshot
+4. frontend stores that result in `uiStore.modelCapabilityCheck`
+5. later BYOK generation requests reuse the saved readiness state unless the selected model/access changed or the saved result was marked `stale`
+
+### Runtime `needs recheck` behavior
+
+Normal BYOK generation does not re-run a live provider probe on every request. Instead:
+
+- clear capability/configuration failures can mark the saved capability status `stale`
+- the next eligible BYOK request or settings save triggers a fresh capability check
+- generic transient failures and `STRUCTURED_OUTPUT_TRUNCATED` do not automatically invalidate readiness
+
+### Distill input/output hardening
+
+`useSlideAnalysis.ts` still runs `explain -> distill`, but `distill` no longer receives the full prompt-format packaging string.
+
+- `formatExplanationArtifactForDistill(...)` removes packaging-only lines such as `Visual Focus Box` and `Socratic Probe`
+- the main explanation artifact and Focus mode rendering still keep the full teaching content
+- backend `distill` now surfaces stable structured-output failures instead of silently retrying after truncation
+
 ### Follow-up implications
 
 Follow-up logic now splits explanation cards only from the explanation payload. This keeps follow-up question context aligned with the actual teaching cards and avoids mixing in fast-scan content.

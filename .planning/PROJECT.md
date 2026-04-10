@@ -28,6 +28,8 @@ A high-quality slide learning assistant that turns static lecture PDFs into a gu
 
 ### Active
 - [ ] **Model Configuration Stability**: normalize model settings and provider-specific parameter handling after the parser phase lands.
+- [ ] **Backend Capability Truth**: move model admission, capability constraints, and provider-parameter support into one backend-owned truth instead of scattered frontend/backend assumptions.
+- [ ] **Active Task Surface Alignment**: clean dead task residue and align hosted-vs-BYOK task availability semantics after model capability hardening.
 - [ ] **Next Milestone Framing**: decide whether model-configuration cleanup becomes the first phase of the next milestone or is introduced through a new roadmap update after milestone closeout.
 
 ### Out of Scope
@@ -53,6 +55,9 @@ A high-quality slide learning assistant that turns static lecture PDFs into a gu
 | `My API` without a parser should still work via degraded analysis | Preserve low-friction usage even when users do not configure parser BYOK. | Locked |
 | Hosted access uses credits, not subscription-first packaging | Validate willingness to pay with minimal product complexity. | Locked |
 | ZPAY is the payment direction | Better fit for the current China-heavy operator context. | Locked |
+| Model capability truth must become backend-owned | Frontend model lists and task-specific provider parameters are now too fragile for BYOK + hosted growth. | Locked |
+| Hosted-vs-BYOK task availability is product policy, not model capability | Regenerate-task divergence should be fixed in product/task-surface work rather than capability logic. | Locked |
+| Hosted regenerate actions should map to one card-level action | `regenerate_chunk` and `regenerate_followup` belong to one card-level hosted action with shared credit semantics. | Locked |
 
 ## Evolution
 This document evolves at phase transitions and milestone boundaries.
@@ -70,4 +75,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update the document so roadmap and requirements stay aligned.
 
 ---
-*Last updated: April 9, 2026 after completing Phase 08 parser cleanup, landing `LlamaParse` parser BYOK for `My API`, and keeping model-configuration cleanup as the next separate step*
+*Last updated: April 10, 2026 after adding Phase 09 model-capability hardening and Phase 10 task-surface alignment as the next structured GSD work*

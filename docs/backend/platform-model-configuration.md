@@ -304,3 +304,24 @@ DEEPSEEK_API_KEY=""
 - `My API` may optionally configure `LlamaParse`.
 - If `My API` omits parser config, `explain` keeps the no-parser degraded analysis path.
 - Parser errors are now separated into `ROUTE_RATE_LIMITED`, `PLATFORM_PARSER_*`, and `BYOK_PARSER_*`.
+
+## 2026-04-10 Phase 09 Model Capability Registry Notes
+
+When you add or change a model now, frontend list updates are not enough.
+
+- Backend capability truth lives in `SlideTutor-AI/api/lib/modelCapabilities.ts`.
+- Save-time and stale first-use BYOK checks go through `POST /api/model-capability-check`.
+- Persisted readiness state lives in `selectedModel + aiAccess + modelCapabilityCheck`, not in raw provider secrets.
+- Runtime provider parameters are built from `structuredOutputConfig.ts` plus resolved capability truth, not from task branches alone.
+
+Current runtime rules to preserve:
+
+- `thinking` is soft only. Gemini `thinkingConfig.thinkingLevel` must be emitted only when the resolved model capability says thinking is supported.
+- `native_structured_output`, `streaming`, `image_input`, and `text_generation` remain hard product constraints.
+- `distill` now uses a `4096` structured-output budget for Gemini and OpenAI-compatible providers.
+- `distill` input may remove packaging-only lines such as `Visual Focus Box` and `Socratic Probe`, but the full explanation artifact for Focus mode quality should stay unchanged.
+
+Current BYOK recheck policy:
+
+- Mark saved capability state `stale` on clear capability/configuration failures such as `MODEL_CAPABILITY_UNKNOWN`, `MODEL_CAPABILITY_UNVERIFIED`, `MODEL_NOT_ELIGIBLE`, or `UNSUPPORTED_PROVIDER_SETTING`.
+- Do not mark the model `stale` for `STRUCTURED_OUTPUT_TRUNCATED` alone. That is treated as a structured-output budget/runtime issue, not proof that the model lost eligibility.

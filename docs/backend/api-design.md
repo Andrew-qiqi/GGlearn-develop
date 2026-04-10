@@ -241,6 +241,54 @@ Notes:
 - `My API` explain requests use `LlamaParse` only when parser BYOK is configured.
 - In hosted `Analyze`, degraded parser results do not stream teaching output and do not become a paid success.
 
+### 2026-04-10 Phase 09 capability and structured-output hardening
+
+Backend preflight now applies one backend-owned capability registry before provider execution:
+
+- unknown models return `MODEL_CAPABILITY_UNKNOWN`
+- unverified BYOK models return `MODEL_CAPABILITY_UNVERIFIED`
+- models that fail the current hard product baseline return `MODEL_NOT_ELIGIBLE`
+
+Provider config generation is now model-aware instead of task-only:
+
+- Gemini emits `thinkingConfig.thinkingLevel` only when the resolved model capability supports thinking
+- `distill` uses a `4096` structured-output budget for Gemini and OpenAI-compatible providers
+- OpenAI-compatible structured tasks still use `response_format.type = "json_schema"`
+
+`distill` hardening notes:
+
+- Gemini `distill` is buffered server-side before the Worker returns the stream contract
+- `finishReason = MAX_TOKENS` now becomes `STRUCTURED_OUTPUT_TRUNCATED`
+- invalid final structured JSON becomes `STRUCTURED_OUTPUT_INVALID`
+- this path intentionally does not auto-retry because the goal is to surface the real parameter/runtime failure clearly
+
+### `POST /api/model-capability-check`
+
+Purpose:
+
+- run one explicit BYOK capability probe during settings save or stale first use
+
+Response shape:
+
+```json
+{
+  "status": "usable | unusable | pending | stale",
+  "checkedAt": "2026-04-10T12:00:00.000Z",
+  "lastErrorCode": "MODEL_NOT_ELIGIBLE",
+  "capabilitySummary": {
+    "structuredOutput": true,
+    "streaming": true,
+    "vision": true,
+    "thinking": false
+  }
+}
+```
+
+Notes:
+
+- this route is for explicit BYOK readiness checks, not for every normal generation request
+- normal generation may still mark saved BYOK readiness `stale` after clear capability/configuration failures
+
 ### `GET /api/get-token`
 
 Purpose:

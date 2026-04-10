@@ -9,6 +9,8 @@
 - [x] **Phase 6: Accounts and Platform-Hosted APIs** - Build on the existing Clerk + credits baseline to finish hosted access and replace mock payment with ZPAY.
 - [x] **Phase 7: China-User Operational Fit** - Re-check the real bottlenecks for China-based users and operators before deeper infra commitments.
 - [x] **Phase 8: Parser Reliability and LlamaParse BYOK** - Stabilize the live parser path, remove misleading parser quota behavior, and add a dedicated parser BYOK path for `My API`.
+- [ ] **Phase 9: Model Capability Registry and Parameter Hardening** - Centralize model capability truth, harden provider-parameter generation, and stabilize structured-output execution.
+- [ ] **Phase 10: Dead Task Cleanup and Hosted Task Surface Alignment** - Remove dead task residue and align hosted task availability with the true active task surface.
 
 ## Phase Details
 
@@ -117,7 +119,7 @@
 
 ## Next Work
 
-Current recommendation: Phase 08 is complete; close out the current milestone or define the next separate model-configuration cleanup phase before reopening provider-parameter tuning.
+Current recommendation: Phase 09 is now defined and planned; execute the model-capability hardening work next, then follow with Phase 10 task-surface cleanup and hosted alignment.
 
 ### Immediate Task List
 - [x] Complete the Cloudflare-first migration.
@@ -130,7 +132,9 @@ Current recommendation: Phase 08 is complete; close out the current milestone or
 - [x] Execute Phase 7 plans to validate the real China-user operational bottlenecks after live Clerk + ZPAY rollout.
 - [x] Record the live operational-fit findings in the operator report and checklist docs.
 - [x] Plan and execute Phase 08 to remove misleading parser limits, harden the Volcengine platform parser path, and add `LlamaParse` for `My API`.
-- [ ] Define the next separate phase or milestone for Gemini/model-configuration cleanup after parser stability work lands.
+- [x] Define the next separate phase or milestone for Gemini/model-configuration cleanup after parser stability work lands.
+- [x] Execute Phase 09 to centralize model capability truth, harden provider parameters, and stabilize structured-output behavior. (completed 2026-04-10)
+- [ ] Execute Phase 10 to remove dead task residue and align hosted task availability semantics.
 
 ## Progress Table
 
@@ -144,6 +148,8 @@ Current recommendation: Phase 08 is complete; close out the current milestone or
 | 6. Accounts and Platform-Hosted APIs | 0/0 | Completed | 2026-04-06 |
 | 7. China-User Operational Fit | 3/3 | Completed | 2026-04-07 |
 | 8. Parser Reliability and LlamaParse BYOK | 3/3 | Completed | 2026-04-09 |
+| 9. Model Capability Registry and Parameter Hardening | 0/3 | Planned | — |
+| 10. Dead Task Cleanup and Hosted Task Surface Alignment | 0/0 | Defined | — |
 
 ### Phase 8: Parser Reliability and LlamaParse BYOK
 
@@ -162,3 +168,31 @@ Plans:
 - [x] 08-03-PLAN.md - Harden the remaining Volcengine platform parser path, separate route vs parser failures, and sync the final parser ownership docs.
 
 **Completed:** 2026-04-09
+
+### Phase 9: Model Capability Registry and Parameter Hardening
+
+**Goal**: Establish one backend-owned model capability truth, harden provider-parameter generation, and remove fragile model-setting failures such as unsupported Gemini thinking controls and truncated structured-output responses.
+**Depends on**: Phase 4, Phase 6, Phase 8
+**Requirements**: MODEL-01, MODEL-02, MODEL-03
+**Success Criteria** (what must be TRUE):
+  1. The product has one global model hard-constraint baseline for active tasks, and models that fail it are rejected before normal execution instead of failing mid-task.
+  2. Provider-specific runtime parameters are generated from model capability truth rather than scattered task-specific conditionals, so unsupported settings such as Gemini `thinkingLevel` on incompatible models no longer explode at runtime.
+  3. Structured-output flows, especially `distill`, no longer frequently fail because of token-budget and parameter misconfiguration, while `quickExplain` / Focus mode quality remains stable.
+**Plans**: 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 9 to break down)
+
+### Phase 10: Dead Task Cleanup and Hosted Task Surface Alignment
+
+**Goal**: Remove expired task residue, define one active task truth, and align hosted task availability so `Platform API` and `My API` expose the same supported learning actions with explicit hosted semantics.
+**Depends on**: Phase 6, Phase 9
+**Requirements**: TASK-01, HOST-03
+**Success Criteria** (what must be TRUE):
+  1. `evaluate_note` and any other expired task residue are removed from code, types, docs, and tests.
+  2. The active task surface is explicit and consistent across backend routing, pricing, frontend guardrails, and docs.
+  3. `regenerate_chunk` and `regenerate_followup` are no longer inconsistently blocked in hosted mode and are both mapped to hosted action `card_regenerate = 1 credit`.
+**Plans**: 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 10 to break down)

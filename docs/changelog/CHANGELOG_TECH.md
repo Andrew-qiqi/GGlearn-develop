@@ -5,6 +5,22 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-10] Completed Phase 09 Model Capability Registry and Parameter Hardening
+
+**What**: Added one backend-owned model capability registry, explicit BYOK capability probing through `POST /api/model-capability-check`, persisted BYOK readiness metadata in frontend settings state, capability-aware runtime provider config generation, and `distill` hardening that strips packaging-only explanation lines before distillation while turning Gemini `MAX_TOKENS` truncation into a stable structured-output error.
+
+**Why**: Model truth had drifted across frontend model lists, backend request builders, and provider-specific error behavior. That caused unsupported Gemini thinking parameters to leak into incompatible models, let BYOK custom models look ready before verification, and made `distill` failures surface as low-signal invalid JSON errors instead of clear capability/runtime diagnostics.
+
+**Impact**:
+- backend capability truth now lives in one registry with hard vs soft constraints
+- BYOK model readiness is checked explicitly and stored as `pending | checking | usable | unusable | stale`
+- runtime generation config now respects real model capabilities instead of assuming one provider family shares identical knobs
+- `distill` now gets a slimmer explanation input while Focus mode quality remains anchored to the unchanged explanation artifact
+- clear capability/configuration failures can mark saved BYOK readiness stale for recheck, while `STRUCTURED_OUTPUT_TRUNCATED` does not
+
+**Files**: `SlideTutor-AI/api/lib/modelCapabilities.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/structuredOutputConfig.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/api/lib/geminiStreamDiagnostics.ts`, `SlideTutor-AI/src/worker/routes/model-capability-check.ts`, `SlideTutor-AI/src/config/models.ts`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/lib/api/apiClient.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/lib/ai/artifacts.ts`, `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `docs/backend/platform-model-configuration.md`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`
+
+---
 ## [2026-04-07] Added Developer Guide For Platform Model Configuration
 
 **What**: Added a backend developer guide that explains how `Platform API` model configuration currently works across frontend model selection, persisted local state, backend provider-secret resolution, and runtime generation flow. Updated the backend docs index and root docs hub so developers can find this guide directly when changing default models, adding preset providers, or extending platform-supported providers.

@@ -33,6 +33,15 @@
 - [x] **CN-02**: Re-check operator-side realities for payments, support, and deployment convenience before deeper infra commitments.
 - [x] **CN-03**: China-based requests must avoid assuming Gemini API availability, because Gemini can reject requests with `User location is not supported for the API use`.
 
+### Model Capability and Parameter Hardening
+- [ ] **MODEL-01**: The backend must own one authoritative model-capability truth that defines hard constraints, soft constraints, and provider-specific parameter support for all active AI tasks.
+- [ ] **MODEL-02**: BYOK models must be validated through system-managed capability checks, and any model that fails the global hard-constraint baseline must be rejected before normal task execution.
+- [ ] **MODEL-03**: Structured-output task execution must use model-aware parameter generation that prevents unsupported provider settings and avoids frequent truncated JSON, without degrading `quickExplain` / Focus mode quality.
+
+### Active Task Surface Alignment
+- [ ] **TASK-01**: Dead or expired AI tasks must be removed from code, types, docs, and tests so the active task surface has one clear truth.
+- [ ] **HOST-03**: `Platform API` and `My API` must expose the same supported learning tasks, including regenerate actions, with explicit hosted action and billing semantics where hosted support exists.
+
 ## Validated Requirements
 - [x] **DATA-01**: IndexedDB-based local persistence replaced the old fragile localStorage path.
 - [x] **DATA-02**: Persistence compatibility and migration safety were added for existing data.
@@ -89,6 +98,11 @@
 | CN-01 | Phase 7 | Completed |
 | CN-02 | Phase 7 | Completed |
 | CN-03 | Phase 7 | Completed |
+| MODEL-01 | Phase 9 | Planned |
+| MODEL-02 | Phase 9 | Planned |
+| MODEL-03 | Phase 9 | Planned |
+| TASK-01 | Phase 10 | Planned |
+| HOST-03 | Phase 10 | Planned |
 | DATA-01 | Phase 2 | Completed |
 | DATA-02 | Phase 2 | Completed |
 | SEC-01 | Phase 1 | Completed |
