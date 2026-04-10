@@ -2,18 +2,18 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 09
-current_phase_name: model-capability-registry-and-parameter-hardening
+current_phase: 10
+current_phase_name: dead-task-cleanup-and-hosted-task-surface-alignment
 current_plan: 1
 status: executing
 stopped_at: Phase 09 added to roadmap and waiting for concrete plans generated from the approved phase brief
-last_updated: "2026-04-10T09:26:19.239Z"
+last_updated: "2026-04-10T10:12:59.887Z"
 last_activity: 2026-04-10
 progress:
   total_phases: 10
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 19
-  completed_plans: 11
+  completed_plans: 14
 ---
 
 # Project State
@@ -23,21 +23,21 @@ progress:
 See: `.planning/PROJECT.md`
 
 **Core Value:** Teacher-like PDF tutoring with controllable model access
-**Current Focus:** Phase 09 — model-capability-registry-and-parameter-hardening
+**Current Focus:** Phase 10 — dead-task-cleanup-and-hosted-task-surface-alignment
 
 ## Current Position
 
-Phase: 09 (model-capability-registry-and-parameter-hardening) — EXECUTING
-Plan: 1 of 3
-**Current Phase:** 09
-**Current Phase Name:** model-capability-registry-and-parameter-hardening
+Phase: 10 (dead-task-cleanup-and-hosted-task-surface-alignment) — EXECUTING
+Plan: 1 of 2
+**Current Phase:** 10
+**Current Phase Name:** dead-task-cleanup-and-hosted-task-surface-alignment
 **Total Phases:** 10
 **Completed Phases:** 8
 **Current Plan:** 1
-**Total Plans in Phase:** 3
-**Status:** Executing Phase 09
+**Total Plans in Phase:** 2
+**Status:** Executing Phase 10
 **Last Activity:** 2026-04-10
-**Last Activity Description:** Phase 09 execution started
+**Last Activity Description:** Phase 10 execution started
 **Progress:** Foundational runtime, BYOK, parser guardrails, hosted access, Clerk auth, live ZPAY recharge, and the Phase 07 operational-fit evidence are in place; the current focus is centralizing model capability truth, hardening provider parameters, fixing structured-output truncation, and then cleaning the hosted task surface
 
 ## Performance Metrics

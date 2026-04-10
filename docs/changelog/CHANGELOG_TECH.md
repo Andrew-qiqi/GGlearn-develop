@@ -5,6 +5,34 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-10] Aligned Hosted Regenerate Surface With `card_regenerate`
+
+**What**: Enabled hosted `regenerate_chunk` and `regenerate_followup` instead of treating them as `My API` only. Both runtime tasks now charge through one hosted action, `card_regenerate`, priced at `1` credit. The frontend regenerate hooks no longer bounce hosted users back to AI settings and now use the same insufficient-credit guardrail pattern as other hosted actions.
+
+**Why**: After Phase 09 clarified model capability truth, the remaining regenerate mismatch was clearly a product-policy leftover, not a model-capability boundary. Keeping hosted regenerate blocked would have left the task surface inconsistent across `Platform API` and `My API`.
+
+**Impact**:
+- `Platform API` and `My API` now expose the same regenerate tasks
+- backend hosted pricing and frontend pricing display now include `card_regenerate = 1`
+- hosted regenerate failures now behave like other credit-backed actions instead of falling back to settings redirection
+
+**Files**: `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/api/lib/platformAccess/types.ts`, `SlideTutor-AI/api/lib/platformAccess/pricing.ts`, `SlideTutor-AI/src/lib/platformAccess/pricing.ts`, `SlideTutor-AI/src/hooks/useChunkRegenerate.ts`, `SlideTutor-AI/src/hooks/useFollowUp.ts`, `SlideTutor-AI/src/components/CreditsRequiredDialog.tsx`, `SlideTutor-AI/src/components/settings/PlatformApiSection.tsx`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`
+
+---
+## [2026-04-10] Removed Live `evaluate_note` Task Residue
+
+**What**: Removed the last live runtime and docs references that still treated `evaluate_note` like a current task. The generate-service task handling and hosted unsupported-action typing no longer include it, and the public API/data-flow docs no longer list it as a current hosted boundary.
+
+**Why**: `evaluate_note` was already a dead feature direction, but it still polluted the active task surface and made Phase 10 cleanup harder to reason about.
+
+**Impact**:
+- the live task surface is cleaner and easier to distinguish from planning/history
+- hosted unsupported-action truth no longer carries dead-task residue
+- future hosted regenerate alignment work can focus on real product boundaries instead of historical leftovers
+
+**Files**: `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/api/lib/platformAccess/types.ts`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`
+
+---
 ## [2026-04-10] Completed Phase 09 Model Capability Registry and Parameter Hardening
 
 **What**: Added one backend-owned model capability registry, explicit BYOK capability probing through `POST /api/model-capability-check`, persisted BYOK readiness metadata in frontend settings state, capability-aware runtime provider config generation, and `distill` hardening that strips packaging-only explanation lines before distillation while turning Gemini `MAX_TOKENS` truncation into a stable structured-output error.

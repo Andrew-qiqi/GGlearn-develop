@@ -37,15 +37,18 @@ For `followup`, `generate_questions`, and `evaluate_answers`:
 
 If credits are insufficient, the Worker returns structured JSON before any model execution.
 
-### Unsupported hosted actions
+### Hosted regenerate actions
 
-Some mature actions remain `My API` only for now:
+Hosted mode now supports the same regenerate tasks as `My API`:
 
 - `regenerate_chunk`
 - `regenerate_followup`
-- `evaluate_note`
 
-The frontend blocks or redirects these flows back toward AI settings instead of silently spending hosted capacity.
+Both tasks map to one hosted action:
+
+- `card_regenerate = 1 credit`
+
+The frontend no longer redirects these actions back to AI settings just because the user is in `Platform API`. The only remaining hosted guardrails here are auth and insufficient-credit handling.
 
 ### Recharge flow
 

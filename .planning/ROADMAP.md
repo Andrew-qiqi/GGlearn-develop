@@ -10,7 +10,7 @@
 - [x] **Phase 7: China-User Operational Fit** - Re-check the real bottlenecks for China-based users and operators before deeper infra commitments.
 - [x] **Phase 8: Parser Reliability and LlamaParse BYOK** - Stabilize the live parser path, remove misleading parser quota behavior, and add a dedicated parser BYOK path for `My API`.
 - [ ] **Phase 9: Model Capability Registry and Parameter Hardening** - Centralize model capability truth, harden provider-parameter generation, and stabilize structured-output execution.
-- [ ] **Phase 10: Dead Task Cleanup and Hosted Task Surface Alignment** - Remove dead task residue and align hosted task availability with the true active task surface.
+- [x] **Phase 10: Dead Task Cleanup and Hosted Task Surface Alignment** - Remove dead task residue and align hosted task availability with the true active task surface. (completed 2026-04-10)
 
 ## Phase Details
 
@@ -149,7 +149,7 @@ Current recommendation: Phase 09 is now defined and planned; execute the model-c
 | 7. China-User Operational Fit | 3/3 | Completed | 2026-04-07 |
 | 8. Parser Reliability and LlamaParse BYOK | 3/3 | Completed | 2026-04-09 |
 | 9. Model Capability Registry and Parameter Hardening | 0/3 | Planned | — |
-| 10. Dead Task Cleanup and Hosted Task Surface Alignment | 0/0 | Defined | — |
+| 10. Dead Task Cleanup and Hosted Task Surface Alignment | 2/2 | Complete   | 2026-04-10 |
 
 ### Phase 8: Parser Reliability and LlamaParse BYOK
 
