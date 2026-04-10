@@ -5,6 +5,20 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-10] Removed Built-In Model Id Drift Between UI And Capability Registry
+
+**What**: Derived backend capability entries for current selectable built-in models from the shared model config in `SlideTutor-AI/src/config/models.ts` instead of maintaining a second hardcoded model-id list in `SlideTutor-AI/api/lib/modelCapabilities.ts`. Added a regression test that asserts every selectable shared model resolves to a non-`unknown` capability profile, while keeping a small backend-only legacy alias list for older saved model ids.
+
+**Why**: Changing a built-in model id in `models.ts` could previously leave the backend capability registry out of sync and trigger `MODEL_CAPABILITY_UNKNOWN` during analyze requests. That made Phase 09's "single capability truth" goal incomplete in practice.
+
+**Impact**:
+- changing the current built-in model list no longer requires duplicating the same model ids in a separate backend registry
+- selectable-model drift now fails in tests instead of surfacing first as a runtime analyze error
+- older saved model ids can still be recognized through explicit legacy aliases where needed
+
+**Files**: `SlideTutor-AI/src/config/models.ts`, `SlideTutor-AI/api/lib/modelCapabilities.ts`, `SlideTutor-AI/api/lib/modelCapabilities.test.ts`, `docs/backend/platform-model-configuration.md`
+
+---
 ## [2026-04-10] Aligned Hosted Regenerate Surface With `card_regenerate`
 
 **What**: Enabled hosted `regenerate_chunk` and `regenerate_followup` instead of treating them as `My API` only. Both runtime tasks now charge through one hosted action, `card_regenerate`, priced at `1` credit. The frontend regenerate hooks no longer bounce hosted users back to AI settings and now use the same insufficient-credit guardrail pattern as other hosted actions.

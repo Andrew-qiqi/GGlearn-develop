@@ -309,10 +309,12 @@ DEEPSEEK_API_KEY=""
 
 When you add or change a model now, frontend list updates are not enough.
 
-- Backend capability truth lives in `SlideTutor-AI/api/lib/modelCapabilities.ts`.
-- Save-time and stale first-use BYOK checks go through `POST /api/model-capability-check`.
+- Current selectable built-in models live in `SlideTutor-AI/src/config/models.ts`, and backend capability truth for those models is derived from that shared config in `SlideTutor-AI/api/lib/modelCapabilities.ts`.
+- A small backend-only legacy capability alias list may still exist for older saved model ids, but new selectable built-ins should not be maintained in a second manual registry.
+- Save-time BYOK checks go through `POST /api/model-capability-check`.
 - Persisted readiness state lives in `selectedModel + aiAccess + modelCapabilityCheck`, not in raw provider secrets.
 - Runtime provider parameters are built from `structuredOutputConfig.ts` plus resolved capability truth, not from task branches alone.
+- If you replace a built-in model id in `models.ts`, you must also verify that its capability metadata in the same shared config is still correct.
 
 Current runtime rules to preserve:
 
@@ -325,3 +327,9 @@ Current BYOK recheck policy:
 
 - Mark saved capability state `stale` on clear capability/configuration failures such as `MODEL_CAPABILITY_UNKNOWN`, `MODEL_CAPABILITY_UNVERIFIED`, `MODEL_NOT_ELIGIBLE`, or `UNSUPPORTED_PROVIDER_SETTING`.
 - Do not mark the model `stale` for `STRUCTURED_OUTPUT_TRUNCATED` alone. That is treated as a structured-output budget/runtime issue, not proof that the model lost eligibility.
+
+Correction for the earlier "Case 1: only replace an existing model id" section:
+
+- That older guidance is no longer accurate after Phase 09.
+- Replacing a built-in selectable model id is no longer a frontend-only change.
+- The safe rule now is: update the shared model definition in `SlideTutor-AI/src/config/models.ts`, verify backend capability resolution still recognizes it, then run a real request smoke test.
