@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"gemini -p --approval-mode yolo --model flash \\\"修复当前设置页信息收纳改动后的两个前端 bug。你在仓库 C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI 中工作。相关文件：src/components/u...",
-  "error": "Exit code 1\nNot enough arguments following: p\nUsage: gemini [options] [command]\n\nGemini CLI - Defaults to interactive mode. Use -p/--prompt for non-interactive (headless) mode.\n\nCommands:\n  gemini mcp                   Manage MCP servers\n  gemini extensions <command>  Manage Gemini CLI extensions.  [aliases: extension]\n  gemini skills <command>      Manage agent skills.  [aliases: skill]\n  gemini hooks <command>       Manage Gemini CLI hooks.  [aliases: hook]\n  gemini [query..]             Launc...",
-  "timestamp": "2026-04-11T08:02:43.285Z",
-  "retry_count": 1
+  "tool_input_preview": "{\"command\":\"node \\\"C:/Users/hoo/.claude/plugins/cache/openai-codex/codex/1.0.1/scripts/codex-companion.mjs\\\" task -- \\\"$(cat <<'EOF'\\n为 SlideTutor-AI 的正式 i18n 第一波改造做风险评估。背景：当前项目已有 applicationLanguage ...",
+  "error": "Exit code 1\n(node:75208) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.\n(Use `node --trace-deprecation ...` to show where the warning was created)\nspawn codex ENOENT",
+  "timestamp": "2026-04-11T14:02:07.325Z",
+  "retry_count": 2
 }
