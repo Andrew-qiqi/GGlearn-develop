@@ -333,3 +333,171 @@ Correction for the earlier "Case 1: only replace an existing model id" section:
 - That older guidance is no longer accurate after Phase 09.
 - Replacing a built-in selectable model id is no longer a frontend-only change.
 - The safe rule now is: update the shared model definition in `SlideTutor-AI/src/config/models.ts`, verify backend capability resolution still recognizes it, then run a real request smoke test.
+
+## 内置模型新增操作手册
+
+适用场景：
+
+- 你要给当前产品新增一个新的“内置可选模型”
+- 这个模型会出现在设置面板里
+- 它属于当前已有 provider 范围，也就是 `gemini` 或 `openai-compatible`
+
+### 结论先说
+
+新增内置模型的唯一主入口是：
+
+- `SlideTutor-AI/src/config/models.ts`
+
+当前实现下，前端可选模型列表和后端内置模型 capability truth 都从这份共享配置出发。不要再去单独维护第二份“当前内置模型 id 列表”。
+
+### 步骤 1：确认这是不是“内置模型新增”
+
+只有下面这种情况，才走本节：
+
+- 只是给现有 `gemini` 或 `openai-compatible` provider 新增一个新的内置可选模型
+
+如果不是，就不要照搬本节：
+
+- 新增一个全新 provider
+- 新增一个新的 OpenAI-compatible preset
+- 只是修改 BYOK 用户自己填写的 custom model
+
+### 步骤 2：在共享模型配置里新增模型定义
+
+编辑：
+
+- [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/config/models.ts)
+
+在 `MODEL_CONFIG.providers[].models[]` 中新增模型，并补全它的共享 capability 元数据。
+
+当前新增内置模型至少要明确这些字段：
+
+- `id`
+- `name`
+- `vision`
+- `endpointPreset`
+  仅 `openai-compatible` 需要
+- `thinking`
+  如果 provider 明确不支持或我们不打算使用，就写 `false`
+- `nativeStructuredOutput`
+  如果不填，当前默认按 `true` 处理；只有明确不支持时才显式写 `false`
+- `streaming`
+  如果不填，当前默认按 `true` 处理；只有明确不支持时才显式写 `false`
+- `capabilityStatus`
+  当前内置可用模型通常不需要写；只有像 `custom-openai-model` 这种需要先探测、默认不能直接准入的特殊项才写 `unverified`
+
+示例：
+
+```ts
+{
+  id: 'gemini-2.5-example',
+  name: 'Gemini 2.5 Example',
+  vision: true,
+  thinking: false,
+}
+```
+
+OpenAI-compatible 示例：
+
+```ts
+{
+  id: 'qwen-example',
+  name: 'Qwen Example',
+  vision: true,
+  endpointPreset: 'qwen',
+  thinking: false,
+}
+```
+
+### 步骤 3：按产品硬约束检查 capability 元数据
+
+新增前先确认，这个模型是否满足当前产品硬约束：
+
+- `text_generation`
+- `image_input`
+- `native_structured_output`
+- `streaming`
+
+在当前实现里：
+
+- `text_generation` 对内置模型默认视为 `true`
+- `image_input` 由 `vision` 决定
+- `native_structured_output` 默认是 `true`，只有明确不支持时才应显式写 `false`
+- `streaming` 默认是 `true`，只有明确不支持时才应显式写 `false`
+- `thinking` 是软能力，不影响准入，但会影响 Gemini 是否附带 `thinkingConfig`
+
+如果一个模型已知不满足任一硬约束，就不要把它作为当前产品内置可选模型加进来。
+
+### 步骤 4：判断是否需要保留 legacy alias
+
+如果你只是新增一个模型，一般不需要动 legacy alias。
+
+只有下面这种情况，才考虑修改：
+
+- 你替换了一个旧的内置模型 id
+- 并且担心已有用户或历史数据里仍保存着旧 id
+
+这时可以在：
+
+- [modelCapabilities.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/api/lib/modelCapabilities.ts)
+
+里的 `LEGACY_MODEL_CAPABILITY_REGISTRY` 保留一条旧 id 映射，让旧选择不会立刻在运行时掉成 `MODEL_CAPABILITY_UNKNOWN`。
+
+注意：
+
+- `LEGACY_MODEL_CAPABILITY_REGISTRY` 只用于兼容旧 id
+- 不要把当前仍然在 UI 可选的内置模型继续手工维护在这里
+- 当前 UI 可选模型必须只在 `models.ts` 维护
+
+### 步骤 5：检查 provider 侧前提是否真实成立
+
+新增共享模型定义之前，先确认这些前提：
+
+- 这个 `modelId` 在 provider 侧真实存在
+- 当前 provider 路径确实支持它
+- 如果是 `openai-compatible`，对应的 `endpointPreset` 没填错
+- 平台模式下，如果这个模型要给 `Platform API` 用，对应服务端密钥和访问路径已经具备
+
+不要依赖“看起来像是对的”。至少要做一次真实请求验证。
+
+### 步骤 6：运行最小验证
+
+新增内置模型后，至少做下面这些验证：
+
+1. 在 `SlideTutor-AI` 目录运行：
+   `npm test -- api/lib/modelCapabilities.test.ts api/lib/modelCapabilityProbe.test.ts api/lib/generateService.platform.test.ts`
+2. 运行：
+   `npm run lint`
+3. 打开设置面板，确认新模型能正常显示
+4. 选择该模型跑一次真实请求，至少验证 `analyze`
+5. 如有需要，再验证 `followup` 或 `quiz`
+
+其中第 1 步很重要，因为：
+
+- `api/lib/modelCapabilities.test.ts` 里有回归测试，会检查当前所有共享可选模型都不会被 backend 判成 `unknown`
+
+### 步骤 7：什么时候不应该新增为内置模型
+
+下面这些情况，不建议直接作为内置模型加入：
+
+- 已知不支持 native structured output
+- 已知不支持 streaming
+- 已知不支持图像输入
+- provider 侧文档或实测能力不稳定
+- 只是为了给 BYOK 用户留一个“也许能用”的实验入口
+
+这类模型更适合：
+
+- 不加入内置列表
+- 或继续走 `custom-openai-model` / BYOK 探测路径
+
+### 步骤 8：新增后要同步更新的认知
+
+正常情况下，新增一个当前内置模型，不需要再手动同步第二份当前内置 capability registry。
+
+你真正需要关心的是：
+
+- `models.ts` 里的共享模型定义是否完整
+- capability 元数据是否准确
+- 是否需要保留旧 id 的 legacy alias
+- 真实 provider 请求是否通过

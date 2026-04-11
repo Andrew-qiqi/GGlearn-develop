@@ -20,8 +20,8 @@ Flow: Validate → Research UI → Verify UI-SPEC → Done
 </objective>
 
 <execution_context>
-@/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/ui-phase.md
-@/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/references/ui-brand.md
+@C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/ui-phase.md
+@C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/references/ui-brand.md
 </execution_context>
 
 <context>
@@ -29,6 +29,6 @@ Phase number: $ARGUMENTS — optional, auto-detects next unplanned phase if omit
 </context>
 
 <process>
-Execute @/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/ui-phase.md end-to-end.
+Execute @C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/ui-phase.md end-to-end.
 Preserve all workflow gates.
 </process>

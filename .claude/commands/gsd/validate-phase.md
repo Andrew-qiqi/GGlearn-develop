@@ -22,7 +22,7 @@ Output: updated VALIDATION.md + generated test files.
 </objective>
 
 <execution_context>
-@/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/validate-phase.md
+@C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/validate-phase.md
 </execution_context>
 
 <context>
@@ -30,6 +30,6 @@ Phase: $ARGUMENTS — optional, defaults to last completed phase.
 </context>
 
 <process>
-Execute @/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/validate-phase.md.
+Execute @C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/validate-phase.md.
 Preserve all workflow gates.
 </process>

@@ -17,9 +17,9 @@ changes that are irrelevant to code review.
 </objective>
 
 <execution_context>
-@/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/pr-branch.md
+@C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/pr-branch.md
 </execution_context>
 
 <process>
-Execute the pr-branch workflow from @/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/pr-branch.md end-to-end.
+Execute the pr-branch workflow from @C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/pr-branch.md end-to-end.
 </process>

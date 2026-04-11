@@ -19,7 +19,7 @@ Output: Forensic report saved to `.planning/forensics/`, presented inline, with 
 </objective>
 
 <execution_context>
-@/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/forensics.md
+@C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/forensics.md
 </execution_context>
 
 <context>
@@ -36,7 +36,7 @@ Output: Forensic report saved to `.planning/forensics/`, presented inline, with 
 </context>
 
 <process>
-Read and execute the forensics workflow from @/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/forensics.md end-to-end.
+Read and execute the forensics workflow from @C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/forensics.md end-to-end.
 </process>
 
 <success_criteria>

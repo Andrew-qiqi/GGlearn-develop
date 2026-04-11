@@ -10,9 +10,9 @@ Display comprehensive project statistics including phase progress, plan executio
 </objective>
 
 <execution_context>
-@/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/stats.md
+@C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/stats.md
 </execution_context>
 
 <process>
-Execute the stats workflow from @/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/stats.md end-to-end.
+Execute the stats workflow from @C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/stats.md end-to-end.
 </process>

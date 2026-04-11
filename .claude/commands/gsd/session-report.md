@@ -11,9 +11,9 @@ Generate a structured SESSION_REPORT.md document capturing session outcomes, wor
 </objective>
 
 <execution_context>
-@/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/session-report.md
+@C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/session-report.md
 </execution_context>
 
 <process>
-Execute the session-report workflow from @/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/session-report.md end-to-end.
+Execute the session-report workflow from @C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/session-report.md end-to-end.
 </process>

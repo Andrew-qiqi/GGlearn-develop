@@ -5,6 +5,24 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-11] Settings Page UI Optimization & Progressive Disclosure
+
+**What**: Implemented a **Progressive Disclosure** pattern in the AI Settings page. Added a reusable `InfoTrigger` component to encapsulate help text and pricing details behind interactive info icons.
+
+**Why**: To reduce visual noise and improve the information hierarchy. The settings page had too much visible explanatory text and flat pricing grids, which cluttered the UI and distracted from core configuration tasks.
+
+**Impact**:
+- **Cleaner UI**: Default settings view is now significantly more compact and focused.
+- **New Component**: `src/components/ui/InfoTrigger.tsx` is now available for cross-project help/info patterns.
+- **Interactions**: Supports hover (desktop) and click/tap (mobile/desktop) for a unified "discovery" experience.
+- **Tests Updated**: `SettingsModal.test.tsx` and `PlatformApiSection.test.tsx` now verify the presence of info triggers rather than static text.
+
+**Files**: 
+- `src/components/ui/InfoTrigger.tsx` (New)
+- `src/components/SettingsModal.tsx`
+- `src/components/settings/PlatformApiSection.tsx`
+- `src/components/SettingsModal.test.tsx`
+- `src/components/settings/PlatformApiSection.test.tsx`
 ## [2026-04-10] Removed Built-In Model Id Drift Between UI And Capability Registry
 
 **What**: Derived backend capability entries for current selectable built-in models from the shared model config in `SlideTutor-AI/src/config/models.ts` instead of maintaining a second hardcoded model-id list in `SlideTutor-AI/api/lib/modelCapabilities.ts`. Added a regression test that asserts every selectable shared model resolves to a non-`unknown` capability profile, while keeping a small backend-only legacy alias list for older saved model ids.

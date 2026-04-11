@@ -216,7 +216,7 @@ get-shit-done/
 
 **New Workflow:**
 - Implementation: `get-shit-done/workflows/{name}.md`
-- Usage: Reference from command with `@/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/{name}.md`
+- Usage: Reference from command with `@C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/{name}.md`
 
 **New Reference Document:**
 - Implementation: `get-shit-done/references/{name}.md`
@@ -229,12 +229,12 @@ get-shit-done/
 ## Special Directories
 
 **get-shit-done/**
-- Purpose: Resources installed to /Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/
+- Purpose: Resources installed to C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/
 - Source: Copied by bin/install.js during installation
 - Committed: Yes (source of truth)
 
 **commands/**
-- Purpose: Slash commands installed to /Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/commands/
+- Purpose: Slash commands installed to C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/commands/
 - Source: Copied by bin/install.js during installation
 - Committed: Yes (source of truth)
 

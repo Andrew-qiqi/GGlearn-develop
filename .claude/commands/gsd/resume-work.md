@@ -22,11 +22,11 @@ Routes to the resume-project workflow which handles:
   </objective>
 
 <execution_context>
-@/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/resume-project.md
+@C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/resume-project.md
 </execution_context>
 
 <process>
-**Follow the resume-project workflow** from `@/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/resume-project.md`.
+**Follow the resume-project workflow** from `@C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/resume-project.md`.
 
 The workflow handles all resumption logic including:
 

@@ -6,7 +6,21 @@
 
 ---
 
-## 2026-04-05 Phase 06 Platform API Access Modes
+## UI Design Patterns (Added 2026-04-11)
+
+### Progressive Disclosure via InfoTrigger
+
+To maintain a clean and focused interface in high-density areas (like Settings), we employ a **Progressive Disclosure** pattern.
+
+**Implementation**:
+- `src/components/ui/InfoTrigger.tsx`: A reusable component that encapsulates supplemental information behind an info icon.
+- **Interactions**: Supports hover for quick preview on desktop and click/tap for persistent visibility on both desktop and touch devices.
+- **Styling**: Uses glassmorphism (backdrop-blur), soft shadows, and refined typography to ensure supplemental content feels integrated but distinct.
+
+**Usage Guidelines**:
+- Use for explanatory text that is not critical for the primary task flow.
+- Use for dense data like pricing tables or complex configuration caveats.
+- Place the trigger immediately following the label or heading it describes.
 
 The frontend now has an explicit access-mode split above the older BYOK model-access layer.
 

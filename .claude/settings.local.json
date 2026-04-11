@@ -49,7 +49,23 @@
       "Bash(rm -rf docs/tech_reference docs/security)",
       "Bash(mv docs/security_new docs/security)",
       "Bash(rm -rf docs/user_files)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(omc:*)",
+      "Bash(codex --version)",
+      "Bash(gemini --version)",
+      "Bash(node:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(where.exe omc:*)",
+      "Bash(npm prefix:*)",
+      "Bash(\"/c/Users/hoo/AppData/Roaming/npm/omc.cmd\" ask:*)",
+      "Bash(cmd.exe /c dir \"C:\\\\Users\\\\hoo\\\\AppData\\\\Roaming\\\\npm\\\\omc.cmd\")",
+      "Bash(cmd.exe /c dir \"C:\\\\Users\\\\hoo\\\\AppData\\\\Roaming\\\\npm\")",
+      "Bash(npm --prefix \"C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI\" test -- src/components/SettingsModal.test.tsx src/components/settings/PlatformApiSection.test.tsx)",
+      "Bash(git -C \"C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI\" status --short)",
+      "Bash(git -C \"C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI\" diff -- \"src/components/ui/InfoTrigger.tsx\" \"src/components/settings/PlatformApiSection.tsx\" \"src/components/SettingsModal.tsx\" \"src/components/SettingsModal.test.tsx\" \"src/components/settings/PlatformApiSection.test.tsx\")",
+      "Bash(git -C \"C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI\" log -5 --oneline)",
+      "Bash(git -C \"C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI\" add \"src/components/ui/InfoTrigger.tsx\" \"src/components/settings/PlatformApiSection.tsx\" \"src/components/SettingsModal.tsx\" \"src/components/SettingsModal.test.tsx\" \"src/components/settings/PlatformApiSection.test.tsx\")",
+      "Bash(git -C C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI commit -m ':*)"
     ]
   }
 }

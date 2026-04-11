@@ -8,6 +8,7 @@ allowed-tools:
   - Glob
   - Grep
   - AskUserQuestion
+  - Skill
   - Task
 ---
 <objective>
@@ -23,8 +24,8 @@ Designed for power users who want to parallelize work across phases from one ter
 </objective>
 
 <execution_context>
-@/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/manager.md
-@/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/references/ui-brand.md
+@C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/manager.md
+@C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/references/ui-brand.md
 </execution_context>
 
 <context>
@@ -34,6 +35,6 @@ Project context, phase list, dependencies, and recommendations are resolved insi
 </context>
 
 <process>
-Execute the manager workflow from @/Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/manager.md end-to-end.
+Execute the manager workflow from @C:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/.claude/get-shit-done/workflows/manager.md end-to-end.
 Maintain the dashboard refresh loop until the user exits or all phases complete.
 </process>
