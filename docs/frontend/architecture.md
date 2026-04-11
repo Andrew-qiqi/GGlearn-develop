@@ -22,6 +22,38 @@ To maintain a clean and focused interface in high-density areas (like Settings),
 - Use for dense data like pricing tables or complex configuration caveats.
 - Place the trigger immediately following the label or heading it describes.
 
+### Settings Surface Refinement (Updated 2026-04-11)
+
+The settings surface now follows a lighter, account-aware layout instead of treating every option as a flat form field.
+
+**Current shape**:
+- `PlatformApiSection.tsx` now combines:
+  - access mode switching
+  - hosted account identity (`Platform Account`)
+  - sign-in / sign-out actions
+  - credits balance and `Buy Credits`
+- supplementary credits pricing remains behind an `InfoTrigger`
+- parser onboarding help for `LlamaParse` is also delivered through the same lightweight disclosure pattern
+
+**Why this matters**:
+- hosted users can now see who is signed in and exit directly from Settings
+- settings density is reduced without hiding critical actions
+- BYOK parser setup now includes a novice-friendly entry path to `LlamaCloud`
+
+### Application Language vs Output Language
+
+The frontend now distinguishes two different language concerns:
+
+- `applicationLanguage`: controls UI copy
+- `outputLanguage`: controls AI-generated explanations and answers
+
+These must stay separate.
+
+**Current implementation boundary**:
+- `applicationLanguage` is persisted independently in `uiStore.ts`
+- first-wave UI i18n currently covers Settings, header actions, and upload / confirm-upload flow
+- `outputLanguage` continues to flow into prompt-generation paths and should not be reused for interface text
+
 The frontend now has an explicit access-mode split above the older BYOK model-access layer.
 
 ### Runtime state

@@ -305,6 +305,19 @@ DEEPSEEK_API_KEY=""
 - If `My API` omits parser config, `explain` keeps the no-parser degraded analysis path.
 - Parser errors are now separated into `ROUTE_RATE_LIMITED`, `PLATFORM_PARSER_*`, and `BYOK_PARSER_*`.
 
+## 2026-04-11 Optional Parser Onboarding Note
+
+For `My API`, parser setup now includes lightweight onboarding guidance directly in Settings:
+
+- `Optional Parser` help explains that parser setup is optional and degraded no-parser analysis still exists
+- when users want `LlamaParse`, the help surface links them to `LlamaCloud`
+- the help copy now gives a short 3-step flow:
+  1. sign in or create a `LlamaCloud` account
+  2. open `API Key` in the left sidebar and create a new key
+  3. copy the `llx-...` key back into Settings
+
+This is intentionally a UI-only guidance improvement. It does **not** change parser routing, parser ownership, or BYOK parser validation rules.
+
 ## 2026-04-10 Phase 09 Model Capability Registry Notes
 
 When you add or change a model now, frontend list updates are not enough.

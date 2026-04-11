@@ -5,6 +5,33 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-11] Expanded Settings, Account Surface, And First-Wave UI i18n
+
+**What**: Continued the settings modernization work by refining disclosure-heavy UI, adding a compact `Platform Account` card with sign-in/sign-out controls, introducing a first-wave UI translation layer for English and Simplified Chinese, and adding `LlamaParse` onboarding guidance directly inside parser help.
+
+**Why**: The previous settings experience had three gaps: too much visible explanatory text, no clear hosted-account identity/exit path, and poor setup guidance for BYOK parser users. At the same time, a China-heavy user base made it necessary to separate `applicationLanguage` (UI copy) from `outputLanguage` (AI response language) and start formalizing a reusable bilingual UI layer.
+
+**Impact**:
+- settings now expose hosted account identity and exit controls without turning the modal into a full account center
+- `applicationLanguage` is persisted separately from `outputLanguage`, and first-wave UI translation now covers settings, header actions, and upload / confirm-upload flow
+- the old settings-only translation shim was replaced by a shared i18n entrypoint
+- `Optional Parser` help now includes a direct `LlamaCloud` entry link plus short onboarding steps for creating an `llx-...` key
+- credits/info overlays and compact account-card layout received follow-up fixes so disclosure popovers no longer collide with nearby actions or get clipped by the card container
+
+**Files**:
+- `SlideTutor-AI/src/components/ui/InfoTrigger.tsx`
+- `SlideTutor-AI/src/components/settings/PlatformApiSection.tsx`
+- `SlideTutor-AI/src/components/SettingsModal.tsx`
+- `SlideTutor-AI/src/components/Header/AppHeader.tsx`
+- `SlideTutor-AI/src/App.tsx`
+- `SlideTutor-AI/src/lib/i18n/index.ts`
+- `SlideTutor-AI/src/store/uiStore.ts`
+- `SlideTutor-AI/src/components/SettingsModal.test.tsx`
+- `SlideTutor-AI/src/components/settings/PlatformApiSection.test.tsx`
+- `SlideTutor-AI/src/components/Header/AppHeader.test.tsx`
+- `SlideTutor-AI/src/App.test.tsx`
+- `SlideTutor-AI/src/store/uiStore.test.ts`
+
 ## [2026-04-11] Settings Page UI Optimization & Progressive Disclosure
 
 **What**: Implemented a **Progressive Disclosure** pattern in the AI Settings page. Added a reusable `InfoTrigger` component to encapsulate help text and pricing details behind interactive info icons.
