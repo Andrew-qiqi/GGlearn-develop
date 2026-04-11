@@ -88,8 +88,8 @@
     },
     {
       "path": "SlideTutor-AI\\src\\components\\SettingsModal.tsx",
-      "accessCount": 3,
-      "lastAccessed": 1775893396092,
+      "accessCount": 5,
+      "lastAccessed": 1775895398107,
       "type": "file"
     },
     {
@@ -103,6 +103,18 @@
       "accessCount": 2,
       "lastAccessed": 1775886216970,
       "type": "directory"
+    },
+    {
+      "path": "SlideTutor-AI\\src\\components\\ui\\InfoTrigger.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1775895099193,
+      "type": "file"
+    },
+    {
+      "path": "SlideTutor-AI\\src\\components\\settings\\PlatformApiSection.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1775895099626,
+      "type": "file"
     },
     {
       "path": ".claude\\settings.local.json",
@@ -168,18 +180,6 @@
       "path": ".planning\\ROADMAP.md",
       "accessCount": 1,
       "lastAccessed": 1775886251574,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\components\\ui\\InfoTrigger.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1775893114526,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\components\\settings\\PlatformApiSection.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1775893114808,
       "type": "file"
     },
     {
