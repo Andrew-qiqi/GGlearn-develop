@@ -5,6 +5,49 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-12] Split Custom BYOK Capability Checks Into Progressive Probe Stages
+
+**What**: Reworked the custom OpenAI-compatible capability probe so it no longer uses one opaque all-in-one request. The backend now probes custom endpoints progressively through text generation, streaming, structured JSON output, and image input, and returns more specific failure codes when the custom endpoint breaks at a particular stage. The settings UI now maps those codes to more targeted compatibility messages.
+
+**Why**: The previous single mixed probe could only say "unsupported" even when the actual problem was narrower, such as "streaming works but JSON-schema structured output does not" or "structured output works but image input under the runtime contract does not." That made custom BYOK failures hard to interpret and hard to debug.
+
+**Impact**:
+- custom BYOK failures can now distinguish baseline incompatibility, streaming incompatibility, structured-output incompatibility, and vision incompatibility
+- settings surface more useful failure copy without changing the broader ready/checking/retry workflow
+- the probe remains aligned with the real SlideTutor runtime contract instead of drifting into a synthetic toy check
+
+**Files**: `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/components/SettingsModal.test.tsx`, `SlideTutor-AI/src/lib/i18n/index.ts`, `docs/backend/byok-capability-check.md`
+
+---
+## [2026-04-12] Stopped Reporting Fake All-False Capability Summaries For Failed Custom BYOK Probes
+
+**What**: Changed `api/lib/modelCapabilityProbe.ts` so unknown or unverified BYOK probe failures no longer fall back to the backend capability registry's default `all false` summary. Failed custom OpenAI-compatible probes now return `capabilitySummary = null` unless the backend already has a trusted known-model capability profile or the custom probe itself succeeded.
+
+**Why**: The custom OpenAI-compatible UI intentionally stores a sentinel catalog model id while runtime checks use the real user-entered `customModelId`. When a custom probe failed, the backend would look up the real runtime model id in the registry, miss it, and then serialize the registry default as if the provider had proven `structuredOutput`, `streaming`, `vision`, and `thinking` were all unsupported. That made genuine protocol/endpoint mismatches look like definitive per-capability failures.
+
+**Impact**:
+- failed custom BYOK compatibility checks no longer mislead the UI with fake `all false` capability summaries
+- `MODEL_CAPABILITY_CHECK_AUTH_FAILED`, `MODEL_CAPABILITY_CHECK_UNSUPPORTED`, and transient pending failures now preserve the stronger signal that the probe failed without trustworthy per-capability evidence
+- successful custom probes and known built-in model checks still return concrete capability summaries
+
+**Files**: `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`, `docs/backend/byok-capability-check.md`
+
+---
+## [2026-04-12] BYOK OpenAI-Compatible Settings And Capability Flow Overhaul
+
+**What**: Reworked `My API` OpenAI-compatible settings so `Select Model` is now the only model-selection entry point, built-in OpenAI-compatible models expose only the current API-key field, and only `Custom OpenAI-compatible` exposes editable `API Key + Base URL + Model ID`. The runtime identity for custom models now stays on a sentinel catalog item while the real `customApiKey`, `customBaseURL`, and `customModelId` live in persisted BYOK settings. The frontend also split OpenAI-compatible keys by preset (`qwenApiKey`, `doubaoApiKey`, `customApiKey`) and removed runtime fallback to the older shared key. On the backend, custom capability checks can now probe into a real usable state, classify auth vs unsupported vs transient failures, and the settings panel now exposes explicit checking state plus a manual `Retry Check` action.
+
+**Why**: The earlier implementation had three classes of drift: model selection and credentials could contradict each other, custom model identity could corrupt the settings `<select>` state, and custom capability checks could sit in an opaque pending/failed state even when the root cause was simply wrong credentials or unsupported endpoint features. Shared OpenAI-compatible key fallback also caused cleared fields to re-populate from legacy state.
+
+**Impact**:
+- built-in `Qwen`, `Doubao`, and custom OpenAI-compatible endpoints no longer share one runtime API key implicitly
+- clearing a preset-specific OpenAI-compatible key no longer silently restores a legacy shared key
+- valid custom OpenAI-compatible probes can now become `usable` instead of remaining permanently pending
+- auth and unsupported-feature failures for custom probes are now visible as distinct capability-check outcomes
+- settings now show explicit loading during capability checks and provide a manual retry path after transient failures
+
+**Files**: `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/config/models.ts`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/lib/api/apiClient.ts`, `SlideTutor-AI/src/lib/i18n/index.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/api/lib/env.ts`, `docs/backend/platform-model-configuration.md`, `docs/frontend/architecture.md`
+
 ## [2026-04-11] Expanded Settings, Account Surface, And First-Wave UI i18n
 
 **What**: Continued the settings modernization work by refining disclosure-heavy UI, adding a compact `Platform Account` card with sign-in/sign-out controls, introducing a first-wave UI translation layer for English and Simplified Chinese, and adding `LlamaParse` onboarding guidance directly inside parser help.
