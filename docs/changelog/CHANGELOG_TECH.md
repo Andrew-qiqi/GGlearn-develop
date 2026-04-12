@@ -5,6 +5,34 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-12] Collapsed Custom BYOK Probe To Two High-Value Runtime Contract Checks
+
+**What**: Removed the standalone custom `text-only` and `stream-only` capability probe passes. The custom OpenAI-compatible probe now focuses on two higher-value stages: a structured runtime contract (`stream + json_schema`) and a multimodal runtime contract (`image + stream + json_schema`). The embedded probe image was also switched from a synthetic PNG placeholder to a stable JPEG data URL so the probe input shape is closer to real explain traffic.
+
+**Why**: The earlier four-stage probe spent most of its time on upstream round trips that added latency but little decision value. At the same time, probe traffic was still using a different image MIME shape from the real runtime path, which increased avoidable false-negative risk.
+
+**Impact**:
+- custom capability checks now make fewer upstream requests before reaching a decision
+- streaming and structured-output failures are still separated where provider evidence allows it, but low-value standalone checks are gone
+- multimodal probing now uses a JPEG data URL instead of the earlier PNG placeholder
+
+**Files**: `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`, `docs/backend/byok-capability-check.md`, `docs/superpowers/specs/2026-04-12-byok-custom-capability-probe-design.md`
+
+---
+## [2026-04-12] Added Stage-Level Probe Logging And Corrected Final Custom BYOK Failure Semantics
+
+**What**: Added structured stage-level logging for custom OpenAI-compatible capability probes, including request correlation fields and upstream failure summaries. Also replaced the final-stage custom failure code with `MODEL_CAPABILITY_CHECK_MULTIMODAL_RUNTIME_CONTRACT_UNSUPPORTED` and updated settings copy so the product no longer claims missing raw image capability when only the final multimodal structured runtime contract has failed. The UI still treats legacy `MODEL_CAPABILITY_CHECK_VISION_UNSUPPORTED` as equivalent to the new multimodal-contract wording for cached state compatibility.
+
+**Why**: Route-level Cloudflare / Worker logs could only show `POST /api/model-capability-check` plus a final `200`, which was not enough to tell which internal probe stage failed. At the same time, the old final error code and UI wording overstated what the probe had actually proven, turning a composite `image + stream + json_schema` failure into an apparent claim that vision itself was unsupported.
+
+**Impact**:
+- failed custom BYOK checks now emit stage-level runtime evidence instead of only a route-level success wrapper
+- final-stage custom failures now have semantics that match the probe contract more closely
+- old cached `VISION_UNSUPPORTED` states no longer continue the misleading vision-only wording in the settings UI
+
+**Files**: `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`, `SlideTutor-AI/src/worker/routes/model-capability-check.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/components/SettingsModal.test.tsx`, `SlideTutor-AI/src/lib/i18n/index.ts`, `docs/backend/byok-capability-check.md`, `docs/superpowers/specs/2026-04-12-byok-custom-capability-probe-design.md`
+
+---
 ## [2026-04-12] Split Custom BYOK Capability Checks Into Progressive Probe Stages
 
 **What**: Reworked the custom OpenAI-compatible capability probe so it no longer uses one opaque all-in-one request. The backend now probes custom endpoints progressively through text generation, streaming, structured JSON output, and image input, and returns more specific failure codes when the custom endpoint breaks at a particular stage. The settings UI now maps those codes to more targeted compatibility messages.

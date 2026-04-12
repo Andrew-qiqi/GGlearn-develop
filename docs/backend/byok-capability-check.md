@@ -67,13 +67,18 @@ Returned for clear non-retryable failures:
 - `MODEL_CAPABILITY_CHECK_AUTH_FAILED`
   - current API key was rejected
 - `MODEL_CAPABILITY_CHECK_UNSUPPORTED`
-  - current endpoint/model failed even the baseline text-generation compatibility probe
+  - current endpoint/model failed the structured runtime contract, but the failure could not be confidently attributed to streaming or structured-output support
 - `MODEL_CAPABILITY_CHECK_STREAMING_UNSUPPORTED`
-  - current endpoint/model cannot stream chat-completion output the way SlideTutor requires
+  - current endpoint/model appears unable to satisfy the streaming part of the structured runtime contract
 - `MODEL_CAPABILITY_CHECK_STRUCTURED_OUTPUT_UNSUPPORTED`
-  - current endpoint/model cannot produce the structured JSON output SlideTutor requires
-- `MODEL_CAPABILITY_CHECK_VISION_UNSUPPORTED`
-  - current endpoint/model rejects image input under the SlideTutor runtime contract
+  - current endpoint/model appears unable to satisfy the structured JSON-output part of the structured runtime contract
+- `MODEL_CAPABILITY_CHECK_MULTIMODAL_RUNTIME_CONTRACT_UNSUPPORTED`
+  - current endpoint/model failed the final `image + stream + structured-output` SlideTutor runtime contract probe
+
+Legacy note:
+
+- older cached frontend state may still contain `MODEL_CAPABILITY_CHECK_VISION_UNSUPPORTED`
+- the UI should treat that legacy code as equivalent to the new multimodal-contract failure instead of as literal proof that raw vision capability is missing
 
 For unknown or unverified custom runtime model ids, `capabilitySummary` is now allowed to be `null` on failure.
 This avoids leaking the backend registry fallback (`all false`) as if it were real probe evidence for the current custom endpoint/model.
@@ -100,14 +105,17 @@ This is different from the older behavior where custom BYOK remained effectively
 
 ## Current custom probe shape
 
-For `Custom OpenAI-compatible`, the backend now probes progressively instead of with one opaque mixed request:
+For `Custom OpenAI-compatible`, the backend now probes progressively with two high-value runtime-contract checks:
 
-1. text completion
-2. streaming text completion
-3. streaming structured-output completion
-4. streaming structured-output completion with image input
+1. streaming structured-output completion
+2. streaming structured-output completion with image input
 
-This preserves the real SlideTutor runtime contract while making unsupported failures more diagnosable.
+This preserves the real SlideTutor runtime contract while removing lower-value standalone text / streaming checks.
+
+Current observability now also logs stage-level probe events with request correlation and upstream failure summaries so route-level `200` logs no longer hide which internal stage failed.
+
+The current probe image fixture also uses a stable embedded `data:image/jpeg;base64,...` input so the capability check matches the runtime image shape more closely than the earlier PNG placeholder.
+The fixture now keeps explicit size headroom above small-provider minimums instead of targeting the smallest possible passing dimensions.
 
 ## UI expectations
 
