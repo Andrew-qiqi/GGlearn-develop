@@ -117,6 +117,8 @@ Current observability now also logs stage-level probe events with request correl
 The current probe image fixture also uses a stable embedded `data:image/jpeg;base64,...` input so the capability check matches the runtime image shape more closely than the earlier PNG placeholder.
 The fixture now keeps explicit size headroom above small-provider minimums instead of targeting the smallest possible passing dimensions.
 
+For providers such as DashScope that enforce JSON-mode prompt rules, the probe prompt now explicitly includes the word `JSON` so the structured runtime contract check does not fail on prompt-shape grounds alone.
+
 ## UI expectations
 
 The settings panel should now behave like this:

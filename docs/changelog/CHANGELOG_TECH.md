@@ -5,6 +5,19 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-12] Added Explicit JSON Keyword To Custom Probe Prompt For DashScope Compatibility
+
+**What**: Updated the custom OpenAI-compatible capability probe prompt from a bare `{"ok":true}` response hint to an explicit `Return valid JSON only: ...` contract so providers that enforce JSON-mode prompt requirements do not fail the probe for prompt-shape reasons alone.
+
+**Why**: DashScope / Qwen capability checks surfaced an upstream error requiring the messages to contain the word `json` when `response_format` enters JSON mode. The formal SlideTutor runtime prompts already mention `JSON` repeatedly, but the lightweight probe prompt did not, which created a provider-specific false negative.
+
+**Impact**:
+- custom DashScope / Qwen capability checks are less likely to fail on prompt wording alone
+- the probe remains lightweight while matching the JSON-mode expectations of the formal runtime more closely
+
+**Files**: `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`, `docs/backend/byok-capability-check.md`
+
+---
 ## [2026-04-12] Collapsed Custom BYOK Probe To Two High-Value Runtime Contract Checks
 
 **What**: Removed the standalone custom `text-only` and `stream-only` capability probe passes. The custom OpenAI-compatible probe now focuses on two higher-value stages: a structured runtime contract (`stream + json_schema`) and a multimodal runtime contract (`image + stream + json_schema`). The embedded probe image was also switched from a synthetic PNG placeholder to a stable JPEG data URL so the probe input shape is closer to real explain traffic.
