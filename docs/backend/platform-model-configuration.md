@@ -320,6 +320,71 @@ This is intentionally a UI-only guidance improvement. It does **not** change par
 
 ## 2026-04-10 Phase 09 Model Capability Registry Notes
 
+## 2026-04-12 BYOK OpenAI-Compatible Settings Notes
+
+This section overrides several older assumptions about `My API` OpenAI-compatible configuration.
+
+### Current frontend contract
+
+- `Select Model` is now the only model-selection entry point in Settings.
+- Built-in `Gemini` selections expose only the `Gemini API Key` field.
+- Built-in `OpenAI-compatible` selections expose only the `OpenAI-Compatible API Key` field.
+- Only `Custom OpenAI-compatible` exposes the full editable runtime tuple:
+  - `API Key`
+  - `Base URL`
+  - `Model ID`
+
+### Current persistence contract
+
+OpenAI-compatible BYOK credentials are now separated by preset instead of sharing one runtime key.
+
+Current persisted fields in [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/config/models.ts) and [uiStore.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/store/uiStore.ts) include:
+
+- `qwenApiKey`
+- `doubaoApiKey`
+- `customApiKey`
+- `customBaseURL`
+- `customModelId`
+
+The older shared `openAiCompatible.apiKey` now exists only as a legacy migration source and should not be treated as current runtime truth.
+
+### Current custom-model identity contract
+
+For `Custom OpenAI-compatible`, the selected catalog item stays pinned to the sentinel model id:
+
+```ts
+{
+  providerId: 'openai-compatible',
+  endpointPreset: 'custom',
+  modelId: 'custom-openai-model'
+}
+```
+
+The real runtime identity now lives in persisted BYOK fields:
+
+- `customModelId`
+- `customBaseURL`
+- `customApiKey`
+
+Do not write the real custom model id back into `selectedModel.modelId`. That older pattern caused the settings select value to stop matching any option and visually fall back to the first model.
+
+### Current capability-check contract
+
+`POST /api/model-capability-check` now has a more actionable custom-model path:
+
+- built-in known models still resolve from the shared capability registry
+- custom OpenAI-compatible models can now probe into a real `usable` state
+- auth-style failures map to `MODEL_CAPABILITY_CHECK_AUTH_FAILED`
+- unsupported-feature/protocol failures map to `MODEL_CAPABILITY_CHECK_UNSUPPORTED`
+- transient failures still map to `MODEL_CAPABILITY_CHECK_FAILED`
+
+This means `Compatibility check pending` should no longer be the steady-state success path for valid custom configuration.
+
+### Current platform boundary
+
+- `Platform API` still does not support `custom` OpenAI-compatible models
+- the shared model picker may still display the custom item, but platform mode disables that option and the backend still rejects custom if it somehow reaches runtime
+
 When you add or change a model now, frontend list updates are not enough.
 
 - Current selectable built-in models live in `SlideTutor-AI/src/config/models.ts`, and backend capability truth for those models is derived from that shared config in `SlideTutor-AI/api/lib/modelCapabilities.ts`.

@@ -135,6 +135,44 @@ This separation matters because the next hosted-access phase should reuse the mo
 
 Legacy `qwen` / `doubao` selections are normalized into the `openai-compatible` family during store initialization so older local settings do not break.
 
+### 2026-04-12 OpenAI-Compatible settings and capability flow update
+
+The BYOK settings surface still keeps the same top-to-bottom layout, but its state contract is now stricter.
+
+Current behavior:
+
+- `Select Model` is the only model-selection entry point
+- built-in `Gemini` selections show only the `Gemini API Key` field
+- built-in `OpenAI-compatible` selections show only the `OpenAI-Compatible API Key` field
+- only `Custom OpenAI-compatible` shows the full editable runtime tuple:
+  - `API Key`
+  - `Base URL`
+  - `Model ID`
+
+The custom catalog item now stays pinned to the sentinel model id `custom-openai-model`. The real custom runtime identity is stored separately in `customApiKey`, `customBaseURL`, and `customModelId`.
+
+OpenAI-compatible keys are also no longer one shared runtime secret. The frontend now keeps:
+
+- `qwenApiKey`
+- `doubaoApiKey`
+- `customApiKey`
+
+The older shared `openAiCompatible.apiKey` is now only a migration source for older saved settings.
+
+### Compatibility-check UX update
+
+`SettingsModal.tsx` now treats capability-check state as a visible interaction instead of a silent background detail.
+
+Current UX rules:
+
+- `checking` shows an explicit loading state with a spinner
+- `usable` shows `Model is ready`
+- `unusable` can now surface more specific custom-model failures
+- transient probe failures now show a dedicated failure message instead of only falling back to a generic pending state
+- the settings panel now exposes a manual `Retry Check` action so users can retry after transient network/provider failures
+
+This is especially important for `Custom OpenAI-compatible`, because the success path is no longer “always pending until first generate”. A successful custom probe can now move directly into a usable frontend state.
+
 ### Persistence boundary
 
 BYOK credentials are persisted locally through the existing IndexedDB `appSettings` store.

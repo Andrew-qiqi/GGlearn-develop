@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"node \\\"C:/Users/hoo/.claude/plugins/cache/openai-codex/codex/1.0.1/scripts/codex-companion.mjs\\\" task -- \\\"$(cat <<'EOF'\\n为 SlideTutor-AI 的正式 i18n 第一波改造做风险评估。背景：当前项目已有 applicationLanguage ...",
-  "error": "Exit code 1\n(node:75208) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.\n(Use `node --trace-deprecation ...` to show where the warning was created)\nspawn codex ENOENT",
-  "timestamp": "2026-04-11T14:02:07.325Z",
-  "retry_count": 2
-}
