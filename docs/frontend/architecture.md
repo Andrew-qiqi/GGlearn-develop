@@ -639,3 +639,34 @@ What changed is the boundary around parser access:
 - `CanvasTutor.tsx` renders a minimal warning badge for degraded analyses
 
 This means the frontend no longer assumes platform parsing is always available, but it still keeps the learner-facing teaching flow continuous.
+
+## 2026-04-14 Explain BBox Grounding Contract
+
+The `explain` prompt now treats parser output as a conditional spatial contract instead of a weak visual hint.
+
+### Parsed mode
+
+When `layoutBlocks` are present:
+
+- the prompt injects them as `Current Slide Parsed Regions`
+- those parsed regions become the primary spatial grounding for `knowledgeCards[].intent`
+- the model still uses vision for semantic judgment, but only for small local refinement around parsed regions
+- a valid `intent` box must stay traceable to one parsed region or one spatially adjacent parsed-region group
+- different knowledge-card boxes may touch at edges, but their filled areas must not overlap
+- if no clean traceable box works, the prompt narrows the teaching point instead of allowing a loose drifting box
+
+### No-parser degraded mode
+
+When `layoutBlocks` are absent, the system intentionally keeps the old vision-led fallback:
+
+- no parsed-region section is injected into the prompt
+- the model keeps final visual authority for the box location
+- this preserves the existing degraded analysis strategy instead of fabricating parser constraints
+
+### Contract boundary
+
+This change is intentionally limited to bbox grounding behavior inside `task = explain`.
+
+- the structured explanation artifact shape is unchanged
+- the intro-card contract is unchanged
+- teaching tone, explanation layering, and Socratic-probe policy are unchanged

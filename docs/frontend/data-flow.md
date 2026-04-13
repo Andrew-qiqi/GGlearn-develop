@@ -86,6 +86,20 @@ For `task = explain`, the runtime now behaves like this:
 9. Worker still returns `x-slidetutor-parse-mode` only when a parser path was actually attempted
 10. frontend stores `analysisAccuracy` on the current page state and only shows `Low accuracy` when the analysis actually degraded
 
+### Explain bbox grounding behavior
+
+The `explain` prompt now has two bbox-grounding modes:
+
+- when normalized `layoutBlocks` are present, the prompt injects them as `Current Slide Parsed Regions`
+- in parsed mode, `knowledgeCards[].intent` must stay traceable to those parsed regions instead of drifting freely by vision alone
+- parsed-mode boxes may be:
+  - exactly one parsed region
+  - one minimal enclosing rectangle over spatially adjacent parsed regions
+  - a small local refinement of one parsed region / parsed-region group
+  - a crop inside an overly large parsed region
+- parsed-mode boxes may touch at boundaries, but their areas must not overlap
+- if no parser blocks are available, the existing no-parser degraded path stays unchanged and the model falls back to its own visual judgment
+
 ### Error taxonomy
 
 - `ROUTE_RATE_LIMITED`: Worker route throttle before generation starts

@@ -5,6 +5,21 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-14] Tightened Explain BBox Grounding Around Parsed Regions
+
+**What**: Updated the `explain` prompt so parser-backed analyses no longer treat `layoutBlocks` as a loose visual hint. When parsed regions are present, the prompt now injects them as `Current Slide Parsed Regions`, requires each `knowledgeCards[].intent` box to stay traceable to those regions, allows only adjacent-region merges / local refinements / inner crops, and explicitly forbids area overlap between different card boxes. The no-parser degraded path was left unchanged and still falls back to the model's own visual judgment.
+
+**Why**: Weak models could often produce acceptable teaching cards but still drift spatially, producing highlight boxes that were offset from the real teaching region or only loosely related to parser output. The goal of this pass was to strengthen bbox grounding without changing teaching style, explanation quality, or the existing degraded no-parser behavior.
+
+**Impact**:
+- parser-backed explain runs now have a much stronger bbox contract while preserving one-card-one-box output
+- different card boxes may touch at the boundary, but they should no longer overlap in filled area
+- no-parser analyses keep the existing vision-led fallback instead of inheriting fake parser constraints
+- frontend architecture docs now explicitly describe the parsed-mode vs degraded-mode bbox behavior
+
+**Files**: `SlideTutor-AI/src/lib/ai/prompts.ts`, `SlideTutor-AI/src/lib/ai/prompts.test.ts`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+
+---
 ## [2026-04-12] Added Explicit JSON Keyword To Custom Probe Prompt For DashScope Compatibility
 
 **What**: Updated the custom OpenAI-compatible capability probe prompt from a bare `{"ok":true}` response hint to an explicit `Return valid JSON only: ...` contract so providers that enforce JSON-mode prompt requirements do not fail the probe for prompt-shape reasons alone.
