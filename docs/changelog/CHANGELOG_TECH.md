@@ -5,6 +5,20 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-14] Normalized Tutor Math Delimiters Before Markdown Rendering
+
+**What**: Added a shared markdown math rendering boundary that normalizes `\(...\)` and `\[...\]` into the dollar-delimited forms expected by `remark-math` before KaTeX rendering. `CanvasTutor`, `AskYouTutor`, and note rendering now all reuse the same `MarkdownMath` wrapper. The explain / follow-up / regenerate prompt contracts were also tightened to explicitly require `$...$` for inline math and `$$...$$` for display math.
+
+**Why**: Model output was structurally valid but occasionally used parenthesis/bracket LaTeX delimiters that `remark-math` does not parse by default. That caused some front-end cards to show raw formula text instead of rendered KaTeX even though the underlying explanation content was otherwise correct.
+
+**Impact**:
+- existing saved explanations that contain `\(...\)` or `\[...\]` now render correctly in the tutor UI without migration
+- new explain / follow-up / regenerate generations have a stricter delimiter contract, reducing future drift from weaker models
+- regression tests now cover both the render boundary and the prompt guidance
+
+**Files**: `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/components/AskYouTutor.tsx`, `SlideTutor-AI/src/components/NoteItem.tsx`, `SlideTutor-AI/src/components/ui/MarkdownMath.tsx`, `SlideTutor-AI/src/lib/markdown/normalizeMathDelimiters.ts`, `SlideTutor-AI/src/lib/ai/prompts.ts`, `SlideTutor-AI/src/components/CanvasTutor.test.tsx`, `SlideTutor-AI/src/lib/ai/prompts.test.ts`, `SlideTutor-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+
+---
 ## [2026-04-14] Fixed LlamaParse LayoutBlock Normalization For Official Nested Geometry
 
 **What**: Updated the `LlamaParse` parser provider so it now reads the official nested `items.pages[*].items[*]` response shape, supports bbox fragments expressed as `x/y/w/h`, and normalizes page-relative geometry against `page_width` / `page_height` before emitting internal `LayoutBlock[].bbox` values in the app-wide `0..1000` coordinate system. Added focused parser tests for both top-level `items.pages` and `result.items.pages`.

@@ -2,7 +2,7 @@
 
 本文档描述 SlideTutor 项目的前端架构、状态管理和 API 客户端设计。
 
-最后更新：2026-04-03
+最后更新：2026-04-14
 
 ---
 
@@ -190,6 +190,36 @@ The analysis stack now has a provider-aware structured-output adapter instead of
 ## 2026-04-03 Phase 2 Artifact-First Runtime
 
 Phase 2 is now complete. The app no longer treats projected markdown or summary strings as live runtime state.
+
+## 2026-04-14 Tutor Math Rendering Boundary
+
+Tutor-facing markdown rendering now goes through one shared math-aware boundary instead of configuring `ReactMarkdown` ad hoc in each surface.
+
+### Current renderer shape
+
+- `src/components/ui/MarkdownMath.tsx` owns the shared `ReactMarkdown + remark-math + rehype-katex` stack
+- `src/lib/markdown/normalizeMathDelimiters.ts` normalizes model output that uses `\(...\)` or `\[...\]`
+- `CanvasTutor.tsx`, `AskYouTutor.tsx`, and note rendering now all reuse that same boundary
+
+### Why this exists
+
+The runtime prompt contract already says "use LaTeX for math formulas", but weaker models can still occasionally emit TeX delimiters that `remark-math` does not parse by default.
+
+Without a normalization boundary, the UI can show raw formula text even when:
+
+- the structured artifact is valid
+- the card body is otherwise correct
+- KaTeX is installed and working for dollar-delimited math
+
+### Boundary rule
+
+This compatibility layer is intentionally render-only:
+
+- it does not rewrite saved artifacts in IndexedDB
+- it does not change the structured `explanationArtifact` / `distillArtifact` schema
+- it only normalizes math delimiters immediately before markdown parsing
+
+This keeps persistence stable while making tutor surfaces more tolerant of model-format drift.
 
 ### Runtime authority
 

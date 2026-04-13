@@ -2,7 +2,7 @@
 
 本文档描述 SlideTutor 项目的数据流和持久化策略。
 
-最后更新：2026-04-03
+最后更新：2026-04-14
 
 ---
 
@@ -140,6 +140,37 @@ Structured JSON is no longer only a prompt convention. The backend now routes sc
 ## 2026-04-03 Phase 2 Artifact-First Data Flow
 
 The frontend data flow is now fully artifact-first.
+
+## 2026-04-14 Tutor Math Delimiter Compatibility Flow
+
+Formula compatibility is now handled at the final presentation boundary, not in artifact parsing or persistence.
+
+### Runtime rule
+
+For tutor-facing rich text:
+
+1. the model response is parsed into structured artifacts exactly as received
+2. artifact `body` strings are stored unchanged in page state
+3. right before UI markdown parsing, the shared markdown renderer normalizes `\(...\)` to `$...$`
+4. right before UI markdown parsing, the same renderer normalizes `\[...\]` to `$$...$$`
+5. `remark-math` and KaTeX then render the normalized string
+
+### Why the boundary is here
+
+This placement preserves two important invariants:
+
+- structured-output parsing remains about schema validity, not display repair
+- saved artifacts stay faithful to the original model output instead of being silently rewritten on write
+
+### Prompt contract
+
+The generation prompts now also explicitly require:
+
+- `$...$` for inline math
+- `$$...$$` for display math
+- no `\(...\)` or `\[...\]`
+
+That means the UI boundary is a compatibility backstop, not the primary contract.
 
 ### Live page-state writes
 
