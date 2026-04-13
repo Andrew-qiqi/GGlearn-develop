@@ -242,6 +242,8 @@ Notes:
 - In Phase 06, BYOK requests no longer fall back to server-side model secrets.
 - `Platform API` explain requests resolve document parsing through the platform-managed Volcengine path.
 - `My API` explain requests use `LlamaParse` only when parser BYOK is configured.
+- `LlamaParse` results are normalized into `LayoutBlock[]` from the provider's page-level item structure before they enter prompt generation.
+- when `LlamaParse` returns page-relative geometry such as `x/y/w/h` plus `page_width` / `page_height`, the backend converts that geometry into the shared `0..1000` `[ymin, xmin, ymax, xmax]` contract used by prompt grounding and frontend highlights.
 - In hosted `Analyze`, degraded parser results do not stream teaching output and do not become a paid success.
 
 ### 2026-04-10 Phase 09 capability and structured-output hardening

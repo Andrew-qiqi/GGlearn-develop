@@ -5,6 +5,20 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-14] Fixed LlamaParse LayoutBlock Normalization For Official Nested Geometry
+
+**What**: Updated the `LlamaParse` parser provider so it now reads the official nested `items.pages[*].items[*]` response shape, supports bbox fragments expressed as `x/y/w/h`, and normalizes page-relative geometry against `page_width` / `page_height` before emitting internal `LayoutBlock[].bbox` values in the app-wide `0..1000` coordinate system. Added focused parser tests for both top-level `items.pages` and `result.items.pages`.
+
+**Why**: The previous implementation assumed a flatter `items[]` shape and primarily accepted already-normalized bbox forms. When `LlamaParse` returned its documented nested page structure, the provider could miss item geometry entirely and fall back to a synthetic full-page block. Even when geometry was present, page-relative coordinates risked being clamped instead of properly normalized.
+
+**Impact**:
+- `My API` explain runs backed by `LlamaParse` now preserve item-level spatial grounding more reliably instead of collapsing to `[0,0,1000,1000]`
+- `knowledgeCards[].intent` now receives better parser anchors on the BYOK parser path without changing the frontend bbox contract
+- parser tests now cover the documented nested result shape rather than only a simplified flat mock
+
+**Files**: `SlideTutor-AI/api/lib/parser/llamaparseProvider.ts`, `SlideTutor-AI/api/lib/parser/llamaparseProvider.test.ts`, `SlideTutor-AI/vitest.node.config.ts`, `docs/backend/api-design.md`
+
+---
 ## [2026-04-14] Tightened Explain BBox Grounding Around Parsed Regions
 
 **What**: Updated the `explain` prompt so parser-backed analyses no longer treat `layoutBlocks` as a loose visual hint. When parsed regions are present, the prompt now injects them as `Current Slide Parsed Regions`, requires each `knowledgeCards[].intent` box to stay traceable to those regions, allows only adjacent-region merges / local refinements / inner crops, and explicitly forbids area overlap between different card boxes. The no-parser degraded path was left unchanged and still falls back to the model's own visual judgment.
