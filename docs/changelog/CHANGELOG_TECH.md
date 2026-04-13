@@ -5,6 +5,22 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-14] Added Official Or Custom Gemini Routing For My API
+
+**What**: Extended the existing Gemini BYOK path so `My API` users can choose between `Google Official` and `Custom` routing without introducing a new provider family or a freeform Gemini model id. The settings panel now exposes a Gemini endpoint selector plus conditional `Gemini Base URL`, the frontend request layer now sends Gemini `baseURL` only for custom mode, backend access resolution now preserves Gemini BYOK `baseURL`, and both runtime generation plus capability checks now construct Gemini clients against the active custom route when configured.
+
+**Why**: BYOK users needed a productized way to keep using the official Gemini model catalog while routing requests through a Gemini-compatible relay. The previous implementation only supported the official Gemini endpoint, which meant custom relay users had no supported configuration path and readiness checks could drift from the actual runtime route.
+
+**Impact**:
+- `My API > Gemini` now supports `Google Official / Custom`
+- `Custom` requires `Gemini Base URL`; `Google Official` does not
+- Gemini capability snapshots now key off the effective endpoint route, so switching endpoint mode or base URL invalidates stale readiness instead of reusing official results
+- `Platform API` remains unchanged and still does not expose Gemini custom routing
+- backend Gemini runtime and capability probes now stay aligned on the same configured route
+
+**Files**: `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/components/SettingsModal.test.tsx`, `SlideTutor-AI/src/lib/i18n/index.ts`, `SlideTutor-AI/src/lib/api/apiClient.ts`, `SlideTutor-AI/src/lib/api/apiClient.test.ts`, `SlideTutor-AI/api/lib/env.ts`, `SlideTutor-AI/api/lib/env.test.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/api/lib/generateService.gemini.test.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`, `docs/backend/byok-capability-check.md`, `docs/user_guide/access-modes.md`
+
+---
 ## [2026-04-14] Normalized Tutor Math Delimiters Before Markdown Rendering
 
 **What**: Added a shared markdown math rendering boundary that normalizes `\(...\)` and `\[...\]` into the dollar-delimited forms expected by `remark-math` before KaTeX rendering. `CanvasTutor`, `AskYouTutor`, and note rendering now all reuse the same `MarkdownMath` wrapper. The explain / follow-up / regenerate prompt contracts were also tightened to explicitly require `$...$` for inline math and `$$...$$` for display math.

@@ -1,10 +1,13 @@
 # BYOK Capability Check
 
-Last updated: 2026-04-12
+Last updated: 2026-04-14
 
 ## Overview
 
-This note records the current BYOK capability-check contract for `My API`, especially the `Custom OpenAI-compatible` path.
+This note records the current BYOK capability-check contract for `My API`, especially:
+
+- `Gemini` with `Google Official / Custom`
+- `Custom OpenAI-compatible`
 
 Key files:
 
@@ -22,6 +25,21 @@ The frontend persists capability state as:
 - `usable`
 - `unusable`
 - `stale`
+
+For `Gemini`, the selected catalog model still comes from the fixed official Gemini dropdown.
+The runtime route is stored separately in BYOK settings:
+
+- `endpointPreset = google-official | custom`
+- `baseURL`
+
+`Google Official` requires:
+
+- `Gemini API Key`
+
+`Custom` requires:
+
+- `Gemini API Key`
+- `Gemini Base URL`
 
 For `Custom OpenAI-compatible`, the selected catalog model remains the sentinel:
 
@@ -51,6 +69,28 @@ The worker route forwards:
 - `modelId`
 - `endpointPreset`
 - normalized BYOK access payload
+
+For Gemini BYOK this now means:
+
+- `Google Official` sends `apiKey` only
+- `Custom` sends `apiKey + baseURL`
+
+Capability selection snapshots are also keyed by the effective runtime route, so changing Gemini endpoint mode or Gemini base URL invalidates the previous saved readiness state instead of reusing it.
+
+## Current Gemini capability behavior
+
+Gemini capability checks must execute against the same route the user selected in `My API`.
+
+- `Google Official` probes the official Gemini endpoint
+- `Custom` probes the configured custom Gemini base URL
+
+Important boundary:
+
+- a known Gemini catalog model on a custom base URL does **not** short-circuit to registry-only `usable`
+- the backend still runs a live Gemini probe against the configured custom route before returning a ready result
+
+On successful custom Gemini probes, known Gemini models keep their registry-derived capability summary.
+On auth, unsupported, or transient failures, the normal probe failure mapping still applies.
 
 ## Current custom OpenAI-compatible outcomes
 
@@ -132,4 +172,5 @@ The settings panel should now behave like this:
 ## Related boundaries
 
 - `Platform API` still must not allow `custom` OpenAI-compatible runtime execution
+- `Platform API` remains unchanged for Gemini and does not expose Gemini custom routing
 - built-in `Qwen` / `Doubao` capability truth still comes from the shared capability registry
