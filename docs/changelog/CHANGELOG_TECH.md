@@ -5,6 +5,21 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-14] Restored Cloudflare Feedback Email Delivery Through Resend
+
+**What**: Completed the Cloudflare-side feedback mail recovery path. Production feedback delivery now assumes Worker secrets `NOTIFICATION_PROVIDER=resend`, `RESEND_API_KEY`, `NOTIFICATION_FROM_EMAIL`, `FEEDBACK_TO_EMAIL`, and `SECURITY_ALERT_TO_EMAIL`, and the Worker feedback notification path now preserves the reporting user's email as `reply-to` on outgoing feedback messages.
+
+**Why**: The old Vercel-era SMTP settings were no longer part of the live `/api/feedback` path after the Cloudflare Worker cutover, so keeping `NOTIFICATION_PROVIDER=log` left the feedback surface in a log-only local fallback instead of a real operator inbox flow. The recovery work also surfaced that the current live public domain family is `slidetutor-ai.com`, not the older `slidetutor.ai` example still present in some local configuration.
+
+**Impact**:
+- operators should verify the sender domain in Resend under the live public domain family, for example `mail.slidetutor-ai.com`
+- Cloudflare production deployments should treat `NOTIFICATION_PROVIDER=log` as local-dev only
+- feedback emails can now be answered directly from the operator inbox without manually copying the user's contact address
+- ops runbooks now include a dedicated `/api/feedback` email smoke check and a reminder to verify `APP_URL` against the actual delegated production domain
+
+**Files**: `SlideTutor-AI/src/worker/lib/notifications.ts`, `SlideTutor-AI/src/worker/lib/notifications.test.ts`, `SlideTutor-AI/README.md`, `docs/architecture/deployment.md`, `docs/operations/china-operator-checklist.md`
+
+---
 ## [2026-04-14] Documented platform-managed Gemini routing
 
 **What**: Clarified how `Platform API` resolves hosted Gemini via Worker environment variables, introduced the `PLATFORM_GEMINI_BASE_URL` and `PLATFORM_GEMINI_API_KEY` examples, and recorded the platform custom routing rules inside deployment, access‑mode, and backend operator docs.

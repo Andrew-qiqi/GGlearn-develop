@@ -1,6 +1,6 @@
 # China Operator Checklist
 
-Last updated: 2026-04-06
+Last updated: 2026-04-14
 
 Use this checklist when validating the live China-facing chain on Cloudflare.
 
@@ -36,6 +36,11 @@ These must exist in the frontend build environment, not only the Worker runtime:
 - `ZPAY_PID`
 - `ZPAY_PKEY`
 - `ZPAY_PAYMENT_TYPE`
+- `NOTIFICATION_PROVIDER=resend` for production feedback delivery
+- `RESEND_API_KEY`
+- `NOTIFICATION_FROM_EMAIL`
+- `FEEDBACK_TO_EMAIL`
+- `SECURITY_ALERT_TO_EMAIL`
 
 ### Coupling to verify
 
@@ -43,6 +48,8 @@ These must exist in the frontend build environment, not only the Worker runtime:
 - ZPAY `notify_url` is derived as `<APP_URL>/api/payment-webhook`
 - ZPAY `return_url` is derived as `<APP_URL>`
 - if `APP_URL` is wrong, both the payment return path and the webhook callback path drift together
+- feedback delivery also depends on the live public domain family because the sender domain behind `NOTIFICATION_FROM_EMAIL` must already be verified for Resend
+- the current live public origin recorded in ops evidence is `https://www.slidetutor-ai.com`; do not assume older local examples using `slidetutor.ai` are authoritative
 
 ## Route Observability Contract
 
@@ -183,6 +190,20 @@ Expected result:
 - exactly one matching request log is easy to find
 - the log includes `path`, `status`, `durationMs`, and route metadata
 
+### 10. Confirm feedback email delivery
+
+1. Open the deployed app at `APP_URL`.
+2. Submit one test feedback entry through the settings modal with `contactAgreed = true` and a reachable email address.
+3. Confirm the frontend receives the existing success contract from `/api/feedback`.
+4. Confirm an email reaches `FEEDBACK_TO_EMAIL`.
+5. Open the delivered email and confirm `reply-to` points at the reporting user email.
+
+Expected result:
+
+- `/api/feedback` returns success without falling back to log-only local mode
+- the operator inbox receives the feedback email
+- replying to the email targets the reporting user instead of the sender mailbox
+
 ## Fast Diagnosis Map
 
 - `Platform API` UI missing:
@@ -193,6 +214,8 @@ Expected result:
   check `VOLCENGINE_ACCESS_KEY_ID` and `VOLCENGINE_SECRET_ACCESS_KEY`
 - recharge intent works but payment does not settle:
   check `APP_URL`, `ZPAY_PID`, `ZPAY_PKEY`, and public reachability of `/api/payment-webhook`
+- feedback route succeeds but no email arrives:
+  check `NOTIFICATION_PROVIDER`, `RESEND_API_KEY`, `NOTIFICATION_FROM_EMAIL`, verified sender-domain status in Resend, and `FEEDBACK_TO_EMAIL`
 - balance changed incorrectly after callback replay:
   inspect `CREDITS_DB` order state and webhook request logs
 

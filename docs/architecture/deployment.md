@@ -102,6 +102,14 @@ Notification secrets:
 - `FEEDBACK_TO_EMAIL`
 - `SECURITY_ALERT_TO_EMAIL`
 
+Feedback delivery notes:
+
+- production feedback delivery now assumes `NOTIFICATION_PROVIDER=resend` on the Worker runtime
+- `NOTIFICATION_FROM_EMAIL` should use a verified sender on the live public domain family, for example `feedback@mail.slidetutor-ai.com`
+- if a user opts into follow-up contact and provides an email, the outgoing feedback message preserves that address as the email `reply-to`
+- the old local default `NOTIFICATION_PROVIDER=log` remains a development fallback only; it does not restore the old Vercel SMTP path
+- verify `APP_URL` against the actual delegated production domain before deploy; older local examples may still reference `slidetutor.ai`, but the current live public origin recorded in ops docs is `https://www.slidetutor-ai.com`
+
 Local development can use `NOTIFICATION_PROVIDER=log` to avoid external delivery.
 
 Clerk note:
@@ -153,6 +161,7 @@ When an operational route returns JSON errors, copy the `requestId` and search W
 - confirm `/api/parser-usage` returns the anonymous usage summary
 - confirm `/api/generate` streams plain text
 - confirm `/api/feedback` returns the existing success contract on successful delivery
+- confirm a real feedback submission produces an email at `FEEDBACK_TO_EMAIL` and that replying to that email targets the reporting user when they supplied an address
 - confirm `/api/recharge-intent` returns a ZPAY checkout URL when `PAYMENT_PROVIDER=zpay`
 - confirm `/api/payment-webhook` is reachable from the public internet and returns plain-text `success` for valid ZPAY callbacks
 - confirm direct browser navigation to `/api/*` does not return the SPA shell
