@@ -186,6 +186,19 @@ The generation prompts now also explicitly require:
 - `$$...$$` for display math
 - no `\(...\)` or `\[...\]`
 
+For JSON-producing tutor artifacts, the contract is stricter still:
+
+- if a formula command appears inside any JSON string, every backslash must be doubled
+- for example, JSON strings must contain `\\sqrt`, `\\times`, `\\frac`, `\\left`, `\\right`
+- raw single-backslash LaTeX inside JSON strings is invalid even if the model otherwise ends normally
+
+This matters because the frontend explain parser distinguishes two different failure classes:
+
+- truncated / incomplete payloads: `No complete JSON object found in response.`
+- syntactically broken JSON: `The response was not valid JSON.`
+
+So a Cloudflare / upstream log showing `finishReason=STOP` does not prove the explain artifact was parseable. A math-heavy response can still complete normally and fail the frontend parse step if it emits raw `\sqrt`-style content inside JSON strings.
+
 That means the UI boundary is a compatibility backstop, not the primary contract.
 
 ### Live page-state writes

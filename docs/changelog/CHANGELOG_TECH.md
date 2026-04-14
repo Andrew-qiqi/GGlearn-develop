@@ -5,6 +5,20 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-14] Hardened Explain JSON Math Escaping Contract
+
+**What**: Tightened the JSON-producing tutor prompt contract for math-heavy responses. `explain` and structured `regenerate_chunk` generation now explicitly require JSON-safe backslash escaping inside string fields, with concrete examples such as `\\sqrt`, `\\times`, `\\frac`, `\\left`, and `\\right`. Added targeted prompt regressions plus an artifact parser regression that documents the failure mode when raw LaTeX backslashes appear inside `explain_v1` JSON strings.
+
+**Why**: Intermittent frontend errors such as `The model returned invalid explain JSON` were not primarily caused by truncated streams. A model run can still end with `finishReason=STOP` while emitting syntactically invalid JSON if math strings contain raw LaTeX commands like `\sqrt` or `\times`, because those backslashes collide with JSON string escaping rules.
+
+**Impact**:
+- `explain` and `regenerate_chunk` now give the model a stricter JSON-safe math contract instead of relying only on `$...$` / `$$...$$` delimiter guidance
+- future regressions are easier to diagnose because tests now explicitly cover the invalid-JSON LaTeX case
+- this change does not add automatic retry or parser-side silent repair; the chosen boundary is prompt hardening, not best-effort JSON mutation after the fact
+
+**Files**: `SlideTutor-AI/src/lib/ai/prompts.ts`, `SlideTutor-AI/src/lib/ai/prompts.test.ts`, `SlideTutor-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `SlideTutor-AI/src/lib/ai/artifacts.test.ts`
+
+---
 ## [2026-04-14] Restored Cloudflare Feedback Email Delivery Through Resend
 
 **What**: Completed the Cloudflare-side feedback mail recovery path. Production feedback delivery now assumes Worker secrets `NOTIFICATION_PROVIDER=resend`, `RESEND_API_KEY`, `NOTIFICATION_FROM_EMAIL`, `FEEDBACK_TO_EMAIL`, and `SECURITY_ALERT_TO_EMAIL`, and the Worker feedback notification path now preserves the reporting user's email as `reply-to` on outgoing feedback messages.
