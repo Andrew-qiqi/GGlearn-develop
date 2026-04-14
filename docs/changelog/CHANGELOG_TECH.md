@@ -5,6 +5,21 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-14] Hardened Tablet Slide Image Extraction Retries
+
+**What**: Extracted PDF page image capture into a shared frontend helper and changed the analysis-image pipeline to resolve a device-specific extraction profile before rendering. Touch/tablet-class devices now use more conservative retry scales plus a tighter canvas pixel budget, and every failed attempt now releases both the temporary canvas and the `pdf.js` page resources before retrying.
+
+**Why**: iPad and other tablet users were hitting the frontend error `Failed to extract slide image.` before any `explain` request reached the backend. The previous fallback path only special-cased iOS and did not clean up `pdf.js` page resources after a failed attempt, which made low-memory retries much more likely to fail on constrained touch devices.
+
+**Impact**:
+- `Analyze`, follow-up image reuse, and quiz image extraction now share one hardened extraction helper
+- Android tablets and other coarse-pointer touch devices no longer fall back to the more aggressive desktop extraction profile
+- regression tests now cover both touch-device profile selection and cleanup-before-retry behavior
+- full repository typechecking is still blocked in this environment by missing `@cloudflare/*` and `@clerk/*` packages, so verification for this change relied on targeted extraction tests
+
+**Files**: `SlideTutor-AI/src/lib/pdf/extractPageData.ts`, `SlideTutor-AI/src/lib/pdf/extractPageData.test.ts`, `SlideTutor-AI/src/components/PdfViewer.tsx`, `docs/frontend/data-flow.md`
+
+---
 ## [2026-04-14] Added Official Or Custom Gemini Routing For My API
 
 **What**: Extended the existing Gemini BYOK path so `My API` users can choose between `Google Official` and `Custom` routing without introducing a new provider family or a freeform Gemini model id. The settings panel now exposes a Gemini endpoint selector plus conditional `Gemini Base URL`, the frontend request layer now sends Gemini `baseURL` only for custom mode, backend access resolution now preserves Gemini BYOK `baseURL`, and both runtime generation plus capability checks now construct Gemini clients against the active custom route when configured.

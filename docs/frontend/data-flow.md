@@ -6,6 +6,21 @@
 
 ---
 
+## 2026-04-14 Touch-Device Slide Extraction Hardening
+
+The frontend slide-image extraction path now resolves a device profile before `PdfViewer.extractPageData(...)` renders a temporary analysis canvas.
+
+### Runtime behavior
+
+- desktop-class devices still prefer higher extraction scales for clearer slide snapshots
+- touch / tablet-class devices now use a constrained extraction profile with lower retry scales and a stricter canvas pixel budget
+- every failed extraction attempt now releases both the temporary canvas and the underlying `pdf.js page` resources before retrying
+- `Analyze`, follow-up image reuse, and quiz generation all continue to share this same extraction entrypoint
+
+### Why this matters
+
+Previously, tablet-class devices could fail the first extraction attempt and then carry unreleased `pdf.js` page resources into the fallback attempt. On memory-constrained WebKit and other touch-device browsers, that made the lower-resolution retry much more likely to fail as well, surfacing the frontend error `Failed to extract slide image.` before the request ever reached backend analysis.
+
 ## 2026-04-05 Hosted Analyze and Credits Flow
 
 Phase 06 adds a hosted credits path without changing the mature two-step analysis UI contract.
