@@ -15,6 +15,7 @@ The frontend slide-image extraction path now resolves a device profile before `P
 - desktop-class devices still prefer higher extraction scales for clearer slide snapshots
 - touch / tablet-class devices now use a constrained extraction profile with lower retry scales and a stricter canvas pixel budget
 - every failed extraction attempt now releases both the temporary canvas and the underlying `pdf.js page` resources before retrying
+- if image export succeeds but frontend text extraction fails, the runtime now keeps the extracted image and degrades to empty local slide text instead of surfacing a hard extraction failure
 - `Analyze`, follow-up image reuse, and quiz generation all continue to share this same extraction entrypoint
 
 ### Why this matters

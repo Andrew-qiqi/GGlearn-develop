@@ -7,14 +7,14 @@
 ---
 ## [2026-04-14] Hardened Tablet Slide Image Extraction Retries
 
-**What**: Extracted PDF page image capture into a shared frontend helper and changed the analysis-image pipeline to resolve a device-specific extraction profile before rendering. Touch/tablet-class devices now use more conservative retry scales plus a tighter canvas pixel budget, and every failed attempt now releases both the temporary canvas and the `pdf.js` page resources before retrying.
+**What**: Extracted PDF page image capture into a shared frontend helper and changed the analysis-image pipeline to resolve a device-specific extraction profile before rendering. Touch/tablet-class devices now use more conservative retry scales plus a tighter canvas pixel budget, every failed attempt now releases both the temporary canvas and the `pdf.js` page resources before retrying, and text-extraction errors after a successful image render now degrade to `text = ''` instead of aborting the whole extraction.
 
-**Why**: iPad and other tablet users were hitting the frontend error `Failed to extract slide image.` before any `explain` request reached the backend. The previous fallback path only special-cased iOS and did not clean up `pdf.js` page resources after a failed attempt, which made low-memory retries much more likely to fail on constrained touch devices.
+**Why**: iPad and other tablet users were hitting the frontend error `Failed to extract slide image.` before any `explain` request reached the backend. The previous fallback path only special-cased iOS and did not clean up `pdf.js` page resources after a failed attempt, which made low-memory retries much more likely to fail on constrained touch devices. It also treated any later `getTextContent()` failure as if the image render itself had failed, even though backend explain only strictly requires `base64Image`.
 
 **Impact**:
 - `Analyze`, follow-up image reuse, and quiz image extraction now share one hardened extraction helper
 - Android tablets and other coarse-pointer touch devices no longer fall back to the more aggressive desktop extraction profile
-- regression tests now cover both touch-device profile selection and cleanup-before-retry behavior
+- regression tests now cover touch-device profile selection, cleanup-before-retry behavior, and image-first degradation when local text extraction fails
 - full repository typechecking is still blocked in this environment by missing `@cloudflare/*` and `@clerk/*` packages, so verification for this change relied on targeted extraction tests
 
 **Files**: `SlideTutor-AI/src/lib/pdf/extractPageData.ts`, `SlideTutor-AI/src/lib/pdf/extractPageData.test.ts`, `SlideTutor-AI/src/components/PdfViewer.tsx`, `docs/frontend/data-flow.md`
