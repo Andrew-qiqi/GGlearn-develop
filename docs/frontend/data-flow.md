@@ -2,7 +2,7 @@
 
 本文档描述 SlideTutor 项目的数据流和持久化策略。
 
-最后更新：2026-04-14
+最后更新：2026-04-15
 
 ---
 
@@ -37,7 +37,8 @@ For `Platform API`, the runtime flow is now:
 5. if parser access is healthy and credits are sufficient, the backend creates a pending analyze attempt and returns `x-slidetutor-analyze-attempt-id`
 6. frontend stores that attempt id only in memory for the current analyze action
 7. frontend calls `/api/generate` again with `task = distill` and `taskData.hostedAnalyzeAttemptId`
-8. only after successful distill stream completion does the Worker commit the single `Analyze = 3` ledger deduction
+8. only after successful distill stream completion does the Worker commit the single `Analyze = 3` deduction
+9. that final hosted analyze commit now happens in one D1 batched transaction, so the balance update, ledger row, and attempt finalization stay atomic on retries
 
 This keeps the learner-facing `Analyze` action whole while still preserving success-only billing.
 
@@ -49,7 +50,7 @@ For `followup`, `generate_questions`, and `evaluate_answers`:
 2. Worker verifies Clerk auth
 3. backend preflights credits before generation starts
 4. stream runs normally
-5. credits are deducted only after the stream completes successfully
+5. credits are deducted only after the stream completes successfully, and the final hosted charge now commits atomically with its ledger row
 
 If credits are insufficient, the Worker returns structured JSON before any model execution.
 
@@ -74,7 +75,7 @@ The frontend no longer redirects these actions back to AI settings just because 
 4. Worker creates a recharge order and returns a ZPAY `submit.php` checkout URL
 5. frontend opens that checkout URL in a new tab
 6. ZPAY calls `/api/payment-webhook` and the Worker replies with plain-text `success`
-7. backend verifies the ZPAY signature and amount, then applies the credit ledger entry exactly once even if the webhook is replayed
+7. backend verifies the ZPAY signature and amount, then applies the balance update, ledger entry, and order completion in one D1 batched transaction so replayed callbacks stay idempotent
 
 ## 2026-04-09 Final Parser Ownership Flow
 

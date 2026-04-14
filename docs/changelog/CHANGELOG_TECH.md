@@ -5,6 +5,20 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-15] Hardened Platform Credits With Atomic D1 Commits
+
+**What**: Reworked the hosted credits completion paths so `Analyze` finalization, hosted follow-up/regenerate/quiz charging, and ZPAY recharge completion now commit through D1 batched transactions instead of mutating balances first and writing durable completion markers afterward. Added targeted service-level regressions for duplicate analyze finalize, duplicate hosted action charge, and replayed recharge completion while keeping the public API contracts unchanged.
+
+**Why**: The previous credits flow relied on sequential writes: mutate account balance, then insert the ledger row, then mark the attempt or order complete. That left a replay window where a retry or concurrent completion request could apply the balance mutation more than once if execution was interrupted between those steps.
+
+**Impact**:
+- hosted credit writes now succeed or roll back as one unit, which closes the main double-charge and double-credit race
+- valid ZPAY retries still receive the existing plain-text `success` acknowledgement
+- no new frontend states, route payloads, or billing UI were introduced
+
+**Files**: `SlideTutor-AI/api/lib/platformAccess/store.ts`, `SlideTutor-AI/api/lib/platformAccess/service.ts`, `SlideTutor-AI/api/lib/platformAccess/service.test.ts`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`
+
+---
 ## [2026-04-14] Settings UI Content Refresh: InfoTrigger Dark Mode Fix, Parser Info Rewrite, And About Page Update
 
 **What**: Fixed the `InfoTrigger` popover contrast problem that made links and titles invisible in certain themes, rewrote the parser info tooltip to emphasize practical impact instead of technical jargon, and refreshed the About SlideTutor page with a value-proposition intro and 4 focused core-feature highlights.

@@ -1,6 +1,22 @@
 # API Design
 
-Last updated: 2026-04-09
+Last updated: 2026-04-15
+
+## 2026-04-15 Atomic credits commit hardening
+
+Hosted credit mutations now use one D1 batched transaction per completion path so the balance write, ledger insert, and final completion marker succeed together or roll back together.
+
+This hardening applies to:
+
+- hosted `Analyze` finalization
+- hosted `followup`, regenerate, and quiz deductions
+- ZPAY recharge completion
+
+The external route contracts stay unchanged:
+
+- valid ZPAY callbacks still return plain-text `success`
+- hosted billing still remains success-only
+- duplicate completion calls stay idempotent instead of replaying balance mutations
 
 ## 2026-04-05 Platform API and Credits
 
@@ -58,6 +74,7 @@ Hosted/platform rules:
 - hosted `Analyze` returns `x-slidetutor-analyze-attempt-id` from the successful `explain` preflight
 - hosted `distill` must send `taskData.hostedAnalyzeAttemptId`
 - hosted `Analyze` charges exactly once after successful `parse + explain + distill`
+- hosted credit commits now happen through one D1 batched transaction so balance mutation and ledger persistence do not drift apart on retries
 - if hosted parser access hits upstream Volcengine throttling, the Worker rejects before streaming with `code = "PLATFORM_PARSER_RATE_LIMITED"`
 - if hosted parser access degrades because the platform parser is unavailable, the Worker rejects before streaming with `code = "PLATFORM_PARSER_UNAVAILABLE"`
 - hosted `followup`, `regenerate_chunk`, `regenerate_followup`, `generate_questions`, and `evaluate_answers` preflight credits before execution and deduct only after successful stream completion
