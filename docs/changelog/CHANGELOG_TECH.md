@@ -5,6 +5,21 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-14] Made Tutor Card Actions Discoverable On Touch Devices
+
+**What**: Added a hover-capability boundary inside `CanvasTutor.tsx` so explanation-card action trays and tutor-note action rows are no longer hover-only everywhere. The tutor now checks `matchMedia('(hover: hover) and (pointer: fine)')`, keeps the existing hover-reveal behavior on desktop-class inputs, and renders those controls visible by default on no-hover devices. Added focused `CanvasTutor` tests for both no-hover visibility and desktop hover preservation.
+
+**Why**: Tablets and other touch devices could not discover or use `follow-up`, `add note`, `regenerate`, `edit`, and `delete` because those controls were hidden behind `group-hover:*` classes and, for the explanation tray, also behind `pointer-events-none`. Without mouse hover, the controls stayed invisible and effectively unreachable.
+
+**Impact**:
+- touch/no-hover users can now see tutor-card and note-card actions without a hover affordance
+- desktop users keep the existing compact hover-on-demand layout
+- note action controls now stop pointer/mouse-down propagation so tapping them does not accidentally start a note drag
+- targeted tutor tests now cover no-hover visibility and hover-capable regression protection
+
+**Files**: `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/components/CanvasTutor.test.tsx`, `docs/frontend/architecture.md`
+
+---
 ## [2026-04-14] Switched Main PDF Tutor Splitter To Pointer Events
 
 **What**: Replaced the main left/right panel divider's mouse-only resize interaction with a unified pointer-event drag session in `App.tsx`. The splitter now starts on `pointerdown`, tracks `pointermove`, finalizes on `pointerup` or `pointercancel`, and applies `touch-action: none` on the handle so touch dragging is not intercepted by browser gestures. Added an app-level regression test that simulates a touch-style pointer drag and verifies that the PDF panel width updates.

@@ -240,6 +240,37 @@ The old implementation only listened to `mousedown` / `mousemove` / `mouseup`, w
 
 The divider now applies `touch-action: none` so browser gesture handling does not consume touch dragging before the app receives pointer movement.
 
+## 2026-04-14 Tutor Card Action Visibility Boundary
+
+`CanvasTutor.tsx` no longer assumes that every user has hover.
+
+### Current interaction contract
+
+- the explanation-card action tray still uses hover-on-demand behavior on hover-capable fine-pointer devices
+- no-hover devices show the same action tray by default so `follow-up`, `add note`, and `regenerate` remain discoverable
+- note-card `edit` / `delete` controls follow the same capability split
+- open input drawers and delete-confirm UI still force the action tray to stay visible regardless of hover capability
+
+### Why this matters
+
+The previous implementation hid both explanation-card actions and note actions behind `group-hover:*` classes plus `pointer-events-none`.
+
+That worked on desktop, but tablet users had no reliable way to discover or activate those controls because the interaction model depended on mouse hover that did not exist.
+
+### Capability rule
+
+The runtime boundary is input-capability-based rather than user-agent-based:
+
+- `matchMedia('(hover: hover) and (pointer: fine)')` keeps the desktop hover behavior
+- missing `matchMedia` support falls back to the touch-visible path so controls do not disappear on constrained browsers
+- legacy `addListener` / `removeListener` support is still honored for older Safari/WebKit behavior
+
+### Dragging guardrail
+
+Touch-visible note actions must not make note dragging worse.
+
+The note action row now stops pointer/mouse down propagation on the action controls themselves so tapping `edit` or `delete` does not accidentally start a note drag.
+
 ### Runtime authority
 
 Each analyzed page is now driven by two structured artifacts only:
