@@ -5,6 +5,21 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-14] Settings UI Content Refresh: InfoTrigger Dark Mode Fix, Parser Info Rewrite, And About Page Update
+
+**What**: Fixed the `InfoTrigger` popover contrast problem that made links and titles invisible in certain themes, rewrote the parser info tooltip to emphasize practical impact instead of technical jargon, and refreshed the About SlideTutor page with a value-proposition intro and 4 focused core-feature highlights.
+
+**Why**: The `InfoTrigger` popover used hardcoded `bg-white/95 dark:bg-stone-900/95` backgrounds that did not match the project's custom theme system (`.twilight-zen`, `.spring-meadow`, etc.), causing link text to blend into the background in several themes. The parser info text said "degraded analysis" which is meaningless to non-technical users — the real user impact is that knowledge-point highlight boxes lose spatial precision. The About page listed outdated features and a generic intro that didn't convey the product's core value.
+
+**Impact**:
+- `InfoTrigger` popover background now uses `bg-bg-elevated/95` which follows theme semantics; all links inside get unified `text-blue-600` styling for guaranteed contrast
+- parser info now explicitly says region precision drops without a parser, and the dropdown label changed from "Degraded" to "Low Precision" / "精度较低"
+- About page intro is now a value proposition; core features narrowed to 4 differentiators: knowledge-point cards with region anchoring, chain-of-thought teaching, chain follow-up Q&A, and quiz self-test
+- Basic Usage step 3 corrected to match current UI (quiz via scrolling, not tab switching)
+
+**Files**: `SlideTutor-AI/src/components/ui/InfoTrigger.tsx`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/lib/i18n/index.ts`
+
+---
 ## [2026-04-14] Hardened Explain JSON Math Escaping Contract
 
 **What**: Tightened the JSON-producing tutor prompt contract for math-heavy responses. `explain` and structured `regenerate_chunk` generation now explicitly require JSON-safe backslash escaping inside string fields, with concrete examples such as `\\sqrt`, `\\times`, `\\frac`, `\\left`, and `\\right`. Added targeted prompt regressions plus an artifact parser regression that documents the failure mode when raw LaTeX backslashes appear inside `explain_v1` JSON strings.
