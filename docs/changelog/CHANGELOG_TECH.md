@@ -5,6 +5,20 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-14] Raised Gemini Explain Structured Output Budget To 6144
+
+**What**: Increased the Gemini structured-output budget for `task = explain` from `4096` to `6144` tokens. The change is limited to the Gemini explain path and does not alter `distill`, `regenerate_chunk`, or OpenAI-compatible output budgets.
+
+**Why**: Some explain runs were reaching Gemini's max-token finish condition before the full structured JSON artifact could complete. The issue appeared intermittent rather than systemic, so the fix was a modest headroom increase instead of a broader generation-policy rewrite.
+
+**Impact**:
+- Gemini explain runs have more room to finish `explain_v1` JSON without truncation
+- OpenAI-compatible explain behavior is unchanged
+- existing distill and chunk-regeneration token budgets remain unchanged
+
+**Files**: `SlideTutor-AI/api/lib/structuredOutputConfig.ts`, `SlideTutor-AI/api/lib/geminiGenerationConfig.test.ts`
+
+---
 ## [2026-04-14] Made Tutor Card Actions Discoverable On Touch Devices
 
 **What**: Added a hover-capability boundary inside `CanvasTutor.tsx` so explanation-card action trays and tutor-note action rows are no longer hover-only everywhere. The tutor now checks `matchMedia('(hover: hover) and (pointer: fine)')`, keeps the existing hover-reveal behavior on desktop-class inputs, and renders those controls visible by default on no-hover devices. Added focused `CanvasTutor` tests for both no-hover visibility and desktop hover preservation.

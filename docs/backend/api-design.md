@@ -257,6 +257,7 @@ Backend preflight now applies one backend-owned capability registry before provi
 Provider config generation is now model-aware instead of task-only:
 
 - Gemini emits `thinkingConfig.thinkingLevel` only when the resolved model capability supports thinking
+- Gemini `explain` now uses a `6144` structured-output budget to reduce intermittent structured JSON truncation on longer slide explanations
 - `distill` uses a `4096` structured-output budget for Gemini and OpenAI-compatible providers
 - OpenAI-compatible structured tasks still use `response_format.type = "json_schema"`
 

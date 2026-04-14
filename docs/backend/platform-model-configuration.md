@@ -398,6 +398,7 @@ Current runtime rules to preserve:
 
 - `thinking` is soft only. Gemini `thinkingConfig.thinkingLevel` must be emitted only when the resolved model capability says thinking is supported.
 - `native_structured_output`, `streaming`, `image_input`, and `text_generation` remain hard product constraints.
+- Gemini `explain` now uses a `6144` structured-output budget to give longer structured teaching artifacts more headroom before `MAX_TOKENS`.
 - `distill` now uses a `4096` structured-output budget for Gemini and OpenAI-compatible providers.
 - `distill` input may remove packaging-only lines such as `Visual Focus Box` and `Socratic Probe`, but the full explanation artifact for Focus mode quality should stay unchanged.
 
