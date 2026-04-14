@@ -5,6 +5,21 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-14] Switched Main PDF Tutor Splitter To Pointer Events
+
+**What**: Replaced the main left/right panel divider's mouse-only resize interaction with a unified pointer-event drag session in `App.tsx`. The splitter now starts on `pointerdown`, tracks `pointermove`, finalizes on `pointerup` or `pointercancel`, and applies `touch-action: none` on the handle so touch dragging is not intercepted by browser gestures. Added an app-level regression test that simulates a touch-style pointer drag and verifies that the PDF panel width updates.
+
+**Why**: Desktop resizing worked because the divider only listened to mouse events. Tablet users could not resize the PDF and tutor panes because touch input never entered that event chain.
+
+**Impact**:
+- desktop mouse resizing continues to work through the same unified pointer path
+- tablet and other touch devices can now drag the main splitter directly without a special long-press delay
+- resize cleanup now explicitly handles `pointercancel` in addition to normal drag completion
+- targeted app interaction tests now cover touch-style splitter dragging
+
+**Files**: `SlideTutor-AI/src/App.tsx`, `SlideTutor-AI/src/App.test.tsx`
+
+---
 ## [2026-04-14] Hardened Tablet Slide Image Extraction Retries
 
 **What**: Extracted PDF page image capture into a shared frontend helper and changed the analysis-image pipeline to resolve a device-specific extraction profile before rendering. Touch/tablet-class devices now use more conservative retry scales plus a tighter canvas pixel budget, every failed attempt now releases both the temporary canvas and the `pdf.js` page resources before retrying, and text-extraction errors after a successful image render now degrade to `text = ''` instead of aborting the whole extraction.

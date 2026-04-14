@@ -221,6 +221,25 @@ This compatibility layer is intentionally render-only:
 
 This keeps persistence stable while making tutor surfaces more tolerant of model-format drift.
 
+## 2026-04-14 Main Splitter Pointer Drag Boundary
+
+The main app shell splitter between the PDF panel and the tutor panel no longer relies on mouse-only drag events.
+
+### Current interaction contract
+
+- the divider starts resizing on `pointerdown`
+- the live ghost position updates on `pointermove`
+- the resize session commits on `pointerup`
+- the same cleanup path also handles `pointercancel`
+
+### Why this matters
+
+The old implementation only listened to `mousedown` / `mousemove` / `mouseup`, which meant desktop resizing worked but touch devices never entered the resize state at all.
+
+### Touch guardrail
+
+The divider now applies `touch-action: none` so browser gesture handling does not consume touch dragging before the app receives pointer movement.
+
 ### Runtime authority
 
 Each analyzed page is now driven by two structured artifacts only:
