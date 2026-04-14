@@ -24,6 +24,10 @@ Key traits:
 - `Gemini Custom` requires a `Gemini Base URL`
 - Gemini model choice still stays on the curated official model dropdown
 - `OpenAI-compatible` supports preset paths such as `Qwen` and `Doubao`, plus a custom base URL
+ 
+Routing note:
+
+- `My API` Gemini routing (official vs custom base URL) is entirely controlled inside the browser and shares `selectedModel` metadata with Platform API, but it does not affect hosted routing.
 
 China note:
 
@@ -48,6 +52,11 @@ Key traits:
 - keeps parser platform-managed
 - keeps model choice explicit inside the supported platform boundary
 - does not expose Gemini custom routing settings
+ 
+Routing note:
+
+- `Platform API` Gemini routing is determined by Cloudflare Worker environment variables: `GEMINI_API_KEY` for official hosted access, or `PLATFORM_GEMINI_BASE_URL` + `PLATFORM_GEMINI_API_KEY` when relaying through a platform-managed Gemini router. `PLATFORM_GEMINI_BASE_URL` must be a valid absolute HTTP(S) URL. This is independent from the browser-managed `My API` Gemini settings even though the selected `modelId` is shared.
+- current deployments still keep `GEMINI_API_KEY` configured even when hosted Gemini is relayed, because other server-side Gemini helpers still use the official key
 
 ## What This Does Not Change
 

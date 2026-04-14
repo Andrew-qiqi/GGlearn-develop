@@ -1,6 +1,6 @@
 # Deployment Architecture
 
-Last updated: 2026-04-04
+Last updated: 2026-04-14
 
 ## Current Target
 
@@ -80,7 +80,9 @@ Core runtime secrets:
 - `SHARED_APP_URL` if a secondary public origin is used
 - `VITE_CLERK_PUBLISHABLE_KEY` or `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` for the SPA-side Clerk bootstrap
 - `CLERK_SECRET_KEY` or `CLERK_JWT_KEY` for Worker-side platform-session verification
-- `GEMINI_API_KEY`
+- `GEMINI_API_KEY` (still required by the current deployment for official hosted Gemini and other internal server-side Gemini helpers)
+- `PLATFORM_GEMINI_BASE_URL` (leave empty to keep the official hosted endpoint; set to an absolute HTTP(S) URL to relay through a platform-managed Gemini router)
+- `PLATFORM_GEMINI_API_KEY` (required in addition when `PLATFORM_GEMINI_BASE_URL` is non-empty)
 - `DOUBAO_API_KEY` when that provider is enabled
 - `QWEN_API_KEY` when that provider is enabled
 - `VOLCENGINE_ACCESS_KEY_ID`

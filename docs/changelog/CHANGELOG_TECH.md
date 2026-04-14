@@ -5,6 +5,21 @@
 条目按时间倒序排列（最新的在前）。
 
 ---
+## [2026-04-14] Documented platform-managed Gemini routing
+
+**What**: Clarified how `Platform API` resolves hosted Gemini via Worker environment variables, introduced the `PLATFORM_GEMINI_BASE_URL` and `PLATFORM_GEMINI_API_KEY` examples, and recorded the platform custom routing rules inside deployment, access‑mode, and backend operator docs.
+
+**Why**: Operators needed to understand that `Platform API` Gemini routing is independent from `My API` and requires either `GEMINI_API_KEY` (official endpoint) or the custom router pair of `PLATFORM_GEMINI_BASE_URL`/`PLATFORM_GEMINI_API_KEY` in order to relay Gemini traffic.
+
+**Impact**:
+- Platform operators now have a reference for the Worker env vars that switch Gemini between the official endpoint and a platform relay, including the requirement that the relay base URL be an absolute HTTP(S) URL.
+- Documentation now explicitly warns that `My API` GEMINI routing is browser-managed while `Platform API` routing is Worker-managed.
+- `.env.example`, deployment guidance, and backend model configuration docs now mention the new env vars so keeping BYOK and hosted routing concerns separated is clearer, while also preserving the current expectation that `GEMINI_API_KEY` remains configured for other server-side Gemini helpers.
+
+**Files**: `SlideTutor-AI/.env.example`, `docs/architecture/deployment.md`, `docs/user_guide/access-modes.md`, `docs/backend/platform-model-configuration.md`, `docs/changelog/CHANGELOG_TECH.md`
+
+---
+
 ## [2026-04-14] Raised Gemini Explain Structured Output Budget To 6144
 
 **What**: Increased the Gemini structured-output budget for `task = explain` from `4096` to `6144` tokens. The change is limited to the Gemini explain path and does not alter `distill`, `regenerate_chunk`, or OpenAI-compatible output budgets.

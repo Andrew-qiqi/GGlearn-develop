@@ -1,6 +1,6 @@
 # Platform 模型配置修改指南
 
-最后更新：2026-04-07
+最后更新：2026-04-14
 
 本文面向开发者，说明如何修改 `Platform API` 的模型配置，包括默认模型、可选模型、提供商接入边界，以及前后端分别需要改哪些位置。
 
@@ -12,6 +12,13 @@
 - 前端把这些字段连同 `access.mode = "platform"` 一起发给 `/api/generate`
 - 后端根据 `providerId + endpointPreset` 选择服务端密钥，而不是读取浏览器里的 BYOK 密钥
 - 因此，修改 platform 模型配置通常不是只改后端，而是“前端可选项 + 后端密钥解析”一起看
+
+### 平台 Gemini 路由说明
+
+- `Platform API` 的 Gemini 路由由 Worker 环境变量单向决定，浏览器端的 BYOK 配置无影响。
+- `PLATFORM_GEMINI_BASE_URL` 为空时仍使用 `GEMINI_API_KEY`；非空时必须是合法的绝对 HTTP(S) URL，并且需要额外的 `PLATFORM_GEMINI_API_KEY` 用于平台代理请求。
+- 即使平台开启了 Gemini relay，当前部署仍保留 `GEMINI_API_KEY`，因为还有其他服务端 Gemini 内部逻辑继续依赖它。
+- 这种平台层自定义路由只改变运行时访问层的 `baseURL`/`apiKey` 组合，不会修改前端 `selectedModel` 或 `My API` 路由的可视状态。
 
 关键代码入口：
 
