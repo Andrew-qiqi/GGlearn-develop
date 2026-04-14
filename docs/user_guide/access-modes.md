@@ -34,7 +34,7 @@ China note:
 Gemini note:
 
 - choose `Google Official` if you want the standard Gemini endpoint
-- choose `Custom` only when your Gemini-compatible relay requires a custom base URL
+- choose `Custom` when you need Gemini requests to use a non-default base URL
 - compatibility checks follow the active Gemini route, so changing `Gemini Base URL` will require a fresh readiness check
 
 ## Platform API

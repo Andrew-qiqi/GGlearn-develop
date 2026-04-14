@@ -68,7 +68,7 @@
 
 **What**: Extended the existing Gemini BYOK path so `My API` users can choose between `Google Official` and `Custom` routing without introducing a new provider family or a freeform Gemini model id. The settings panel now exposes a Gemini endpoint selector plus conditional `Gemini Base URL`, the frontend request layer now sends Gemini `baseURL` only for custom mode, backend access resolution now preserves Gemini BYOK `baseURL`, and both runtime generation plus capability checks now construct Gemini clients against the active custom route when configured.
 
-**Why**: BYOK users needed a productized way to keep using the official Gemini model catalog while routing requests through a Gemini-compatible relay. The previous implementation only supported the official Gemini endpoint, which meant custom relay users had no supported configuration path and readiness checks could drift from the actual runtime route.
+**Why**: BYOK users needed a productized way to keep using the official Gemini model catalog while sending requests through a custom Gemini base URL. The previous implementation only supported the official Gemini endpoint, which meant custom Gemini routes had no supported configuration path and readiness checks could drift from the actual runtime route.
 
 **Impact**:
 - `My API > Gemini` now supports `Google Official / Custom`
