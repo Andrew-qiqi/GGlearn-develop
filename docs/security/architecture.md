@@ -1,8 +1,9 @@
 # 安全架构
 
 本文档描述 SlideTutor 项目的安全架构和多层防御策略。
+除鉴权、限流和输入校验外，当前版本也覆盖 `Platform API` credits 的账本完整性边界。
 
-最后更新：2026-03-28
+最后更新：2026-04-15
 
 ---
 
@@ -86,6 +87,34 @@ signature = HMAC-SHA256(secret, payload)
 | `/api/generate` | 10 请求 | 1 分钟 |
 | `/api/generate` | 100 请求 | 24 小时 |
 | `/api/get-token` | 20 请求 | 1 分钟 |
+
+### Platform Credits 完整性
+
+`Platform API` 下的 credits 数值不以前端状态为准，余额修改只能由 Worker 内部的 D1 写路径完成。
+
+当前已经加固的完成路径：
+
+- hosted `Analyze` 成功后的最终扣费
+- hosted `followup` / `regenerate` / quiz 成功后的最终扣费
+- `ZPAY` 充值回调成功后的最终加币
+
+这些路径现在都通过一次 D1 batched transaction 原子提交：
+
+1. 修改账户余额
+2. 写入 credits ledger
+3. 写入完成标记，如 analyze attempt、hosted action 或 recharge order
+
+当前止损能力：
+
+- 重试或并发重复完成时，会命中已存在的持久化完成记录，保持幂等
+- 如果执行在中途失败，余额、ledger、完成标记会一起回滚，避免出现账本漂移
+- 合法的 `ZPAY` 重放回调仍返回明文 `success`，避免支付侧持续重试放大问题
+- 运营侧仍可通过带 `requestId` 的 Worker 日志排查异常请求
+
+当前未覆盖的范围：
+
+- 还没有单独的欺诈评分、阈值告警或自动冻结账户机制
+- 当前策略以“防止重复写入和账本漂移”为主，而不是重型风控系统
 
 ### 环境变量配置
 

@@ -1,6 +1,6 @@
 # Operations Docs
 
-Last updated: 2026-04-07
+Last updated: 2026-04-15
 
 Use this module for operator-facing runbooks and evidence artifacts that support the live China-user chain.
 
@@ -19,6 +19,7 @@ Use this module for operator-facing runbooks and evidence artifacts that support
 Current note:
 
 - the report now contains the Phase 07 live validation result from 2026-04-07 rather than only a blank template
+- the operator checklist is also the place to verify replay-safe recharge behavior after the 2026-04-15 atomic credits hardening
 
 ## Decision Gate
 

@@ -1,6 +1,6 @@
 # 后端文档
 
-本模块包含 SlideTutor 项目的后端 API 设计、解析边界、模型托管边界和错误处理相关文档。
+本模块包含 SlideTutor 项目的后端 API 设计、解析边界、模型托管边界、credits 账本约定和错误处理相关文档。
 
 ## 文档列表
 
@@ -18,6 +18,10 @@
 
 查看 [platform-model-configuration.md](platform-model-configuration.md)，了解前端模型清单、后端密钥解析、环境变量和验证步骤。
 
+### 我想了解 hosted credits / 充值接口和幂等边界
+
+查看 [api-design.md](api-design.md)，了解余额查询、充值意图、支付回调，以及当前的原子提交约定。
+
 ### 我想了解 parser 所有权和错误分类
 
 先看 [api-design.md](api-design.md)，再看 [platform-model-configuration.md](platform-model-configuration.md)，确认 `Platform API` 的平台托管解析、`My API` 的可选 `LlamaParse`，以及 `ROUTE_RATE_LIMITED` / `PLATFORM_PARSER_*` / `BYOK_PARSER_*` 的边界。
@@ -28,4 +32,4 @@
 
 ---
 
-最后更新：2026-04-09
+最后更新：2026-04-15
