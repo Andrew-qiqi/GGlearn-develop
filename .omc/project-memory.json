@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1775884849093,
-  "projectRoot": "C:\\Users\\hoo\\Documents\\z_cqmeng_file\\local_repository\\SlideTutor-AI-main",
+  "lastScanned": 1776408619814,
+  "projectRoot": "C:\\Users\\hoo\\Documents\\z_cqmeng_file\\local_repository\\GGlearn-develop",
   "techStack": {
     "languages": [],
     "frameworks": [],
@@ -24,9 +24,7 @@
   "structure": {
     "isMonorepo": false,
     "workspaces": [],
-    "mainDirectories": [
-      "docs"
-    ],
+    "mainDirectories": [],
     "gitBranches": {
       "defaultBranch": "main",
       "branchingStrategy": null
@@ -34,21 +32,11 @@
   },
   "customNotes": [],
   "directoryMap": {
-    "docs": {
-      "path": "docs",
-      "purpose": "Documentation",
-      "fileCount": 2,
-      "lastAccessed": 1775884849080,
-      "keyFiles": [
-        "DOCUMENTATION_RULES.md",
-        "README.md"
-      ]
-    },
-    "SlideTutor-AI": {
-      "path": "SlideTutor-AI",
+    "GGlearn": {
+      "path": "GGlearn",
       "purpose": null,
-      "fileCount": 20,
-      "lastAccessed": 1775884849080,
+      "fileCount": 21,
+      "lastAccessed": 1776408619797,
       "keyFiles": [
         "edgeone.json",
         "generate-icon.ts",
@@ -56,234 +44,8 @@
         "metadata.json",
         "package-lock.json"
       ]
-    },
-    "tmp_files": {
-      "path": "tmp_files",
-      "purpose": null,
-      "fileCount": 2,
-      "lastAccessed": 1775884849081,
-      "keyFiles": [
-        "2026-03-31 23.23.43.jpeg",
-        "template.md"
-      ]
-    },
-    "SlideTutor-AI\\api": {
-      "path": "SlideTutor-AI\\api",
-      "purpose": "API routes",
-      "fileCount": 5,
-      "lastAccessed": 1775884849081,
-      "keyFiles": [
-        "generate.ts",
-        "get-token.ts",
-        "parserAccess.test.ts"
-      ]
     }
   },
-  "hotPaths": [
-    {
-      "path": "SlideTutor-AI\\src\\components\\SettingsModal.tsx",
-      "accessCount": 45,
-      "lastAccessed": 1775914088084,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\components\\settings\\PlatformApiSection.tsx",
-      "accessCount": 29,
-      "lastAccessed": 1775913112915,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\components\\SettingsModal.test.tsx",
-      "accessCount": 15,
-      "lastAccessed": 1775914156234,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\lib\\i18n\\settingsText.ts",
-      "accessCount": 12,
-      "lastAccessed": 1775914747556,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\lib\\auth\\clerk.tsx",
-      "accessCount": 10,
-      "lastAccessed": 1775897844832,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\store\\uiStore.ts",
-      "accessCount": 10,
-      "lastAccessed": 1775902673394,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\store\\uiStore.test.ts",
-      "accessCount": 9,
-      "lastAccessed": 1775902673532,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\components\\settings\\PlatformApiSection.test.tsx",
-      "accessCount": 8,
-      "lastAccessed": 1775897894038,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src",
-      "accessCount": 7,
-      "lastAccessed": 1775914393287,
-      "type": "directory"
-    },
-    {
-      "path": "",
-      "accessCount": 6,
-      "lastAccessed": 1775885555683,
-      "type": "directory"
-    },
-    {
-      "path": ".claude\\settings.local.json",
-      "accessCount": 6,
-      "lastAccessed": 1775913478176,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\components",
-      "accessCount": 3,
-      "lastAccessed": 1775897605050,
-      "type": "directory"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\lib\\auth\\clerk.test.tsx",
-      "accessCount": 3,
-      "lastAccessed": 1775897845179,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\components\\ui\\InfoTrigger.tsx",
-      "accessCount": 3,
-      "lastAccessed": 1775900763782,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\App.tsx",
-      "accessCount": 3,
-      "lastAccessed": 1775914747629,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\components\\Header\\AppHeader.tsx",
-      "accessCount": 3,
-      "lastAccessed": 1775919652841,
-      "type": "file"
-    },
-    {
-      "path": "docs\\backend\\platform-model-configuration.md",
-      "accessCount": 3,
-      "lastAccessed": 1775923143055,
-      "type": "file"
-    },
-    {
-      "path": "docs",
-      "accessCount": 2,
-      "lastAccessed": 1775886216856,
-      "type": "directory"
-    },
-    {
-      "path": ".planning",
-      "accessCount": 2,
-      "lastAccessed": 1775886216970,
-      "type": "directory"
-    },
-    {
-      "path": "SlideTutor-AI\\package.json",
-      "accessCount": 2,
-      "lastAccessed": 1775913074828,
-      "type": "file"
-    },
-    {
-      "path": "docs\\frontend\\architecture.md",
-      "accessCount": 2,
-      "lastAccessed": 1775923123506,
-      "type": "file"
-    },
-    {
-      "path": "docs\\changelog\\CHANGELOG_TECH.md",
-      "accessCount": 2,
-      "lastAccessed": 1775923134068,
-      "type": "file"
-    },
-    {
-      "path": ".claude\\get-shit-done\\workflows\\update.md",
-      "accessCount": 1,
-      "lastAccessed": 1775885864778,
-      "type": "file"
-    },
-    {
-      "path": ".planning\\PROJECT.md",
-      "accessCount": 1,
-      "lastAccessed": 1775886250748,
-      "type": "file"
-    },
-    {
-      "path": "docs\\frontend\\README.md",
-      "accessCount": 1,
-      "lastAccessed": 1775886250851,
-      "type": "file"
-    },
-    {
-      "path": "docs\\README.md",
-      "accessCount": 1,
-      "lastAccessed": 1775886250941,
-      "type": "file"
-    },
-    {
-      "path": "docs\\frontend\\data-flow.md",
-      "accessCount": 1,
-      "lastAccessed": 1775886251112,
-      "type": "file"
-    },
-    {
-      "path": ".planning\\STATE.md",
-      "accessCount": 1,
-      "lastAccessed": 1775886251165,
-      "type": "file"
-    },
-    {
-      "path": ".planning\\phases\\10-dead-task-cleanup-and-hosted-task-surface-alignment\\10-CONTEXT.md",
-      "accessCount": 1,
-      "lastAccessed": 1775886251281,
-      "type": "file"
-    },
-    {
-      "path": ".planning\\ROADMAP.md",
-      "accessCount": 1,
-      "lastAccessed": 1775886251574,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\store",
-      "accessCount": 1,
-      "lastAccessed": 1775901373729,
-      "type": "directory"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\App.test.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1775919653200,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\components\\Header\\AppHeader.test.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1775919653906,
-      "type": "file"
-    },
-    {
-      "path": "SlideTutor-AI\\src\\lib\\i18n\\index.ts",
-      "accessCount": 1,
-      "lastAccessed": 1775919654761,
-      "type": "file"
-    }
-  ],
+  "hotPaths": [],
   "userDirectives": []
 }
