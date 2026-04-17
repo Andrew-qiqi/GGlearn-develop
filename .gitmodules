@@ -1,0 +1,3 @@
+[submodule "GGlearn"]
+	path = GGlearn
+	url = https://github.com/Andrew-qiqi/GGlearn.git
