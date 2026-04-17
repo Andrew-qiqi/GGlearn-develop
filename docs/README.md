@@ -1,99 +1,30 @@
-# SlideTutor 文档中心
+# GGlearn Documentation Hub
 
-最后更新：2026-04-15
+Last updated: 2026-04-17
 
-这个目录是项目级文档入口，按模块组织，方便查找代码架构、接口约定、运维步骤和产品讨论记录。
+This directory is the project-level documentation entrypoint. Much of the deeper architecture history still reflects the earlier SlideTutor codebase, but the active product direction is now GGlearn: an AI textbook workspace centered on structured study, not chat.
 
-## 模块导航
+## Recommended Reading Order
 
-### `architecture/`
+### For product / architecture context
 
-- [system-overview.md](architecture/system-overview.md)
-- [tech-stack.md](architecture/tech-stack.md)
-- [deployment.md](architecture/deployment.md)
+1. `architecture/system-overview.md`
+2. `architecture/tech-stack.md`
+3. `.omx/artifacts/gemini-gglearn-ai-textbook-north-star-20260416T223527Z.md`
+4. `.omx/artifacts/gemini-gglearn-mvp-frontend-convergence-20260416T231200Z.md`
 
-### `frontend/`
+### For current execution / acceptance context
 
-- [architecture.md](frontend/architecture.md)
-- [data-flow.md](frontend/data-flow.md)
+1. `.omx/artifacts/mvp-browser-verification-20260417T003900Z.md`
+2. `.omx/artifacts/overnight-acceptance-status-20260417T011500Z.md`
 
-### `backend/`
+### For deployment / ops
 
-- [api-design.md](backend/api-design.md)
-- [platform-model-configuration.md](backend/platform-model-configuration.md)
-- [error-handling.md](backend/error-handling.md)
+1. `architecture/deployment.md`
+2. `operations/china-operator-checklist.md`
+3. `backend/api-design.md`
 
-### `security/`
+## Maintenance Notes
 
-- [architecture.md](security/architecture.md)
-- [token-authentication.md](security/token-authentication.md)
-- [rate-limiting.md](security/rate-limiting.md)
-
-### `user_guide/`
-
-- [README.md](user_guide/README.md)
-- [access-modes.md](user_guide/access-modes.md)
-
-### `operations/`
-
-- [README.md](operations/README.md)
-- [china-operator-checklist.md](operations/china-operator-checklist.md)
-- [china-operational-fit-report.md](operations/china-operational-fit-report.md)
-
-### `changelog/`
-
-- [CHANGELOG_TECH.md](changelog/CHANGELOG_TECH.md)
-
-### `discuss/`
-
-- [project-brief.md](discuss/project-brief.md)
-- [phases/](discuss/phases/)
-
-### `superpowers/`
-
-- 历史工作流归档区，仅在维护已有资料时进入
-
-## 快速开始
-
-### 我想了解整体架构
-
-1. [architecture/system-overview.md](architecture/system-overview.md)
-2. [architecture/tech-stack.md](architecture/tech-stack.md)
-3. [frontend/architecture.md](frontend/architecture.md)
-4. [backend/api-design.md](backend/api-design.md)
-
-### 我想部署或排查线上环境
-
-1. [architecture/deployment.md](architecture/deployment.md)
-2. [operations/china-operator-checklist.md](operations/china-operator-checklist.md)
-3. [backend/api-design.md](backend/api-design.md)
-
-### 我想修改 Platform API 的模型配置
-
-1. [backend/platform-model-configuration.md](backend/platform-model-configuration.md)
-2. [backend/api-design.md](backend/api-design.md)
-3. [operations/china-operator-checklist.md](operations/china-operator-checklist.md)
-
-### 我想了解 credits 安全、回放幂等和充值止损
-
-1. [security/architecture.md](security/architecture.md)
-2. [backend/api-design.md](backend/api-design.md)
-3. [operations/china-operator-checklist.md](operations/china-operator-checklist.md)
-
-### 我想了解 parser 边界和解析故障
-
-1. [backend/api-design.md](backend/api-design.md)
-2. [frontend/data-flow.md](frontend/data-flow.md)
-3. [backend/platform-model-configuration.md](backend/platform-model-configuration.md)
-
-### 我想了解用户侧接入方式
-
-1. [user_guide/access-modes.md](user_guide/access-modes.md)
-2. [operations/china-operational-fit-report.md](operations/china-operational-fit-report.md)
-
-## 维护约定
-
-- 修改代码后，同步更新对应模块文档。
-- 重要技术变更记录到 [changelog/CHANGELOG_TECH.md](changelog/CHANGELOG_TECH.md)。
-- 修改文档结构前，先查看 [DOCUMENTATION_RULES.md](DOCUMENTATION_RULES.md)。
-- 运维检查表、线上核验结果和支持排障文档统一维护在 `operations/`。
+- Update docs whenever active runtime or user-visible behavior changes.
+- Prefer `.omx/` artifacts for current execution truth; treat older SlideTutor-branded docs as historical context unless updated.
