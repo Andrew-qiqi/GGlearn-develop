@@ -12,18 +12,18 @@
 
 ## File Map
 
-- Modify: `SlideTutor-AI/src/App.tsx`
+- Modify: `GGlearn-AI/src/App.tsx`
   - Replace the current mouse-only splitter drag logic with pointer-event handling.
   - Keep the existing width guardrail (`20 < leftWidth < 80`) and ghost divider behavior.
   - Add a stable selector for the divider plus touch-specific interaction guardrails.
-- Modify: `SlideTutor-AI/src/App.test.tsx`
+- Modify: `GGlearn-AI/src/App.test.tsx`
   - Add a focused regression test for touch-style divider dragging.
   - Stub the browser width so width calculations are deterministic.
 
 ## Task 1: Add A Failing Touch Drag Regression Test
 
 **Files:**
-- Modify: `SlideTutor-AI/src/App.test.tsx`
+- Modify: `GGlearn-AI/src/App.test.tsx`
 
 - [ ] **Step 1: Add a stable selector for the future divider test target**
 
@@ -85,7 +85,7 @@ it('resizes panels from a touch-style pointer drag on the splitter', () => {
 Run:
 
 ```bash
-cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI
+cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI
 npx vitest run src/App.test.tsx
 ```
 
@@ -103,8 +103,8 @@ git commit -m "test(app): cover touch splitter dragging"
 ## Task 2: Implement Unified Pointer-Based Splitter Dragging
 
 **Files:**
-- Modify: `SlideTutor-AI/src/App.tsx`
-- Verify with: `SlideTutor-AI/src/App.test.tsx`
+- Modify: `GGlearn-AI/src/App.tsx`
+- Verify with: `GGlearn-AI/src/App.test.tsx`
 
 - [ ] **Step 1: Add refs and helpers for pointer-session tracking**
 
@@ -205,7 +205,7 @@ This keeps the regression test focused on the actual resized container.
 Run:
 
 ```bash
-cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI
+cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI
 npx vitest run src/App.test.tsx
 ```
 
@@ -232,7 +232,7 @@ git commit -m "fix(app): enable splitter dragging on touch devices"
 Run:
 
 ```bash
-cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI
+cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI
 npx vitest run src/App.test.tsx
 ```
 
@@ -245,7 +245,7 @@ Expected:
 Run:
 
 ```bash
-cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI
+cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI
 npx tsc --noEmit --moduleResolution bundler --module esnext --target es2022 --jsx react-jsx --skipLibCheck src/App.tsx
 ```
 

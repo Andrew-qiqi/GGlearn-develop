@@ -31,7 +31,7 @@ The following routes now emit structured Worker logs with `requestId`, `path`, `
 
 For these routes, JSON error responses include `requestId` so support work can correlate the user-visible failure to Worker logs. Valid ZPAY callbacks remain the one exception because the response body must stay plain-text `success`.
 
-Operator smoke steps for these routes live in [china-operator-checklist.md](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/docs/operations/china-operator-checklist.md).
+Operator smoke steps for these routes live in [china-operator-checklist.md](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/docs/operations/china-operator-checklist.md).
 
 ### `POST /api/generate` platform-mode additions
 

@@ -2,7 +2,7 @@
 
 Last updated: 2026-04-17
 
-This directory is the project-level documentation entrypoint. Much of the deeper architecture history still reflects the earlier SlideTutor codebase, but the active product direction is now GGlearn: an AI textbook workspace centered on structured study, not chat.
+This directory is the project-level documentation entrypoint. Much of the deeper architecture history still reflects the earlier GGlearn codebase, but the active product direction is now GGlearn: an AI textbook workspace centered on structured study, not chat.
 
 ## Recommended Reading Order
 
@@ -27,4 +27,4 @@ This directory is the project-level documentation entrypoint. Much of the deeper
 ## Maintenance Notes
 
 - Update docs whenever active runtime or user-visible behavior changes.
-- Prefer `.omx/` artifacts for current execution truth; treat older SlideTutor-branded docs as historical context unless updated.
+- Prefer `.omx/` artifacts for current execution truth; treat older GGlearn-branded docs as historical context unless updated.

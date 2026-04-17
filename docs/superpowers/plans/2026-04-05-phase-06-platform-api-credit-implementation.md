@@ -12,7 +12,7 @@
 
 ## Scope Locks
 
-- This plan implements the approved product spec in [2026-04-05-phase-06-platform-api-credit-product-design.md](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/docs/superpowers/specs/2026-04-05-phase-06-platform-api-credit-product-design.md).
+- This plan implements the approved product spec in [2026-04-05-phase-06-platform-api-credit-product-design.md](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/docs/superpowers/specs/2026-04-05-phase-06-platform-api-credit-product-design.md).
 - `My API` stays browser-local and never uses platform credits.
 - `Platform API` requires login at mode-switch time, not later at action time.
 - Hosted billing covers only approved priced actions in this phase:
@@ -31,97 +31,97 @@
 
 ### Frontend access state and auth
 
-- Modify: `SlideTutor-AI/src/config/models.ts`
+- Modify: `GGlearn-AI/src/config/models.ts`
   - Add explicit access-mode types and normalize away old BYOK-only assumptions.
-- Modify: `SlideTutor-AI/src/store/uiStore.ts`
+- Modify: `GGlearn-AI/src/store/uiStore.ts`
   - Persist `accessMode`, hold hosted balance snapshot state, and hold insufficient-credit dialog state.
-- Modify: `SlideTutor-AI/src/store/uiStore.test.ts`
+- Modify: `GGlearn-AI/src/store/uiStore.test.ts`
   - Cover new persisted access mode and hosted UI state behavior.
-- Create: `SlideTutor-AI/src/lib/auth/clerk.tsx`
+- Create: `GGlearn-AI/src/lib/auth/clerk.tsx`
   - Wrap `ClerkProvider`, centralize publishable-key lookup, and expose helper hooks for platform login and session-token fetch.
-- Modify: `SlideTutor-AI/src/main.tsx`
+- Modify: `GGlearn-AI/src/main.tsx`
   - Mount the app under the Clerk provider.
-- Modify: `SlideTutor-AI/package.json`
+- Modify: `GGlearn-AI/package.json`
   - Add Clerk dependencies.
 
 ### Frontend API and hosted UI
 
-- Modify: `SlideTutor-AI/src/lib/api/apiClient.ts`
+- Modify: `GGlearn-AI/src/lib/api/apiClient.ts`
   - Send `mode: "platform"` or BYOK payloads, attach `Authorization: Bearer ...` for hosted requests, fetch hosted balance, and create recharge intents.
-- Modify: `SlideTutor-AI/src/lib/api/apiClient.test.ts`
+- Modify: `GGlearn-AI/src/lib/api/apiClient.test.ts`
   - Cover hosted auth headers and hosted payload shape.
-- Create: `SlideTutor-AI/src/lib/platformAccess/pricing.ts`
+- Create: `GGlearn-AI/src/lib/platformAccess/pricing.ts`
   - Frontend constants for action pricing and RMB-to-credit conversion.
-- Create: `SlideTutor-AI/src/lib/platformAccess/pricing.test.ts`
+- Create: `GGlearn-AI/src/lib/platformAccess/pricing.test.ts`
   - Cover `1 RMB = 30 credits` conversion and action price constants.
-- Create: `SlideTutor-AI/src/components/settings/PlatformApiSection.tsx`
+- Create: `GGlearn-AI/src/components/settings/PlatformApiSection.tsx`
   - Render neutral mode toggle, hosted balance, price summary, and `Buy Credits`.
-- Create: `SlideTutor-AI/src/components/settings/BuyCreditsDialog.tsx`
+- Create: `GGlearn-AI/src/components/settings/BuyCreditsDialog.tsx`
   - Render RMB input, live credit quote, and recharge submit action.
-- Create: `SlideTutor-AI/src/components/CreditsRequiredDialog.tsx`
+- Create: `GGlearn-AI/src/components/CreditsRequiredDialog.tsx`
   - Render the global insufficient-credit prompt with `Buy Credits` and `Switch to My API`.
-- Modify: `SlideTutor-AI/src/components/SettingsModal.tsx`
+- Modify: `GGlearn-AI/src/components/SettingsModal.tsx`
   - Delegate AI tab UI into focused subcomponents instead of expanding the current monolith.
-- Modify: `SlideTutor-AI/src/components/SettingsModal.test.tsx`
+- Modify: `GGlearn-AI/src/components/SettingsModal.test.tsx`
   - Cover hosted balance rendering, neutral mode switch, and live recharge quote.
-- Modify: `SlideTutor-AI/src/App.tsx`
+- Modify: `GGlearn-AI/src/App.tsx`
   - Mount the global insufficient-credit dialog and pass through hosted UI handlers.
 
 ### Frontend action hooks
 
-- Modify: `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`
+- Modify: `GGlearn-AI/src/hooks/useSlideAnalysis.ts`
   - Capture hosted analyze attempt ids and pass them into `distill` finalize calls.
-- Modify: `SlideTutor-AI/src/hooks/useFollowUp.ts`
+- Modify: `GGlearn-AI/src/hooks/useFollowUp.ts`
   - Open the insufficient-credit dialog on hosted billing errors instead of leaking raw quota text.
-- Modify: `SlideTutor-AI/src/hooks/useQuiz.ts`
+- Modify: `GGlearn-AI/src/hooks/useQuiz.ts`
   - Same hosted billing handling for generate/evaluate.
-- Modify: `SlideTutor-AI/src/hooks/useChunkRegenerate.ts`
+- Modify: `GGlearn-AI/src/hooks/useChunkRegenerate.ts`
   - Block platform-mode regenerate and push the user back toward `My API` instead of silently using hosted capacity.
 
 ### Worker auth, credits, and payment boundary
 
-- Create: `SlideTutor-AI/api/lib/platformAccess/types.ts`
+- Create: `GGlearn-AI/api/lib/platformAccess/types.ts`
   - Shared backend types for balances, ledger entries, analyze attempts, and recharge orders.
-- Create: `SlideTutor-AI/api/lib/platformAccess/pricing.ts`
+- Create: `GGlearn-AI/api/lib/platformAccess/pricing.ts`
   - Canonical backend pricing table and hosted-task whitelist.
-- Create: `SlideTutor-AI/api/lib/platformAccess/store.ts`
+- Create: `GGlearn-AI/api/lib/platformAccess/store.ts`
   - D1 reads and writes for balances, ledger, analyze attempts, and recharge orders.
-- Create: `SlideTutor-AI/api/lib/platformAccess/service.ts`
+- Create: `GGlearn-AI/api/lib/platformAccess/service.ts`
   - Business rules for starter grant, sufficient-balance checks, analyze attempt lifecycle, successful deductions, and recharge application.
-- Create: `SlideTutor-AI/api/lib/platformAccess/paymentAdapter.ts`
+- Create: `GGlearn-AI/api/lib/platformAccess/paymentAdapter.ts`
   - Provider-agnostic recharge adapter interface plus factory.
-- Create: `SlideTutor-AI/api/lib/platformAccess/mockPaymentAdapter.ts`
+- Create: `GGlearn-AI/api/lib/platformAccess/mockPaymentAdapter.ts`
   - Local and test recharge adapter that simulates checkout and webhook success.
-- Create: `SlideTutor-AI/src/worker/lib/auth.ts`
+- Create: `GGlearn-AI/src/worker/lib/auth.ts`
   - Verify Clerk session tokens and surface `userId`.
-- Create: `SlideTutor-AI/src/worker/routes/credits-balance.ts`
+- Create: `GGlearn-AI/src/worker/routes/credits-balance.ts`
   - Return starter-backed hosted balance for the signed-in user.
-- Create: `SlideTutor-AI/src/worker/routes/recharge-intent.ts`
+- Create: `GGlearn-AI/src/worker/routes/recharge-intent.ts`
   - Create a recharge order and return provider checkout data.
-- Create: `SlideTutor-AI/src/worker/routes/payment-webhook.ts`
+- Create: `GGlearn-AI/src/worker/routes/payment-webhook.ts`
   - Verify recharge completion and apply credits exactly once.
-- Modify: `SlideTutor-AI/src/worker/index.ts`
+- Modify: `GGlearn-AI/src/worker/index.ts`
   - Register the new hosted routes and env bindings.
-- Modify: `SlideTutor-AI/src/worker/routes/generate.ts`
+- Modify: `GGlearn-AI/src/worker/routes/generate.ts`
   - Verify platform auth before hosted generate requests, pass user context into generation service, and return hosted attempt headers.
-- Modify: `SlideTutor-AI/src/worker/lib/env.ts`
+- Modify: `GGlearn-AI/src/worker/lib/env.ts`
   - Read new payment and Clerk env flags cleanly.
-- Modify: `SlideTutor-AI/api/lib/generateService.ts`
+- Modify: `GGlearn-AI/api/lib/generateService.ts`
   - Enforce hosted pricing and analyze attempt semantics without changing teaching prompts.
 
 ### Database, env, and tests
 
-- Create: `SlideTutor-AI/migrations/002_platform_access_credits.sql`
+- Create: `GGlearn-AI/migrations/002_platform_access_credits.sql`
   - D1 schema for accounts, ledger, analyze attempts, and recharge orders.
-- Modify: `SlideTutor-AI/.env.example`
+- Modify: `GGlearn-AI/.env.example`
   - Add Clerk, hosted pricing, and payment adapter env vars.
-- Modify: `SlideTutor-AI/wrangler.jsonc`
+- Modify: `GGlearn-AI/wrangler.jsonc`
   - Bind the credits D1 database and any payment-related vars needed for Worker execution.
-- Create: `SlideTutor-AI/test/workers/credits-balance.worker.test.ts`
+- Create: `GGlearn-AI/test/workers/credits-balance.worker.test.ts`
   - Cover hosted balance route and starter grant.
-- Create: `SlideTutor-AI/test/workers/platform-generate.worker.test.ts`
+- Create: `GGlearn-AI/test/workers/platform-generate.worker.test.ts`
   - Cover hosted auth, insufficient credits, hosted analyze attempt headers, and successful hosted deductions.
-- Create: `SlideTutor-AI/test/workers/recharge.worker.test.ts`
+- Create: `GGlearn-AI/test/workers/recharge.worker.test.ts`
   - Cover recharge intent creation and idempotent webhook credit application.
 - Modify: `docs/backend/api-design.md`
   - Document hosted auth headers, credit routes, and hosted analyze behavior.
@@ -135,9 +135,9 @@
 ## Task 1: Persist access mode and hosted UI state
 
 **Files:**
-- Modify: `SlideTutor-AI/src/config/models.ts`
-- Modify: `SlideTutor-AI/src/store/uiStore.ts`
-- Test: `SlideTutor-AI/src/store/uiStore.test.ts`
+- Modify: `GGlearn-AI/src/config/models.ts`
+- Modify: `GGlearn-AI/src/store/uiStore.ts`
+- Test: `GGlearn-AI/src/store/uiStore.test.ts`
 
 - [ ] **Step 1: Write the failing store tests**
 
@@ -160,7 +160,7 @@ it('opens a structured insufficient-credit dialog without mutating access mode',
 
 - [ ] **Step 2: Run the store test file and verify it fails**
 
-Run: `cd SlideTutor-AI && npm test -- src/store/uiStore.test.ts`
+Run: `cd GGlearn-AI && npm test -- src/store/uiStore.test.ts`
 
 Expected: FAIL because `accessMode`, hosted balance state, and insufficient-credit dialog helpers do not exist yet.
 
@@ -184,28 +184,28 @@ Implementation notes:
 
 - [ ] **Step 4: Run the store tests again**
 
-Run: `cd SlideTutor-AI && npm test -- src/store/uiStore.test.ts`
+Run: `cd GGlearn-AI && npm test -- src/store/uiStore.test.ts`
 
 Expected: PASS
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/src/config/models.ts SlideTutor-AI/src/store/uiStore.ts SlideTutor-AI/src/store/uiStore.test.ts
+git add GGlearn-AI/src/config/models.ts GGlearn-AI/src/store/uiStore.ts GGlearn-AI/src/store/uiStore.test.ts
 git commit -m "feat: persist platform access mode state"
 ```
 
 ## Task 2: Add Clerk frontend and backend foundations
 
 **Files:**
-- Modify: `SlideTutor-AI/package.json`
-- Create: `SlideTutor-AI/src/lib/auth/clerk.tsx`
-- Modify: `SlideTutor-AI/src/main.tsx`
-- Modify: `SlideTutor-AI/.env.example`
+- Modify: `GGlearn-AI/package.json`
+- Create: `GGlearn-AI/src/lib/auth/clerk.tsx`
+- Modify: `GGlearn-AI/src/main.tsx`
+- Modify: `GGlearn-AI/.env.example`
 
 - [ ] **Step 1: Write a failing auth helper test**
 
-Create `SlideTutor-AI/src/lib/auth/clerk.test.tsx`:
+Create `GGlearn-AI/src/lib/auth/clerk.test.tsx`:
 
 ```ts
 it('throws a clear error when VITE_CLERK_PUBLISHABLE_KEY is missing', () => {
@@ -215,7 +215,7 @@ it('throws a clear error when VITE_CLERK_PUBLISHABLE_KEY is missing', () => {
 
 - [ ] **Step 2: Run the auth helper test and verify it fails**
 
-Run: `cd SlideTutor-AI && npm test -- src/lib/auth/clerk.test.tsx`
+Run: `cd GGlearn-AI && npm test -- src/lib/auth/clerk.test.tsx`
 
 Expected: FAIL because the auth helper does not exist yet.
 
@@ -224,7 +224,7 @@ Expected: FAIL because the auth helper does not exist yet.
 Run:
 
 ```bash
-cd SlideTutor-AI
+cd GGlearn-AI
 npm install @clerk/clerk-react @clerk/backend
 ```
 
@@ -238,25 +238,25 @@ Implementation notes:
 
 - [ ] **Step 4: Run auth helper tests**
 
-Run: `cd SlideTutor-AI && npm test -- src/lib/auth/clerk.test.tsx`
+Run: `cd GGlearn-AI && npm test -- src/lib/auth/clerk.test.tsx`
 
 Expected: PASS
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/package.json SlideTutor-AI/package-lock.json SlideTutor-AI/src/lib/auth/clerk.tsx SlideTutor-AI/src/lib/auth/clerk.test.tsx SlideTutor-AI/src/main.tsx SlideTutor-AI/.env.example
+git add GGlearn-AI/package.json GGlearn-AI/package-lock.json GGlearn-AI/src/lib/auth/clerk.tsx GGlearn-AI/src/lib/auth/clerk.test.tsx GGlearn-AI/src/main.tsx GGlearn-AI/.env.example
 git commit -m "feat: add clerk auth foundation"
 ```
 
 ## Task 3: Build D1-backed hosted credits and analyze-attempt schema
 
 **Files:**
-- Create: `SlideTutor-AI/migrations/002_platform_access_credits.sql`
-- Create: `SlideTutor-AI/api/lib/platformAccess/types.ts`
-- Create: `SlideTutor-AI/api/lib/platformAccess/pricing.ts`
-- Create: `SlideTutor-AI/api/lib/platformAccess/service.ts`
-- Test: `SlideTutor-AI/api/lib/platformAccess/pricing.test.ts`
+- Create: `GGlearn-AI/migrations/002_platform_access_credits.sql`
+- Create: `GGlearn-AI/api/lib/platformAccess/types.ts`
+- Create: `GGlearn-AI/api/lib/platformAccess/pricing.ts`
+- Create: `GGlearn-AI/api/lib/platformAccess/service.ts`
+- Test: `GGlearn-AI/api/lib/platformAccess/pricing.test.ts`
 
 - [ ] **Step 1: Write failing pricing tests**
 
@@ -273,7 +273,7 @@ it('rejects unsupported hosted actions', () => {
 
 - [ ] **Step 2: Run the pricing tests and verify they fail**
 
-Run: `cd SlideTutor-AI && npm test -- api/lib/platformAccess/pricing.test.ts`
+Run: `cd GGlearn-AI && npm test -- api/lib/platformAccess/pricing.test.ts`
 
 Expected: FAIL because hosted pricing helpers do not exist yet.
 
@@ -335,25 +335,25 @@ Service rules:
 
 - [ ] **Step 4: Run pricing tests**
 
-Run: `cd SlideTutor-AI && npm test -- api/lib/platformAccess/pricing.test.ts`
+Run: `cd GGlearn-AI && npm test -- api/lib/platformAccess/pricing.test.ts`
 
 Expected: PASS
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/migrations/002_platform_access_credits.sql SlideTutor-AI/api/lib/platformAccess/types.ts SlideTutor-AI/api/lib/platformAccess/pricing.ts SlideTutor-AI/api/lib/platformAccess/pricing.test.ts SlideTutor-AI/api/lib/platformAccess/service.ts
+git add GGlearn-AI/migrations/002_platform_access_credits.sql GGlearn-AI/api/lib/platformAccess/types.ts GGlearn-AI/api/lib/platformAccess/pricing.ts GGlearn-AI/api/lib/platformAccess/pricing.test.ts GGlearn-AI/api/lib/platformAccess/service.ts
 git commit -m "feat: add hosted credits schema and pricing rules"
 ```
 
 ## Task 4: Add Worker auth and hosted balance routes
 
 **Files:**
-- Create: `SlideTutor-AI/src/worker/lib/auth.ts`
-- Create: `SlideTutor-AI/src/worker/routes/credits-balance.ts`
-- Modify: `SlideTutor-AI/src/worker/index.ts`
-- Modify: `SlideTutor-AI/src/worker/lib/env.ts`
-- Test: `SlideTutor-AI/test/workers/credits-balance.worker.test.ts`
+- Create: `GGlearn-AI/src/worker/lib/auth.ts`
+- Create: `GGlearn-AI/src/worker/routes/credits-balance.ts`
+- Modify: `GGlearn-AI/src/worker/index.ts`
+- Modify: `GGlearn-AI/src/worker/lib/env.ts`
+- Test: `GGlearn-AI/test/workers/credits-balance.worker.test.ts`
 
 - [ ] **Step 1: Write failing worker tests for hosted auth and starter balance**
 
@@ -369,7 +369,7 @@ it('returns a starter-backed balance for a newly authenticated user', async () =
 
 - [ ] **Step 2: Run the worker tests and verify they fail**
 
-Run: `cd SlideTutor-AI && npm run test:workers -- test/workers/credits-balance.worker.test.ts`
+Run: `cd GGlearn-AI && npm run test:workers -- test/workers/credits-balance.worker.test.ts`
 
 Expected: FAIL because the route and auth helper do not exist yet.
 
@@ -391,23 +391,23 @@ Implementation notes:
 
 - [ ] **Step 4: Run the worker tests again**
 
-Run: `cd SlideTutor-AI && npm run test:workers -- test/workers/credits-balance.worker.test.ts`
+Run: `cd GGlearn-AI && npm run test:workers -- test/workers/credits-balance.worker.test.ts`
 
 Expected: PASS
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/src/worker/lib/auth.ts SlideTutor-AI/src/worker/routes/credits-balance.ts SlideTutor-AI/src/worker/index.ts SlideTutor-AI/src/worker/lib/env.ts SlideTutor-AI/test/workers/credits-balance.worker.test.ts
+git add GGlearn-AI/src/worker/lib/auth.ts GGlearn-AI/src/worker/routes/credits-balance.ts GGlearn-AI/src/worker/index.ts GGlearn-AI/src/worker/lib/env.ts GGlearn-AI/test/workers/credits-balance.worker.test.ts
 git commit -m "feat: add hosted auth and balance route"
 ```
 
 ## Task 5: Teach the frontend API client about platform mode
 
 **Files:**
-- Modify: `SlideTutor-AI/src/lib/api/apiClient.ts`
-- Test: `SlideTutor-AI/src/lib/api/apiClient.test.ts`
-- Modify: `SlideTutor-AI/src/config/models.ts`
+- Modify: `GGlearn-AI/src/lib/api/apiClient.ts`
+- Test: `GGlearn-AI/src/lib/api/apiClient.test.ts`
+- Modify: `GGlearn-AI/src/config/models.ts`
 
 - [ ] **Step 1: Write failing API client tests**
 
@@ -425,7 +425,7 @@ it('does not fall back to server secrets when byok mode is selected but the loca
 
 - [ ] **Step 2: Run the API client tests and verify they fail**
 
-Run: `cd SlideTutor-AI && npm test -- src/lib/api/apiClient.test.ts`
+Run: `cd GGlearn-AI && npm test -- src/lib/api/apiClient.test.ts`
 
 Expected: FAIL because platform-mode payloads and Clerk bearer tokens do not exist yet.
 
@@ -450,28 +450,28 @@ type GenerateAccessPayload =
 
 - [ ] **Step 4: Run the API client tests**
 
-Run: `cd SlideTutor-AI && npm test -- src/lib/api/apiClient.test.ts`
+Run: `cd GGlearn-AI && npm test -- src/lib/api/apiClient.test.ts`
 
 Expected: PASS
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/src/lib/api/apiClient.ts SlideTutor-AI/src/lib/api/apiClient.test.ts SlideTutor-AI/src/config/models.ts
+git add GGlearn-AI/src/lib/api/apiClient.ts GGlearn-AI/src/lib/api/apiClient.test.ts GGlearn-AI/src/config/models.ts
 git commit -m "feat: add platform api request payloads"
 ```
 
 ## Task 6: Add neutral mode switching and hosted settings UI
 
 **Files:**
-- Create: `SlideTutor-AI/src/lib/platformAccess/pricing.ts`
-- Create: `SlideTutor-AI/src/lib/platformAccess/pricing.test.ts`
-- Create: `SlideTutor-AI/src/components/settings/PlatformApiSection.tsx`
-- Create: `SlideTutor-AI/src/components/settings/BuyCreditsDialog.tsx`
-- Create: `SlideTutor-AI/src/components/CreditsRequiredDialog.tsx`
-- Modify: `SlideTutor-AI/src/components/SettingsModal.tsx`
-- Modify: `SlideTutor-AI/src/components/SettingsModal.test.tsx`
-- Modify: `SlideTutor-AI/src/App.tsx`
+- Create: `GGlearn-AI/src/lib/platformAccess/pricing.ts`
+- Create: `GGlearn-AI/src/lib/platformAccess/pricing.test.ts`
+- Create: `GGlearn-AI/src/components/settings/PlatformApiSection.tsx`
+- Create: `GGlearn-AI/src/components/settings/BuyCreditsDialog.tsx`
+- Create: `GGlearn-AI/src/components/CreditsRequiredDialog.tsx`
+- Modify: `GGlearn-AI/src/components/SettingsModal.tsx`
+- Modify: `GGlearn-AI/src/components/SettingsModal.test.tsx`
+- Modify: `GGlearn-AI/src/App.tsx`
 
 - [ ] **Step 1: Write failing UI tests**
 
@@ -490,7 +490,7 @@ it('shows live recharge conversion at 1 RMB = 30 credits', async () => {
 
 - [ ] **Step 2: Run the settings tests and verify they fail**
 
-Run: `cd SlideTutor-AI && npm test -- src/components/SettingsModal.test.tsx src/lib/platformAccess/pricing.test.ts`
+Run: `cd GGlearn-AI && npm test -- src/components/SettingsModal.test.tsx src/lib/platformAccess/pricing.test.ts`
 
 Expected: FAIL because platform UI and recharge conversion do not exist yet.
 
@@ -509,26 +509,26 @@ Implementation notes:
 
 - [ ] **Step 4: Run the settings tests**
 
-Run: `cd SlideTutor-AI && npm test -- src/components/SettingsModal.test.tsx src/lib/platformAccess/pricing.test.ts`
+Run: `cd GGlearn-AI && npm test -- src/components/SettingsModal.test.tsx src/lib/platformAccess/pricing.test.ts`
 
 Expected: PASS
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/src/lib/platformAccess/pricing.ts SlideTutor-AI/src/lib/platformAccess/pricing.test.ts SlideTutor-AI/src/components/settings/PlatformApiSection.tsx SlideTutor-AI/src/components/settings/BuyCreditsDialog.tsx SlideTutor-AI/src/components/CreditsRequiredDialog.tsx SlideTutor-AI/src/components/SettingsModal.tsx SlideTutor-AI/src/components/SettingsModal.test.tsx SlideTutor-AI/src/App.tsx
+git add GGlearn-AI/src/lib/platformAccess/pricing.ts GGlearn-AI/src/lib/platformAccess/pricing.test.ts GGlearn-AI/src/components/settings/PlatformApiSection.tsx GGlearn-AI/src/components/settings/BuyCreditsDialog.tsx GGlearn-AI/src/components/CreditsRequiredDialog.tsx GGlearn-AI/src/components/SettingsModal.tsx GGlearn-AI/src/components/SettingsModal.test.tsx GGlearn-AI/src/App.tsx
 git commit -m "feat: add platform api settings ui"
 ```
 
 ## Task 7: Implement hosted `Analyze` reservation and finalize semantics
 
 **Files:**
-- Modify: `SlideTutor-AI/api/lib/generateService.ts`
-- Create: `SlideTutor-AI/api/lib/platformAccess/store.ts`
-- Modify: `SlideTutor-AI/api/lib/platformAccess/service.ts`
-- Modify: `SlideTutor-AI/src/worker/routes/generate.ts`
-- Modify: `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`
-- Test: `SlideTutor-AI/test/workers/platform-generate.worker.test.ts`
+- Modify: `GGlearn-AI/api/lib/generateService.ts`
+- Create: `GGlearn-AI/api/lib/platformAccess/store.ts`
+- Modify: `GGlearn-AI/api/lib/platformAccess/service.ts`
+- Modify: `GGlearn-AI/src/worker/routes/generate.ts`
+- Modify: `GGlearn-AI/src/hooks/useSlideAnalysis.ts`
+- Test: `GGlearn-AI/test/workers/platform-generate.worker.test.ts`
 
 - [ ] **Step 1: Write failing hosted analyze worker tests**
 
@@ -548,7 +548,7 @@ it('commits exactly one 3-credit deduction when hosted distill finalizes a match
 
 - [ ] **Step 2: Run the hosted generate tests and verify they fail**
 
-Run: `cd SlideTutor-AI && npm run test:workers -- test/workers/platform-generate.worker.test.ts`
+Run: `cd GGlearn-AI && npm run test:workers -- test/workers/platform-generate.worker.test.ts`
 
 Expected: FAIL because analyze attempt tracking does not exist yet.
 
@@ -580,25 +580,25 @@ taskData: {
 
 - [ ] **Step 4: Run the hosted generate tests**
 
-Run: `cd SlideTutor-AI && npm run test:workers -- test/workers/platform-generate.worker.test.ts`
+Run: `cd GGlearn-AI && npm run test:workers -- test/workers/platform-generate.worker.test.ts`
 
 Expected: PASS
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/api/lib/generateService.ts SlideTutor-AI/api/lib/platformAccess/store.ts SlideTutor-AI/api/lib/platformAccess/service.ts SlideTutor-AI/src/worker/routes/generate.ts SlideTutor-AI/src/hooks/useSlideAnalysis.ts SlideTutor-AI/test/workers/platform-generate.worker.test.ts
+git add GGlearn-AI/api/lib/generateService.ts GGlearn-AI/api/lib/platformAccess/store.ts GGlearn-AI/api/lib/platformAccess/service.ts GGlearn-AI/src/worker/routes/generate.ts GGlearn-AI/src/hooks/useSlideAnalysis.ts GGlearn-AI/test/workers/platform-generate.worker.test.ts
 git commit -m "feat: add hosted analyze billing lifecycle"
 ```
 
 ## Task 8: Bill hosted `Follow-up` and quiz actions, and block unsupported hosted actions
 
 **Files:**
-- Modify: `SlideTutor-AI/api/lib/generateService.ts`
-- Modify: `SlideTutor-AI/src/hooks/useFollowUp.ts`
-- Modify: `SlideTutor-AI/src/hooks/useQuiz.ts`
-- Modify: `SlideTutor-AI/src/hooks/useChunkRegenerate.ts`
-- Test: `SlideTutor-AI/test/workers/platform-generate.worker.test.ts`
+- Modify: `GGlearn-AI/api/lib/generateService.ts`
+- Modify: `GGlearn-AI/src/hooks/useFollowUp.ts`
+- Modify: `GGlearn-AI/src/hooks/useQuiz.ts`
+- Modify: `GGlearn-AI/src/hooks/useChunkRegenerate.ts`
+- Test: `GGlearn-AI/test/workers/platform-generate.worker.test.ts`
 
 - [ ] **Step 1: Extend the failing worker tests**
 
@@ -618,7 +618,7 @@ it('returns INSUFFICIENT_CREDITS before hosted followup execution when balance i
 
 - [ ] **Step 2: Run the worker tests and verify they fail**
 
-Run: `cd SlideTutor-AI && npm run test:workers -- test/workers/platform-generate.worker.test.ts`
+Run: `cd GGlearn-AI && npm run test:workers -- test/workers/platform-generate.worker.test.ts`
 
 Expected: FAIL because hosted follow-up and quiz deductions do not exist yet.
 
@@ -645,7 +645,7 @@ Implementation notes:
 Run:
 
 ```bash
-cd SlideTutor-AI
+cd GGlearn-AI
 npm run test:workers -- test/workers/platform-generate.worker.test.ts
 npm test -- src/hooks/useSlideAnalysis.test.ts src/lib/api/apiClient.test.ts
 ```
@@ -655,20 +655,20 @@ Expected: PASS
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/api/lib/generateService.ts SlideTutor-AI/src/hooks/useFollowUp.ts SlideTutor-AI/src/hooks/useQuiz.ts SlideTutor-AI/src/hooks/useChunkRegenerate.ts SlideTutor-AI/test/workers/platform-generate.worker.test.ts
+git add GGlearn-AI/api/lib/generateService.ts GGlearn-AI/src/hooks/useFollowUp.ts GGlearn-AI/src/hooks/useQuiz.ts GGlearn-AI/src/hooks/useChunkRegenerate.ts GGlearn-AI/test/workers/platform-generate.worker.test.ts
 git commit -m "feat: bill hosted followup and quiz actions"
 ```
 
 ## Task 9: Add recharge intent and mock payment adapter boundary
 
 **Files:**
-- Create: `SlideTutor-AI/api/lib/platformAccess/paymentAdapter.ts`
-- Create: `SlideTutor-AI/api/lib/platformAccess/mockPaymentAdapter.ts`
-- Create: `SlideTutor-AI/src/worker/routes/recharge-intent.ts`
-- Create: `SlideTutor-AI/src/worker/routes/payment-webhook.ts`
-- Test: `SlideTutor-AI/test/workers/recharge.worker.test.ts`
-- Modify: `SlideTutor-AI/.env.example`
-- Modify: `SlideTutor-AI/wrangler.jsonc`
+- Create: `GGlearn-AI/api/lib/platformAccess/paymentAdapter.ts`
+- Create: `GGlearn-AI/api/lib/platformAccess/mockPaymentAdapter.ts`
+- Create: `GGlearn-AI/src/worker/routes/recharge-intent.ts`
+- Create: `GGlearn-AI/src/worker/routes/payment-webhook.ts`
+- Test: `GGlearn-AI/test/workers/recharge.worker.test.ts`
+- Modify: `GGlearn-AI/.env.example`
+- Modify: `GGlearn-AI/wrangler.jsonc`
 
 - [ ] **Step 1: Write failing recharge worker tests**
 
@@ -687,7 +687,7 @@ it('applies credits exactly once when the webhook is replayed', async () => {
 
 - [ ] **Step 2: Run the recharge worker tests and verify they fail**
 
-Run: `cd SlideTutor-AI && npm run test:workers -- test/workers/recharge.worker.test.ts`
+Run: `cd GGlearn-AI && npm run test:workers -- test/workers/recharge.worker.test.ts`
 
 Expected: FAIL because recharge routes and adapters do not exist yet.
 
@@ -724,14 +724,14 @@ Implementation notes:
 
 - [ ] **Step 4: Run the recharge worker tests**
 
-Run: `cd SlideTutor-AI && npm run test:workers -- test/workers/recharge.worker.test.ts`
+Run: `cd GGlearn-AI && npm run test:workers -- test/workers/recharge.worker.test.ts`
 
 Expected: PASS
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/api/lib/platformAccess/paymentAdapter.ts SlideTutor-AI/api/lib/platformAccess/mockPaymentAdapter.ts SlideTutor-AI/src/worker/routes/recharge-intent.ts SlideTutor-AI/src/worker/routes/payment-webhook.ts SlideTutor-AI/test/workers/recharge.worker.test.ts SlideTutor-AI/.env.example SlideTutor-AI/wrangler.jsonc
+git add GGlearn-AI/api/lib/platformAccess/paymentAdapter.ts GGlearn-AI/api/lib/platformAccess/mockPaymentAdapter.ts GGlearn-AI/src/worker/routes/recharge-intent.ts GGlearn-AI/src/worker/routes/payment-webhook.ts GGlearn-AI/test/workers/recharge.worker.test.ts GGlearn-AI/.env.example GGlearn-AI/wrangler.jsonc
 git commit -m "feat: add hosted recharge adapter boundary"
 ```
 
@@ -758,7 +758,7 @@ Document:
 Run:
 
 ```bash
-cd SlideTutor-AI
+cd GGlearn-AI
 npm test -- src/store/uiStore.test.ts src/lib/api/apiClient.test.ts src/components/SettingsModal.test.tsx src/lib/platformAccess/pricing.test.ts
 npm run test:workers -- test/workers/credits-balance.worker.test.ts test/workers/platform-generate.worker.test.ts test/workers/recharge.worker.test.ts
 ```
@@ -770,7 +770,7 @@ Expected: PASS
 Run:
 
 ```bash
-cd SlideTutor-AI
+cd GGlearn-AI
 npm test
 npm run test:workers
 npm run lint

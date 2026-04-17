@@ -1,6 +1,6 @@
 # 技术变更日志
 
-本文档记录 SlideTutor 项目的重要技术变更、架构决策和实现细节。
+本文档记录 GGlearn 项目的重要技术变更、架构决策和实现细节。
 
 条目按时间倒序排列（最新的在前）。
 
@@ -16,12 +16,12 @@
 - valid ZPAY retries still receive the existing plain-text `success` acknowledgement
 - no new frontend states, route payloads, or billing UI were introduced
 
-**Files**: `SlideTutor-AI/api/lib/platformAccess/store.ts`, `SlideTutor-AI/api/lib/platformAccess/service.ts`, `SlideTutor-AI/api/lib/platformAccess/service.test.ts`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/api/lib/platformAccess/store.ts`, `GGlearn-AI/api/lib/platformAccess/service.ts`, `GGlearn-AI/api/lib/platformAccess/service.test.ts`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`
 
 ---
 ## [2026-04-14] Settings UI Content Refresh: InfoTrigger Dark Mode Fix, Parser Info Rewrite, And About Page Update
 
-**What**: Fixed the `InfoTrigger` popover contrast problem that made links and titles invisible in certain themes, rewrote the parser info tooltip to emphasize practical impact instead of technical jargon, and refreshed the About SlideTutor page with a value-proposition intro and 4 focused core-feature highlights.
+**What**: Fixed the `InfoTrigger` popover contrast problem that made links and titles invisible in certain themes, rewrote the parser info tooltip to emphasize practical impact instead of technical jargon, and refreshed the About GGlearn page with a value-proposition intro and 4 focused core-feature highlights.
 
 **Why**: The `InfoTrigger` popover used hardcoded `bg-white/95 dark:bg-stone-900/95` backgrounds that did not match the project's custom theme system (`.twilight-zen`, `.spring-meadow`, etc.), causing link text to blend into the background in several themes. The parser info text said "degraded analysis" which is meaningless to non-technical users — the real user impact is that knowledge-point highlight boxes lose spatial precision. The About page listed outdated features and a generic intro that didn't convey the product's core value.
 
@@ -31,7 +31,7 @@
 - About page intro is now a value proposition; core features narrowed to 4 differentiators: knowledge-point cards with region anchoring, chain-of-thought teaching, chain follow-up Q&A, and quiz self-test
 - Basic Usage step 3 corrected to match current UI (quiz via scrolling, not tab switching)
 
-**Files**: `SlideTutor-AI/src/components/ui/InfoTrigger.tsx`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/lib/i18n/index.ts`
+**Files**: `GGlearn-AI/src/components/ui/InfoTrigger.tsx`, `GGlearn-AI/src/components/SettingsModal.tsx`, `GGlearn-AI/src/lib/i18n/index.ts`
 
 ---
 ## [2026-04-14] Hardened Explain JSON Math Escaping Contract
@@ -45,7 +45,7 @@
 - future regressions are easier to diagnose because tests now explicitly cover the invalid-JSON LaTeX case
 - this change does not add automatic retry or parser-side silent repair; the chosen boundary is prompt hardening, not best-effort JSON mutation after the fact
 
-**Files**: `SlideTutor-AI/src/lib/ai/prompts.ts`, `SlideTutor-AI/src/lib/ai/prompts.test.ts`, `SlideTutor-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `SlideTutor-AI/src/lib/ai/artifacts.test.ts`
+**Files**: `GGlearn-AI/src/lib/ai/prompts.ts`, `GGlearn-AI/src/lib/ai/prompts.test.ts`, `GGlearn-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `GGlearn-AI/src/lib/ai/artifacts.test.ts`
 
 ---
 ## [2026-04-14] Restored Cloudflare Feedback Email Delivery Through Resend
@@ -60,7 +60,7 @@
 - feedback emails can now be answered directly from the operator inbox without manually copying the user's contact address
 - ops runbooks now include a dedicated `/api/feedback` email smoke check and a reminder to verify `APP_URL` against the actual delegated production domain
 
-**Files**: `SlideTutor-AI/src/worker/lib/notifications.ts`, `SlideTutor-AI/src/worker/lib/notifications.test.ts`, `SlideTutor-AI/README.md`, `docs/architecture/deployment.md`, `docs/operations/china-operator-checklist.md`
+**Files**: `GGlearn-AI/src/worker/lib/notifications.ts`, `GGlearn-AI/src/worker/lib/notifications.test.ts`, `GGlearn-AI/README.md`, `docs/architecture/deployment.md`, `docs/operations/china-operator-checklist.md`
 
 ---
 ## [2026-04-14] Documented platform-managed Gemini routing
@@ -74,7 +74,7 @@
 - Documentation now explicitly warns that `My API` GEMINI routing is browser-managed while `Platform API` routing is Worker-managed.
 - `.env.example`, deployment guidance, and backend model configuration docs now mention the new env vars so keeping BYOK and hosted routing concerns separated is clearer, while also preserving the current expectation that `GEMINI_API_KEY` remains configured for other server-side Gemini helpers.
 
-**Files**: `SlideTutor-AI/.env.example`, `docs/architecture/deployment.md`, `docs/user_guide/access-modes.md`, `docs/backend/platform-model-configuration.md`, `docs/changelog/CHANGELOG_TECH.md`
+**Files**: `GGlearn-AI/.env.example`, `docs/architecture/deployment.md`, `docs/user_guide/access-modes.md`, `docs/backend/platform-model-configuration.md`, `docs/changelog/CHANGELOG_TECH.md`
 
 ---
 
@@ -89,7 +89,7 @@
 - OpenAI-compatible explain behavior is unchanged
 - existing distill and chunk-regeneration token budgets remain unchanged
 
-**Files**: `SlideTutor-AI/api/lib/structuredOutputConfig.ts`, `SlideTutor-AI/api/lib/geminiGenerationConfig.test.ts`
+**Files**: `GGlearn-AI/api/lib/structuredOutputConfig.ts`, `GGlearn-AI/api/lib/geminiGenerationConfig.test.ts`
 
 ---
 ## [2026-04-14] Made Tutor Card Actions Discoverable On Touch Devices
@@ -104,7 +104,7 @@
 - note action controls now stop pointer/mouse-down propagation so tapping them does not accidentally start a note drag
 - targeted tutor tests now cover no-hover visibility and hover-capable regression protection
 
-**Files**: `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/components/CanvasTutor.test.tsx`, `docs/frontend/architecture.md`
+**Files**: `GGlearn-AI/src/components/CanvasTutor.tsx`, `GGlearn-AI/src/components/CanvasTutor.test.tsx`, `docs/frontend/architecture.md`
 
 ---
 ## [2026-04-14] Switched Main PDF Tutor Splitter To Pointer Events
@@ -119,7 +119,7 @@
 - resize cleanup now explicitly handles `pointercancel` in addition to normal drag completion
 - targeted app interaction tests now cover touch-style splitter dragging
 
-**Files**: `SlideTutor-AI/src/App.tsx`, `SlideTutor-AI/src/App.test.tsx`
+**Files**: `GGlearn-AI/src/App.tsx`, `GGlearn-AI/src/App.test.tsx`
 
 ---
 ## [2026-04-14] Hardened Tablet Slide Image Extraction Retries
@@ -134,7 +134,7 @@
 - regression tests now cover touch-device profile selection, cleanup-before-retry behavior, and image-first degradation when local text extraction fails
 - full repository typechecking is still blocked in this environment by missing `@cloudflare/*` and `@clerk/*` packages, so verification for this change relied on targeted extraction tests
 
-**Files**: `SlideTutor-AI/src/lib/pdf/extractPageData.ts`, `SlideTutor-AI/src/lib/pdf/extractPageData.test.ts`, `SlideTutor-AI/src/components/PdfViewer.tsx`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/src/lib/pdf/extractPageData.ts`, `GGlearn-AI/src/lib/pdf/extractPageData.test.ts`, `GGlearn-AI/src/components/PdfViewer.tsx`, `docs/frontend/data-flow.md`
 
 ---
 ## [2026-04-14] Added Official Or Custom Gemini Routing For My API
@@ -150,7 +150,7 @@
 - `Platform API` remains unchanged and still does not expose Gemini custom routing
 - backend Gemini runtime and capability probes now stay aligned on the same configured route
 
-**Files**: `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/components/SettingsModal.test.tsx`, `SlideTutor-AI/src/lib/i18n/index.ts`, `SlideTutor-AI/src/lib/api/apiClient.ts`, `SlideTutor-AI/src/lib/api/apiClient.test.ts`, `SlideTutor-AI/api/lib/env.ts`, `SlideTutor-AI/api/lib/env.test.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/api/lib/generateService.gemini.test.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`, `docs/backend/byok-capability-check.md`, `docs/user_guide/access-modes.md`
+**Files**: `GGlearn-AI/src/components/SettingsModal.tsx`, `GGlearn-AI/src/components/SettingsModal.test.tsx`, `GGlearn-AI/src/lib/i18n/index.ts`, `GGlearn-AI/src/lib/api/apiClient.ts`, `GGlearn-AI/src/lib/api/apiClient.test.ts`, `GGlearn-AI/api/lib/env.ts`, `GGlearn-AI/api/lib/env.test.ts`, `GGlearn-AI/api/lib/generateService.ts`, `GGlearn-AI/api/lib/generateService.gemini.test.ts`, `GGlearn-AI/api/lib/modelCapabilityProbe.ts`, `GGlearn-AI/api/lib/modelCapabilityProbe.test.ts`, `docs/backend/byok-capability-check.md`, `docs/user_guide/access-modes.md`
 
 ---
 ## [2026-04-14] Normalized Tutor Math Delimiters Before Markdown Rendering
@@ -164,7 +164,7 @@
 - new explain / follow-up / regenerate generations have a stricter delimiter contract, reducing future drift from weaker models
 - regression tests now cover both the render boundary and the prompt guidance
 
-**Files**: `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/components/AskYouTutor.tsx`, `SlideTutor-AI/src/components/NoteItem.tsx`, `SlideTutor-AI/src/components/ui/MarkdownMath.tsx`, `SlideTutor-AI/src/lib/markdown/normalizeMathDelimiters.ts`, `SlideTutor-AI/src/lib/ai/prompts.ts`, `SlideTutor-AI/src/components/CanvasTutor.test.tsx`, `SlideTutor-AI/src/lib/ai/prompts.test.ts`, `SlideTutor-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/src/components/CanvasTutor.tsx`, `GGlearn-AI/src/components/AskYouTutor.tsx`, `GGlearn-AI/src/components/NoteItem.tsx`, `GGlearn-AI/src/components/ui/MarkdownMath.tsx`, `GGlearn-AI/src/lib/markdown/normalizeMathDelimiters.ts`, `GGlearn-AI/src/lib/ai/prompts.ts`, `GGlearn-AI/src/components/CanvasTutor.test.tsx`, `GGlearn-AI/src/lib/ai/prompts.test.ts`, `GGlearn-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
 
 ---
 ## [2026-04-14] Fixed LlamaParse LayoutBlock Normalization For Official Nested Geometry
@@ -178,7 +178,7 @@
 - `knowledgeCards[].intent` now receives better parser anchors on the BYOK parser path without changing the frontend bbox contract
 - parser tests now cover the documented nested result shape rather than only a simplified flat mock
 
-**Files**: `SlideTutor-AI/api/lib/parser/llamaparseProvider.ts`, `SlideTutor-AI/api/lib/parser/llamaparseProvider.test.ts`, `SlideTutor-AI/vitest.node.config.ts`, `docs/backend/api-design.md`
+**Files**: `GGlearn-AI/api/lib/parser/llamaparseProvider.ts`, `GGlearn-AI/api/lib/parser/llamaparseProvider.test.ts`, `GGlearn-AI/vitest.node.config.ts`, `docs/backend/api-design.md`
 
 ---
 ## [2026-04-14] Tightened Explain BBox Grounding Around Parsed Regions
@@ -193,20 +193,20 @@
 - no-parser analyses keep the existing vision-led fallback instead of inheriting fake parser constraints
 - frontend architecture docs now explicitly describe the parsed-mode vs degraded-mode bbox behavior
 
-**Files**: `SlideTutor-AI/src/lib/ai/prompts.ts`, `SlideTutor-AI/src/lib/ai/prompts.test.ts`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/src/lib/ai/prompts.ts`, `GGlearn-AI/src/lib/ai/prompts.test.ts`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
 
 ---
 ## [2026-04-12] Added Explicit JSON Keyword To Custom Probe Prompt For DashScope Compatibility
 
 **What**: Updated the custom OpenAI-compatible capability probe prompt from a bare `{"ok":true}` response hint to an explicit `Return valid JSON only: ...` contract so providers that enforce JSON-mode prompt requirements do not fail the probe for prompt-shape reasons alone.
 
-**Why**: DashScope / Qwen capability checks surfaced an upstream error requiring the messages to contain the word `json` when `response_format` enters JSON mode. The formal SlideTutor runtime prompts already mention `JSON` repeatedly, but the lightweight probe prompt did not, which created a provider-specific false negative.
+**Why**: DashScope / Qwen capability checks surfaced an upstream error requiring the messages to contain the word `json` when `response_format` enters JSON mode. The formal GGlearn runtime prompts already mention `JSON` repeatedly, but the lightweight probe prompt did not, which created a provider-specific false negative.
 
 **Impact**:
 - custom DashScope / Qwen capability checks are less likely to fail on prompt wording alone
 - the probe remains lightweight while matching the JSON-mode expectations of the formal runtime more closely
 
-**Files**: `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`, `docs/backend/byok-capability-check.md`
+**Files**: `GGlearn-AI/api/lib/modelCapabilityProbe.ts`, `GGlearn-AI/api/lib/modelCapabilityProbe.test.ts`, `docs/backend/byok-capability-check.md`
 
 ---
 ## [2026-04-12] Collapsed Custom BYOK Probe To Two High-Value Runtime Contract Checks
@@ -220,7 +220,7 @@
 - streaming and structured-output failures are still separated where provider evidence allows it, but low-value standalone checks are gone
 - multimodal probing now uses a JPEG data URL instead of the earlier PNG placeholder
 
-**Files**: `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`, `docs/backend/byok-capability-check.md`, `docs/superpowers/specs/2026-04-12-byok-custom-capability-probe-design.md`
+**Files**: `GGlearn-AI/api/lib/modelCapabilityProbe.ts`, `GGlearn-AI/api/lib/modelCapabilityProbe.test.ts`, `docs/backend/byok-capability-check.md`, `docs/superpowers/specs/2026-04-12-byok-custom-capability-probe-design.md`
 
 ---
 ## [2026-04-12] Added Stage-Level Probe Logging And Corrected Final Custom BYOK Failure Semantics
@@ -234,7 +234,7 @@
 - final-stage custom failures now have semantics that match the probe contract more closely
 - old cached `VISION_UNSUPPORTED` states no longer continue the misleading vision-only wording in the settings UI
 
-**Files**: `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`, `SlideTutor-AI/src/worker/routes/model-capability-check.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/components/SettingsModal.test.tsx`, `SlideTutor-AI/src/lib/i18n/index.ts`, `docs/backend/byok-capability-check.md`, `docs/superpowers/specs/2026-04-12-byok-custom-capability-probe-design.md`
+**Files**: `GGlearn-AI/api/lib/modelCapabilityProbe.ts`, `GGlearn-AI/api/lib/modelCapabilityProbe.test.ts`, `GGlearn-AI/src/worker/routes/model-capability-check.ts`, `GGlearn-AI/src/components/SettingsModal.tsx`, `GGlearn-AI/src/components/SettingsModal.test.tsx`, `GGlearn-AI/src/lib/i18n/index.ts`, `docs/backend/byok-capability-check.md`, `docs/superpowers/specs/2026-04-12-byok-custom-capability-probe-design.md`
 
 ---
 ## [2026-04-12] Split Custom BYOK Capability Checks Into Progressive Probe Stages
@@ -246,9 +246,9 @@
 **Impact**:
 - custom BYOK failures can now distinguish baseline incompatibility, streaming incompatibility, structured-output incompatibility, and vision incompatibility
 - settings surface more useful failure copy without changing the broader ready/checking/retry workflow
-- the probe remains aligned with the real SlideTutor runtime contract instead of drifting into a synthetic toy check
+- the probe remains aligned with the real GGlearn runtime contract instead of drifting into a synthetic toy check
 
-**Files**: `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/components/SettingsModal.test.tsx`, `SlideTutor-AI/src/lib/i18n/index.ts`, `docs/backend/byok-capability-check.md`
+**Files**: `GGlearn-AI/api/lib/modelCapabilityProbe.ts`, `GGlearn-AI/api/lib/modelCapabilityProbe.test.ts`, `GGlearn-AI/src/components/SettingsModal.tsx`, `GGlearn-AI/src/components/SettingsModal.test.tsx`, `GGlearn-AI/src/lib/i18n/index.ts`, `docs/backend/byok-capability-check.md`
 
 ---
 ## [2026-04-12] Stopped Reporting Fake All-False Capability Summaries For Failed Custom BYOK Probes
@@ -262,7 +262,7 @@
 - `MODEL_CAPABILITY_CHECK_AUTH_FAILED`, `MODEL_CAPABILITY_CHECK_UNSUPPORTED`, and transient pending failures now preserve the stronger signal that the probe failed without trustworthy per-capability evidence
 - successful custom probes and known built-in model checks still return concrete capability summaries
 
-**Files**: `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`, `docs/backend/byok-capability-check.md`
+**Files**: `GGlearn-AI/api/lib/modelCapabilityProbe.ts`, `GGlearn-AI/api/lib/modelCapabilityProbe.test.ts`, `docs/backend/byok-capability-check.md`
 
 ---
 ## [2026-04-12] BYOK OpenAI-Compatible Settings And Capability Flow Overhaul
@@ -278,7 +278,7 @@
 - auth and unsupported-feature failures for custom probes are now visible as distinct capability-check outcomes
 - settings now show explicit loading during capability checks and provide a manual retry path after transient failures
 
-**Files**: `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/config/models.ts`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/lib/api/apiClient.ts`, `SlideTutor-AI/src/lib/i18n/index.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/api/lib/env.ts`, `docs/backend/platform-model-configuration.md`, `docs/frontend/architecture.md`
+**Files**: `GGlearn-AI/src/components/SettingsModal.tsx`, `GGlearn-AI/src/config/models.ts`, `GGlearn-AI/src/store/uiStore.ts`, `GGlearn-AI/src/lib/api/apiClient.ts`, `GGlearn-AI/src/lib/i18n/index.ts`, `GGlearn-AI/api/lib/modelCapabilityProbe.ts`, `GGlearn-AI/api/lib/generateService.ts`, `GGlearn-AI/api/lib/env.ts`, `docs/backend/platform-model-configuration.md`, `docs/frontend/architecture.md`
 
 ## [2026-04-11] Expanded Settings, Account Surface, And First-Wave UI i18n
 
@@ -294,18 +294,18 @@
 - credits/info overlays and compact account-card layout received follow-up fixes so disclosure popovers no longer collide with nearby actions or get clipped by the card container
 
 **Files**:
-- `SlideTutor-AI/src/components/ui/InfoTrigger.tsx`
-- `SlideTutor-AI/src/components/settings/PlatformApiSection.tsx`
-- `SlideTutor-AI/src/components/SettingsModal.tsx`
-- `SlideTutor-AI/src/components/Header/AppHeader.tsx`
-- `SlideTutor-AI/src/App.tsx`
-- `SlideTutor-AI/src/lib/i18n/index.ts`
-- `SlideTutor-AI/src/store/uiStore.ts`
-- `SlideTutor-AI/src/components/SettingsModal.test.tsx`
-- `SlideTutor-AI/src/components/settings/PlatformApiSection.test.tsx`
-- `SlideTutor-AI/src/components/Header/AppHeader.test.tsx`
-- `SlideTutor-AI/src/App.test.tsx`
-- `SlideTutor-AI/src/store/uiStore.test.ts`
+- `GGlearn-AI/src/components/ui/InfoTrigger.tsx`
+- `GGlearn-AI/src/components/settings/PlatformApiSection.tsx`
+- `GGlearn-AI/src/components/SettingsModal.tsx`
+- `GGlearn-AI/src/components/Header/AppHeader.tsx`
+- `GGlearn-AI/src/App.tsx`
+- `GGlearn-AI/src/lib/i18n/index.ts`
+- `GGlearn-AI/src/store/uiStore.ts`
+- `GGlearn-AI/src/components/SettingsModal.test.tsx`
+- `GGlearn-AI/src/components/settings/PlatformApiSection.test.tsx`
+- `GGlearn-AI/src/components/Header/AppHeader.test.tsx`
+- `GGlearn-AI/src/App.test.tsx`
+- `GGlearn-AI/src/store/uiStore.test.ts`
 
 ## [2026-04-11] Settings Page UI Optimization & Progressive Disclosure
 
@@ -327,7 +327,7 @@
 - `src/components/settings/PlatformApiSection.test.tsx`
 ## [2026-04-10] Removed Built-In Model Id Drift Between UI And Capability Registry
 
-**What**: Derived backend capability entries for current selectable built-in models from the shared model config in `SlideTutor-AI/src/config/models.ts` instead of maintaining a second hardcoded model-id list in `SlideTutor-AI/api/lib/modelCapabilities.ts`. Added a regression test that asserts every selectable shared model resolves to a non-`unknown` capability profile, while keeping a small backend-only legacy alias list for older saved model ids.
+**What**: Derived backend capability entries for current selectable built-in models from the shared model config in `GGlearn-AI/src/config/models.ts` instead of maintaining a second hardcoded model-id list in `GGlearn-AI/api/lib/modelCapabilities.ts`. Added a regression test that asserts every selectable shared model resolves to a non-`unknown` capability profile, while keeping a small backend-only legacy alias list for older saved model ids.
 
 **Why**: Changing a built-in model id in `models.ts` could previously leave the backend capability registry out of sync and trigger `MODEL_CAPABILITY_UNKNOWN` during analyze requests. That made Phase 09's "single capability truth" goal incomplete in practice.
 
@@ -336,7 +336,7 @@
 - selectable-model drift now fails in tests instead of surfacing first as a runtime analyze error
 - older saved model ids can still be recognized through explicit legacy aliases where needed
 
-**Files**: `SlideTutor-AI/src/config/models.ts`, `SlideTutor-AI/api/lib/modelCapabilities.ts`, `SlideTutor-AI/api/lib/modelCapabilities.test.ts`, `docs/backend/platform-model-configuration.md`
+**Files**: `GGlearn-AI/src/config/models.ts`, `GGlearn-AI/api/lib/modelCapabilities.ts`, `GGlearn-AI/api/lib/modelCapabilities.test.ts`, `docs/backend/platform-model-configuration.md`
 
 ---
 ## [2026-04-10] Aligned Hosted Regenerate Surface With `card_regenerate`
@@ -350,7 +350,7 @@
 - backend hosted pricing and frontend pricing display now include `card_regenerate = 1`
 - hosted regenerate failures now behave like other credit-backed actions instead of falling back to settings redirection
 
-**Files**: `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/api/lib/platformAccess/types.ts`, `SlideTutor-AI/api/lib/platformAccess/pricing.ts`, `SlideTutor-AI/src/lib/platformAccess/pricing.ts`, `SlideTutor-AI/src/hooks/useChunkRegenerate.ts`, `SlideTutor-AI/src/hooks/useFollowUp.ts`, `SlideTutor-AI/src/components/CreditsRequiredDialog.tsx`, `SlideTutor-AI/src/components/settings/PlatformApiSection.tsx`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/api/lib/generateService.ts`, `GGlearn-AI/api/lib/platformAccess/types.ts`, `GGlearn-AI/api/lib/platformAccess/pricing.ts`, `GGlearn-AI/src/lib/platformAccess/pricing.ts`, `GGlearn-AI/src/hooks/useChunkRegenerate.ts`, `GGlearn-AI/src/hooks/useFollowUp.ts`, `GGlearn-AI/src/components/CreditsRequiredDialog.tsx`, `GGlearn-AI/src/components/settings/PlatformApiSection.tsx`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`
 
 ---
 ## [2026-04-10] Removed Live `evaluate_note` Task Residue
@@ -364,7 +364,7 @@
 - hosted unsupported-action truth no longer carries dead-task residue
 - future hosted regenerate alignment work can focus on real product boundaries instead of historical leftovers
 
-**Files**: `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/api/lib/platformAccess/types.ts`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/api/lib/generateService.ts`, `GGlearn-AI/api/lib/platformAccess/types.ts`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`
 
 ---
 ## [2026-04-10] Completed Phase 09 Model Capability Registry and Parameter Hardening
@@ -380,7 +380,7 @@
 - `distill` now gets a slimmer explanation input while Focus mode quality remains anchored to the unchanged explanation artifact
 - clear capability/configuration failures can mark saved BYOK readiness stale for recheck, while `STRUCTURED_OUTPUT_TRUNCATED` does not
 
-**Files**: `SlideTutor-AI/api/lib/modelCapabilities.ts`, `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`, `SlideTutor-AI/api/lib/structuredOutputConfig.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/api/lib/geminiStreamDiagnostics.ts`, `SlideTutor-AI/src/worker/routes/model-capability-check.ts`, `SlideTutor-AI/src/config/models.ts`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/lib/api/apiClient.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/lib/ai/artifacts.ts`, `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `docs/backend/platform-model-configuration.md`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/api/lib/modelCapabilities.ts`, `GGlearn-AI/api/lib/modelCapabilityProbe.ts`, `GGlearn-AI/api/lib/structuredOutputConfig.ts`, `GGlearn-AI/api/lib/generateService.ts`, `GGlearn-AI/api/lib/geminiStreamDiagnostics.ts`, `GGlearn-AI/src/worker/routes/model-capability-check.ts`, `GGlearn-AI/src/config/models.ts`, `GGlearn-AI/src/store/uiStore.ts`, `GGlearn-AI/src/lib/api/apiClient.ts`, `GGlearn-AI/src/components/SettingsModal.tsx`, `GGlearn-AI/src/lib/ai/artifacts.ts`, `GGlearn-AI/src/hooks/useSlideAnalysis.ts`, `docs/backend/platform-model-configuration.md`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`
 
 ---
 ## [2026-04-07] Added Developer Guide For Platform Model Configuration
@@ -436,7 +436,7 @@
 - user-visible failures become easier to interpret without reading server code
 - API docs now reflect the more specific hosted parser failure contract
 
-**Files**: `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/api/lib/generateService.platform.test.ts`, `docs/backend/api-design.md`
+**Files**: `GGlearn-AI/api/lib/generateService.ts`, `GGlearn-AI/api/lib/generateService.platform.test.ts`, `docs/backend/api-design.md`
 
 ---
 ## [2026-04-06] Added Request-Id Parity And China Operator Runbooks
@@ -451,7 +451,7 @@
 - the repo now has one operator checklist for Cloudflare + Clerk + Volcengine + ZPAY smoke tests
 - future `parser BYOK` or `MinerU` discussions now have a dedicated evidence template instead of relying on chat memory
 
-**Files**: `SlideTutor-AI/src/worker/lib/observability.ts`, `SlideTutor-AI/src/worker/routes/parse.ts`, `SlideTutor-AI/src/worker/routes/parser-usage.ts`, `SlideTutor-AI/src/worker/routes/credits-balance.ts`, `SlideTutor-AI/src/worker/routes/recharge-intent.ts`, `SlideTutor-AI/src/worker/routes/payment-webhook.ts`, `SlideTutor-AI/test/workers/security-observability.worker.test.ts`, `SlideTutor-AI/test/workers/credits-balance.worker.test.ts`, `SlideTutor-AI/test/workers/recharge.worker.test.ts`, `docs/architecture/deployment.md`, `docs/backend/api-design.md`, `docs/README.md`, `docs/user_guide/README.md`, `docs/user_guide/access-modes.md`, `docs/operations/README.md`, `docs/operations/china-operator-checklist.md`, `docs/operations/china-operational-fit-report.md`
+**Files**: `GGlearn-AI/src/worker/lib/observability.ts`, `GGlearn-AI/src/worker/routes/parse.ts`, `GGlearn-AI/src/worker/routes/parser-usage.ts`, `GGlearn-AI/src/worker/routes/credits-balance.ts`, `GGlearn-AI/src/worker/routes/recharge-intent.ts`, `GGlearn-AI/src/worker/routes/payment-webhook.ts`, `GGlearn-AI/test/workers/security-observability.worker.test.ts`, `GGlearn-AI/test/workers/credits-balance.worker.test.ts`, `GGlearn-AI/test/workers/recharge.worker.test.ts`, `docs/architecture/deployment.md`, `docs/backend/api-design.md`, `docs/README.md`, `docs/user_guide/README.md`, `docs/user_guide/access-modes.md`, `docs/operations/README.md`, `docs/operations/china-operator-checklist.md`, `docs/operations/china-operational-fit-report.md`
 
 ---
 ## [2026-04-06] Replaced Mock Recharge Checkout With ZPAY
@@ -466,7 +466,7 @@
 - `/api/payment-webhook` must stay publicly reachable and answer valid callbacks with plain-text `success`
 - the backend now rejects signed-but-mismatched callback amounts before crediting the account
 
-**Files**: `SlideTutor-AI/api/lib/platformAccess/paymentAdapter.ts`, `SlideTutor-AI/api/lib/platformAccess/mockPaymentAdapter.ts`, `SlideTutor-AI/api/lib/platformAccess/zpayAdapter.ts`, `SlideTutor-AI/api/lib/platformAccess/zpayAdapter.test.ts`, `SlideTutor-AI/api/lib/platformAccess/service.ts`, `SlideTutor-AI/api/lib/platformAccess/service.test.ts`, `SlideTutor-AI/src/worker/routes/payment-webhook.ts`, `SlideTutor-AI/src/worker/index.ts`, `SlideTutor-AI/test/workers/recharge.worker.test.ts`, `SlideTutor-AI/.env.example`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`, `docs/architecture/deployment.md`
+**Files**: `GGlearn-AI/api/lib/platformAccess/paymentAdapter.ts`, `GGlearn-AI/api/lib/platformAccess/mockPaymentAdapter.ts`, `GGlearn-AI/api/lib/platformAccess/zpayAdapter.ts`, `GGlearn-AI/api/lib/platformAccess/zpayAdapter.test.ts`, `GGlearn-AI/api/lib/platformAccess/service.ts`, `GGlearn-AI/api/lib/platformAccess/service.test.ts`, `GGlearn-AI/src/worker/routes/payment-webhook.ts`, `GGlearn-AI/src/worker/index.ts`, `GGlearn-AI/test/workers/recharge.worker.test.ts`, `GGlearn-AI/.env.example`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`, `docs/architecture/deployment.md`
 
 ---
 ## [2026-04-06] Hardened Clerk Frontend Bootstrap For Cloudflare Deploys
@@ -481,7 +481,7 @@
 - Cloudflare/local builds can use either `VITE_CLERK_PUBLISHABLE_KEY` or `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - Worker-side `CLERK_SECRET_KEY` / `CLERK_JWT_KEY` are still required separately for bearer-token verification
 
-**Files**: `SlideTutor-AI/src/lib/auth/clerk.tsx`, `SlideTutor-AI/src/lib/auth/clerk.test.tsx`, `SlideTutor-AI/src/components/settings/PlatformApiSection.tsx`, `SlideTutor-AI/src/components/SettingsModal.test.tsx`, `SlideTutor-AI/vite.config.ts`, `docs/frontend/architecture.md`, `docs/architecture/deployment.md`
+**Files**: `GGlearn-AI/src/lib/auth/clerk.tsx`, `GGlearn-AI/src/lib/auth/clerk.test.tsx`, `GGlearn-AI/src/components/settings/PlatformApiSection.tsx`, `GGlearn-AI/src/components/SettingsModal.test.tsx`, `GGlearn-AI/vite.config.ts`, `docs/frontend/architecture.md`, `docs/architecture/deployment.md`
 
 ---
 ## [2026-04-06] Completed Phase 05-03 Volcengine Parser Runtime Cutover
@@ -496,7 +496,7 @@
 - local and Worker parser configuration now expects `VOLCENGINE_ACCESS_KEY_ID` and `VOLCENGINE_SECRET_ACCESS_KEY`
 - the repo no longer carries Azure parser runtime code as an accidental fallback path
 
-**Files**: `SlideTutor-AI/api/lib/parser/volcengineProvider.ts`, `SlideTutor-AI/api/lib/parser/volcengineProvider.test.ts`, `SlideTutor-AI/api/lib/parser/accessService.ts`, `SlideTutor-AI/api/generate.ts`, `SlideTutor-AI/api/lib/env.ts`, `SlideTutor-AI/api/parserAccess.test.ts`, `SlideTutor-AI/api/security.test.ts`, `SlideTutor-AI/src/worker/index.ts`, `SlideTutor-AI/test/workers/parse-route.worker.test.ts`, `SlideTutor-AI/test/workers/security-observability.worker.test.ts`, `SlideTutor-AI/.env.example`, `SlideTutor-AI/README.md`, `docs/backend/api-design.md`, `docs/architecture/deployment.md`, `docs/architecture/system-overview.md`, `docs/architecture/tech-stack.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/api/lib/parser/volcengineProvider.ts`, `GGlearn-AI/api/lib/parser/volcengineProvider.test.ts`, `GGlearn-AI/api/lib/parser/accessService.ts`, `GGlearn-AI/api/generate.ts`, `GGlearn-AI/api/lib/env.ts`, `GGlearn-AI/api/parserAccess.test.ts`, `GGlearn-AI/api/security.test.ts`, `GGlearn-AI/src/worker/index.ts`, `GGlearn-AI/test/workers/parse-route.worker.test.ts`, `GGlearn-AI/test/workers/security-observability.worker.test.ts`, `GGlearn-AI/.env.example`, `GGlearn-AI/README.md`, `docs/backend/api-design.md`, `docs/architecture/deployment.md`, `docs/architecture/system-overview.md`, `docs/architecture/tech-stack.md`, `docs/frontend/data-flow.md`
 
 ---
 ## [2026-04-05] Completed Phase 06 Platform API Credits and Recharge Boundary
@@ -513,7 +513,7 @@
 - recharge uses a provider-agnostic adapter boundary; the current `mock` adapter supports route verification and replay-safe webhook handling
 - no frontend recharge history or deduction history was added
 
-**Files**: `SlideTutor-AI/src/lib/auth/clerk.tsx`, `SlideTutor-AI/src/lib/api/apiClient.ts`, `SlideTutor-AI/src/lib/platformAccess/pricing.ts`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/components/settings/PlatformApiSection.tsx`, `SlideTutor-AI/src/components/settings/BuyCreditsDialog.tsx`, `SlideTutor-AI/src/components/CreditsRequiredDialog.tsx`, `SlideTutor-AI/src/App.tsx`, `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `SlideTutor-AI/src/hooks/useFollowUp.ts`, `SlideTutor-AI/src/hooks/useQuiz.ts`, `SlideTutor-AI/src/hooks/useChunkRegenerate.ts`, `SlideTutor-AI/api/lib/platformAccess/service.ts`, `SlideTutor-AI/api/lib/platformAccess/store.ts`, `SlideTutor-AI/api/lib/platformAccess/paymentAdapter.ts`, `SlideTutor-AI/api/lib/platformAccess/mockPaymentAdapter.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/src/worker/routes/generate.ts`, `SlideTutor-AI/src/worker/routes/credits-balance.ts`, `SlideTutor-AI/src/worker/routes/recharge-intent.ts`, `SlideTutor-AI/src/worker/routes/payment-webhook.ts`, `SlideTutor-AI/src/worker/index.ts`, `SlideTutor-AI/migrations/002_platform_access_credits.sql`, `SlideTutor-AI/.env.example`, `SlideTutor-AI/wrangler.jsonc`, `docs/backend/api-design.md`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/src/lib/auth/clerk.tsx`, `GGlearn-AI/src/lib/api/apiClient.ts`, `GGlearn-AI/src/lib/platformAccess/pricing.ts`, `GGlearn-AI/src/store/uiStore.ts`, `GGlearn-AI/src/components/SettingsModal.tsx`, `GGlearn-AI/src/components/settings/PlatformApiSection.tsx`, `GGlearn-AI/src/components/settings/BuyCreditsDialog.tsx`, `GGlearn-AI/src/components/CreditsRequiredDialog.tsx`, `GGlearn-AI/src/App.tsx`, `GGlearn-AI/src/hooks/useSlideAnalysis.ts`, `GGlearn-AI/src/hooks/useFollowUp.ts`, `GGlearn-AI/src/hooks/useQuiz.ts`, `GGlearn-AI/src/hooks/useChunkRegenerate.ts`, `GGlearn-AI/api/lib/platformAccess/service.ts`, `GGlearn-AI/api/lib/platformAccess/store.ts`, `GGlearn-AI/api/lib/platformAccess/paymentAdapter.ts`, `GGlearn-AI/api/lib/platformAccess/mockPaymentAdapter.ts`, `GGlearn-AI/api/lib/generateService.ts`, `GGlearn-AI/src/worker/routes/generate.ts`, `GGlearn-AI/src/worker/routes/credits-balance.ts`, `GGlearn-AI/src/worker/routes/recharge-intent.ts`, `GGlearn-AI/src/worker/routes/payment-webhook.ts`, `GGlearn-AI/src/worker/index.ts`, `GGlearn-AI/migrations/002_platform_access_credits.sql`, `GGlearn-AI/.env.example`, `GGlearn-AI/wrangler.jsonc`, `docs/backend/api-design.md`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
 
 ---
 ## [2026-04-05] Completed Phase 05 Parser Bootstrap and Provider Abstraction
@@ -529,7 +529,7 @@
 - parser usage truth now lives in Cloudflare D1 and depends on `USAGE_HASH_SECRET`
 - settings owns quota visibility, while the tutor canvas only reacts to actual degraded analysis results
 
-**Files**: `SlideTutor-AI/api/lib/parser/provider.ts`, `SlideTutor-AI/api/lib/parser/azureProvider.ts`, `SlideTutor-AI/api/lib/parser/usageStore.ts`, `SlideTutor-AI/api/lib/parser/accessService.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/src/worker/routes/generate.ts`, `SlideTutor-AI/src/worker/routes/parse.ts`, `SlideTutor-AI/src/worker/routes/parser-usage.ts`, `SlideTutor-AI/src/worker/index.ts`, `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/wrangler.jsonc`, `SlideTutor-AI/migrations/001_parser_usage_daily.sql`, `SlideTutor-AI/README.md`, `docs/backend/api-design.md`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/api/lib/parser/provider.ts`, `GGlearn-AI/api/lib/parser/azureProvider.ts`, `GGlearn-AI/api/lib/parser/usageStore.ts`, `GGlearn-AI/api/lib/parser/accessService.ts`, `GGlearn-AI/api/lib/generateService.ts`, `GGlearn-AI/src/worker/routes/generate.ts`, `GGlearn-AI/src/worker/routes/parse.ts`, `GGlearn-AI/src/worker/routes/parser-usage.ts`, `GGlearn-AI/src/worker/index.ts`, `GGlearn-AI/src/hooks/useSlideAnalysis.ts`, `GGlearn-AI/src/components/SettingsModal.tsx`, `GGlearn-AI/src/components/CanvasTutor.tsx`, `GGlearn-AI/wrangler.jsonc`, `GGlearn-AI/migrations/001_parser_usage_daily.sql`, `GGlearn-AI/README.md`, `docs/backend/api-design.md`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
 
 ---
 ## [2026-04-04] Completed Phase 04 BYOK-First Access Layer
@@ -545,7 +545,7 @@
 - `/api/generate` can prefer BYOK credentials while still falling back to preset env secrets during the migration window
 - parser setup is still not required from users in this phase because parsing remains platform-funded
 
-**Files**: `SlideTutor-AI/src/config/models.ts`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/lib/api/apiClient.ts`, `SlideTutor-AI/api/lib/env.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/src/store/uiStore.test.ts`, `SlideTutor-AI/src/lib/api/apiClient.test.ts`, `SlideTutor-AI/src/components/SettingsModal.test.tsx`, `SlideTutor-AI/api/security.test.ts`, `SlideTutor-AI/test/workers/generate-stream.worker.test.ts`, `SlideTutor-AI/README.md`, `docs/backend/api-design.md`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/src/config/models.ts`, `GGlearn-AI/src/store/uiStore.ts`, `GGlearn-AI/src/components/SettingsModal.tsx`, `GGlearn-AI/src/lib/api/apiClient.ts`, `GGlearn-AI/api/lib/env.ts`, `GGlearn-AI/api/lib/generateService.ts`, `GGlearn-AI/src/store/uiStore.test.ts`, `GGlearn-AI/src/lib/api/apiClient.test.ts`, `GGlearn-AI/src/components/SettingsModal.test.tsx`, `GGlearn-AI/api/security.test.ts`, `GGlearn-AI/test/workers/generate-stream.worker.test.ts`, `GGlearn-AI/README.md`, `docs/backend/api-design.md`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
 
 ---
 ## [2026-04-04] Completed Cloudflare-First Public Runtime Cutover
@@ -561,7 +561,7 @@
 - local operators should use `NOTIFICATION_PROVIDER`, `RESEND_API_KEY`, `NOTIFICATION_FROM_EMAIL`, `FEEDBACK_TO_EMAIL`, and `SECURITY_ALERT_TO_EMAIL` instead of legacy SMTP env vars
 - `@vercel/analytics` is no longer part of the frontend bootstrap path
 
-**Files**: `SlideTutor-AI/src/worker/routes/feedback.ts`, `SlideTutor-AI/src/worker/lib/notifications.ts`, `SlideTutor-AI/src/worker/index.ts`, `SlideTutor-AI/src/worker/routes/generate.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/package.json`, `SlideTutor-AI/src/main.tsx`, `SlideTutor-AI/.env.example`, `SlideTutor-AI/README.md`, `docs/architecture/deployment.md`, `docs/backend/api-design.md`, `docs/security/token-authentication.md`
+**Files**: `GGlearn-AI/src/worker/routes/feedback.ts`, `GGlearn-AI/src/worker/lib/notifications.ts`, `GGlearn-AI/src/worker/index.ts`, `GGlearn-AI/src/worker/routes/generate.ts`, `GGlearn-AI/src/components/SettingsModal.tsx`, `GGlearn-AI/package.json`, `GGlearn-AI/src/main.tsx`, `GGlearn-AI/.env.example`, `GGlearn-AI/README.md`, `docs/architecture/deployment.md`, `docs/backend/api-design.md`, `docs/security/token-authentication.md`
 
 ---
 ## [2026-04-03] Completed Phase 2 Artifact-First Downstream Migration
@@ -577,7 +577,7 @@
 - `followup` / `regenerate_followup` now receive structured explanation context
 - `regenerate_chunk` now uses native structured output for Gemini and OpenAI-compatible providers
 
-**Files**: `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `SlideTutor-AI/src/hooks/useFollowUp.ts`, `SlideTutor-AI/src/hooks/useChunkRegenerate.ts`, `SlideTutor-AI/src/hooks/usePdfLibrary.ts`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/components/PdfViewer.tsx`, `SlideTutor-AI/src/hooks/useQuiz.ts`, `SlideTutor-AI/api/lib/structuredOutputConfig.ts`
+**Files**: `GGlearn-AI/src/hooks/useSlideAnalysis.ts`, `GGlearn-AI/src/hooks/useFollowUp.ts`, `GGlearn-AI/src/hooks/useChunkRegenerate.ts`, `GGlearn-AI/src/hooks/usePdfLibrary.ts`, `GGlearn-AI/src/components/CanvasTutor.tsx`, `GGlearn-AI/src/components/PdfViewer.tsx`, `GGlearn-AI/src/hooks/useQuiz.ts`, `GGlearn-AI/api/lib/structuredOutputConfig.ts`
 
 ---
 ## [2026-04-03] Added Provider-Native Structured Output Adapters and Gemini Token Diagnostics
@@ -592,7 +592,7 @@
 - `generate_questions` and `evaluate_answers` are now covered by the same structured-output infrastructure as `explain` / `distill`
 - this provider-native layer now also powers `regenerate_chunk` after the downstream Phase 2 migration
 
-**Files**: `SlideTutor-AI/api/lib/structuredOutputConfig.ts`, `SlideTutor-AI/api/generate.ts`, `SlideTutor-AI/api/lib/geminiStreamDiagnostics.ts`, `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `SlideTutor-AI/src/lib/ai/artifacts.ts`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/api/lib/structuredOutputConfig.ts`, `GGlearn-AI/api/generate.ts`, `GGlearn-AI/api/lib/geminiStreamDiagnostics.ts`, `GGlearn-AI/src/hooks/useSlideAnalysis.ts`, `GGlearn-AI/src/lib/ai/artifacts.ts`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
 
 ---
 ## [2026-04-03] Migrated Explain / Distill Generation to Structured JSON Artifacts
@@ -607,7 +607,7 @@
 - `summary` compatibility text is now serialized as a fixed-order multiline context-memory block instead of a flattened single line
 - follow-up and chunk regeneration now resolve target cards from artifact order, which prepares the rest of the app for fully native JSON consumption
 
-**Files**: `SlideTutor-AI/src/lib/ai/artifacts.ts`, `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/hooks/useFollowUp.ts`, `SlideTutor-AI/src/hooks/useChunkRegenerate.ts`, `SlideTutor-AI/api/generate.ts`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/src/lib/ai/artifacts.ts`, `GGlearn-AI/src/hooks/useSlideAnalysis.ts`, `GGlearn-AI/src/components/CanvasTutor.tsx`, `GGlearn-AI/src/hooks/useFollowUp.ts`, `GGlearn-AI/src/hooks/useChunkRegenerate.ts`, `GGlearn-AI/api/generate.ts`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
 
 ---
 ## [2026-04-02] Removed End-of-Expand Jitter from Tutor Card Input Panels
@@ -621,7 +621,7 @@
 - focus is still deferred until after mount, but now avoids browser scroll jumps when supported
 - no theme tokens, note behavior, or panel timing constants changed
 
-**Files**: `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/lib/focusWithoutScroll.ts`, `SlideTutor-AI/src/lib/focusWithoutScroll.test.ts`
+**Files**: `GGlearn-AI/src/components/CanvasTutor.tsx`, `GGlearn-AI/src/lib/focusWithoutScroll.ts`, `GGlearn-AI/src/lib/focusWithoutScroll.test.ts`
 
 ## [2026-04-01] Twilight Zen Theme Visual Refinement and Reading Comfort Update
 
@@ -635,7 +635,7 @@
 - **Strict Semantic Protection**: Used a "Direct Override + Explicit Restoration" strategy to protect the `Thinking Prompt` and shared product accents from theme-specific color bleeding.
 - **Visual Hierarchy**: Card titles now naturally contrast with the softer body text by inheriting the conservatively tuned `--text-primary` (`#D1DBE8`).
 
-**Files**: `SlideTutor-AI/src/index.css`, `docs/frontend/architecture.md`
+**Files**: `GGlearn-AI/src/index.css`, `docs/frontend/architecture.md`
 
 ---
 ## [2026-04-01] Centralized Runtime Theme-Color Source for PWA Title Bar Sync
@@ -649,7 +649,7 @@
 - startup and post-boot theme synchronization stay aligned
 - regression coverage now checks both `index.html` boot behavior and `uiStore` theme changes
 
-**Files**: `SlideTutor-AI/index.html`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/store/uiStore.test.ts`, `SlideTutor-AI/src/test/themeBootScript.test.ts`
+**Files**: `GGlearn-AI/index.html`, `GGlearn-AI/src/store/uiStore.ts`, `GGlearn-AI/src/store/uiStore.test.ts`, `GGlearn-AI/src/test/themeBootScript.test.ts`
 
 ---
 ## [2026-04-01] Synchronized PWA Title Bar with Active Theme
@@ -663,7 +663,7 @@
 - Added a `updateMetaThemeColor` helper in `uiStore.ts` to push theme color updates to the DOM immediately upon theme change.
 - The early-boot script in `index.html` now reads `localStorage` to set the `theme-color` meta tag synchronously, eliminating any purple flash before React boots.
 
-**Files**: `SlideTutor-AI/public/manifest.json`, `SlideTutor-AI/index.html`, `SlideTutor-AI/src/store/uiStore.ts`
+**Files**: `GGlearn-AI/public/manifest.json`, `GGlearn-AI/index.html`, `GGlearn-AI/src/store/uiStore.ts`
 
 ---
 ## [2026-04-01] Refined Theme Icon Contrast and Reverted Highlight Color
@@ -676,7 +676,7 @@
 - Icons in shared product components (e.g., top header buttons, `Thinking Prompt`) now retain proper contrast against their backgrounds across all themes.
 - PDF explanation highlights use a uniform, borderless light gray overlay with a multiply blend mode, ensuring visual consistency and reading comfort regardless of the active theme.
 
-**Files**: `SlideTutor-AI/src/index.css`
+**Files**: `GGlearn-AI/src/index.css`
 
 ---
 ## [2026-04-01] Restored Shared Product Accents and Finalized Borderless Highlight Contract
@@ -691,7 +691,7 @@
 - Highlight overlays are now consistently borderless and fill-only in every theme, with one shared visual meaning.
 - Added a CSS contract regression test so future theme edits are less likely to reintroduce theme-specific overrides for shared accent tokens.
 
-**Files**: `SlideTutor-AI/src/index.css`, `SlideTutor-AI/src/components/Header/AppHeader.tsx`, `SlideTutor-AI/src/components/Header/AppHeader.test.tsx`, `SlideTutor-AI/src/lib/themeVisualContract.test.ts`, `docs/changelog/CHANGELOG_TECH.md`, `docs/frontend/architecture.md`
+**Files**: `GGlearn-AI/src/index.css`, `GGlearn-AI/src/components/Header/AppHeader.tsx`, `GGlearn-AI/src/components/Header/AppHeader.test.tsx`, `GGlearn-AI/src/lib/themeVisualContract.test.ts`, `docs/changelog/CHANGELOG_TECH.md`, `docs/frontend/architecture.md`
 
 ## [2026-04-01] Unified Theme Accent Semantics and Fixed Spring Meadow Header Contrast
 
@@ -705,7 +705,7 @@
 - Header accent controls now use explicit semantic classes, which prevents theme-wide icon color overrides from breaking readability on dark accent surfaces.
 - No feature behavior, theme toggle logic, persistence flow, or PDF interaction logic changed.
 
-**Files**: `SlideTutor-AI/src/index.css`, `SlideTutor-AI/src/components/Header/AppHeader.tsx`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/components/PdfViewer.tsx`, `SlideTutor-AI/src/components/Header/AppHeader.test.tsx`
+**Files**: `GGlearn-AI/src/index.css`, `GGlearn-AI/src/components/Header/AppHeader.tsx`, `GGlearn-AI/src/components/CanvasTutor.tsx`, `GGlearn-AI/src/components/PdfViewer.tsx`, `GGlearn-AI/src/components/Header/AppHeader.test.tsx`
 
 ## [2026-04-01] Replaced Unfriendly Themes with "Twilight Zen" Theme
 
@@ -721,7 +721,7 @@
 - Global theme state (`uiStore.ts`) and UI components (`ThemeToggle`, `SettingsModal`) updated.
 - No new external dependencies added.
 
-**Files**: `SlideTutor-AI/src/index.css`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/components/ThemeToggle.tsx`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/index.html`
+**Files**: `GGlearn-AI/src/index.css`, `GGlearn-AI/src/store/uiStore.ts`, `GGlearn-AI/src/components/ThemeToggle.tsx`, `GGlearn-AI/src/components/SettingsModal.tsx`, `GGlearn-AI/index.html`
 
 ## [2026-03-31] Added "Spring Meadow" Theme
 
@@ -736,7 +736,7 @@
 - Settings modal now lists all five themes.
 - No changes to existing themes or core architecture.
 
-**Files**: `SlideTutor-AI/src/index.css`, `SlideTutor-AI/src/store/uiStore.ts`, `SlideTutor-AI/src/components/ThemeToggle.tsx`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/index.html`, `docs/frontend/architecture.md`
+**Files**: `GGlearn-AI/src/index.css`, `GGlearn-AI/src/store/uiStore.ts`, `GGlearn-AI/src/components/ThemeToggle.tsx`, `GGlearn-AI/src/components/SettingsModal.tsx`, `GGlearn-AI/index.html`, `docs/frontend/architecture.md`
 
 ## [2026-04-01] Smoothed Tutor Card Input Panel Open/Close Motion
 
@@ -750,7 +750,7 @@
 - chunk rows still animate positional shifts, but no longer compound panel-size animation with full layout-size interpolation
 - added regression coverage for the new panel state and animation contract
 
-**Files**: `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/lib/tutorCardInputPanel.ts`, `SlideTutor-AI/src/lib/tutorCardInputPanel.test.ts`
+**Files**: `GGlearn-AI/src/components/CanvasTutor.tsx`, `GGlearn-AI/src/lib/tutorCardInputPanel.ts`, `GGlearn-AI/src/lib/tutorCardInputPanel.test.ts`
 
 ## [2026-03-31] Stabilized Note Drag Boundaries Across PDF and Tutor Views
 
@@ -764,7 +764,7 @@
 - note drag behavior is now covered by dedicated regression tests
 - frontend note interaction rules are documented in `docs/frontend/architecture.md`
 
-**Files**: `SlideTutor-AI/src/lib/noteDragUtils.ts`, `SlideTutor-AI/src/lib/noteDragUtils.test.ts`, `SlideTutor-AI/src/components/PdfViewer.tsx`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `docs/frontend/architecture.md`
+**Files**: `GGlearn-AI/src/lib/noteDragUtils.ts`, `GGlearn-AI/src/lib/noteDragUtils.test.ts`, `GGlearn-AI/src/components/PdfViewer.tsx`, `GGlearn-AI/src/components/CanvasTutor.tsx`, `docs/frontend/architecture.md`
 
 ## [2026-03-30] Tightened Explanation Highlight Contract
 
@@ -778,7 +778,7 @@
 - intro cards no longer expose the chunk regenerate action in the UI
 - no backend API shape changes and no new dependencies
 
-**Files**: `SlideTutor-AI/src/lib/ai/prompts.ts`, `SlideTutor-AI/src/lib/ai/prompts.test.ts`, `SlideTutor-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/components/CanvasTutor.test.tsx`
+**Files**: `GGlearn-AI/src/lib/ai/prompts.ts`, `GGlearn-AI/src/lib/ai/prompts.test.ts`, `GGlearn-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `GGlearn-AI/src/components/CanvasTutor.tsx`, `GGlearn-AI/src/components/CanvasTutor.test.tsx`
 
 ## [2026-03-29] Editorial Redesign of Quick Explain (Focus Mode)
 
@@ -793,7 +793,7 @@
 - Theme-aware design still relies on semantic tokens for contrast, with a few local accent styles in the component.
 - No changes to data structure, prompt logic, or backend services.
 
-**Files**: `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/lib/ai/quickExplainFormat.ts`, `SlideTutor-AI/src/lib/ai/quickExplainFormat.test.ts`
+**Files**: `GGlearn-AI/src/components/CanvasTutor.tsx`, `GGlearn-AI/src/lib/ai/quickExplainFormat.ts`, `GGlearn-AI/src/lib/ai/quickExplainFormat.test.ts`
 
 ## [2026-03-29] Added Drag-and-Drop and Copy-Paste PDF Upload
 
@@ -807,7 +807,7 @@
 - `processFile` now clears `pendingFile` upon successful execution.
 - No breaking changes.
 
-**Files**: `SlideTutor-AI/src/App.tsx`, `SlideTutor-AI/src/components/PdfViewer.tsx`
+**Files**: `GGlearn-AI/src/App.tsx`, `GGlearn-AI/src/components/PdfViewer.tsx`
 
 ## [2026-03-29] Product Renaming and Prompt Repositioning for Quick Explain
 
@@ -821,7 +821,7 @@
 - `useSlideAnalysis.ts` accepts `quickExplain` and maps it into the existing `cheatSheet` storage field
 - UI wording now reflects the product concept without breaking stored data
 
-**Files**: `SlideTutor-AI/src/lib/ai/prompts.ts`, `SlideTutor-AI/src/lib/ai/prompts.test.ts`, `SlideTutor-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `SlideTutor-AI/src/hooks/useSlideAnalysis.test.ts`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/src/lib/ai/prompts.ts`, `GGlearn-AI/src/lib/ai/prompts.test.ts`, `GGlearn-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `GGlearn-AI/src/hooks/useSlideAnalysis.ts`, `GGlearn-AI/src/hooks/useSlideAnalysis.test.ts`, `GGlearn-AI/src/components/CanvasTutor.tsx`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
 
 ## [2026-03-29] Intro Card Prompt Refinement for Teacher Persona
 
@@ -835,7 +835,7 @@
 - "Forbidden Styles" added to strictly block corporate/formal phrases and mechanical "Notice how..." instructions in the intro.
 - No changes to the 3-part artifact structure or the detailed knowledge card style.
 
-**Files**: `SlideTutor-AI/src/lib/ai/prompts.ts`, `SlideTutor-AI/src/lib/ai/prompts.test.ts`, `SlideTutor-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`
+**Files**: `GGlearn-AI/src/lib/ai/prompts.ts`, `GGlearn-AI/src/lib/ai/prompts.test.ts`, `GGlearn-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`
 
 ## [2026-03-29] Distill Stage Replaced Separate CheatSheet and Summary Requests
 
@@ -849,7 +849,7 @@
 - `cheatSheet` is now produced by text distillation rather than a second image-based request
 - `summary` continues to store `Context Memory`, but now comes from the same distill response as `cheatSheet`
 
-**Files**: `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `SlideTutor-AI/src/hooks/useSlideAnalysis.test.ts`, `SlideTutor-AI/src/lib/ai/prompts.ts`, `SlideTutor-AI/src/lib/ai/prompts.test.ts`, `SlideTutor-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `SlideTutor-AI/api/generate.ts`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
+**Files**: `GGlearn-AI/src/hooks/useSlideAnalysis.ts`, `GGlearn-AI/src/hooks/useSlideAnalysis.test.ts`, `GGlearn-AI/src/lib/ai/prompts.ts`, `GGlearn-AI/src/lib/ai/prompts.test.ts`, `GGlearn-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `GGlearn-AI/api/generate.ts`, `docs/frontend/architecture.md`, `docs/frontend/data-flow.md`
 
 ## [2026-03-29] Context Memory and Cheat Sheet Pipeline Overhaul
 
@@ -864,7 +864,7 @@
 - focus mode consumes `cheatSheet` directly
 - auto analysis is less likely to lose previous-slide continuity because it no longer depends on a stale closure snapshot
 
-**Files**: `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`, `SlideTutor-AI/src/hooks/useSlideAnalysis.test.ts`, `SlideTutor-AI/src/lib/ai/prompts.ts`, `SlideTutor-AI/src/lib/ai/prompts.test.ts`, `SlideTutor-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `SlideTutor-AI/src/components/CanvasTutor.tsx`, `SlideTutor-AI/src/hooks/useFollowUp.ts`, `SlideTutor-AI/src/hooks/usePdfLibrary.ts`, `SlideTutor-AI/src/types.ts`, `docs/superpowers/specs/2026-03-29-context-cheatsheet-design.md`, `docs/superpowers/plans/2026-03-29-context-cheatsheet-overhaul.md`
+**Files**: `GGlearn-AI/src/hooks/useSlideAnalysis.ts`, `GGlearn-AI/src/hooks/useSlideAnalysis.test.ts`, `GGlearn-AI/src/lib/ai/prompts.ts`, `GGlearn-AI/src/lib/ai/prompts.test.ts`, `GGlearn-AI/src/lib/ai/__snapshots__/prompts.test.ts.snap`, `GGlearn-AI/src/components/CanvasTutor.tsx`, `GGlearn-AI/src/hooks/useFollowUp.ts`, `GGlearn-AI/src/hooks/usePdfLibrary.ts`, `GGlearn-AI/src/types.ts`, `docs/superpowers/specs/2026-03-29-context-cheatsheet-design.md`, `docs/superpowers/plans/2026-03-29-context-cheatsheet-overhaul.md`
 
 
 ## [2026-03-28] 主题管理系统重构与持久化修复
@@ -1056,6 +1056,6 @@ signature = HMAC-SHA256(secret, payload)
 - `My API` users can opt into `LlamaParse` cleanly or stay on degraded no-parser analysis
 - worker throttling, platform parser issues, and BYOK parser failures now surface as separate codes: `ROUTE_RATE_LIMITED`, `PLATFORM_PARSER_*`, and `BYOK_PARSER_*`
 
-**Files**: `SlideTutor-AI/api/lib/parser/accessService.ts`, `SlideTutor-AI/api/lib/parser/volcengineProvider.ts`, `SlideTutor-AI/api/lib/parser/llamaparseProvider.ts`, `SlideTutor-AI/api/lib/generateService.ts`, `SlideTutor-AI/src/worker/routes/generate.ts`, `SlideTutor-AI/src/components/SettingsModal.tsx`, `SlideTutor-AI/src/lib/api/apiClient.ts`, `SlideTutor-AI/src/config/models.ts`, `SlideTutor-AI/src/store/uiStore.ts`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`, `docs/backend/platform-model-configuration.md`
+**Files**: `GGlearn-AI/api/lib/parser/accessService.ts`, `GGlearn-AI/api/lib/parser/volcengineProvider.ts`, `GGlearn-AI/api/lib/parser/llamaparseProvider.ts`, `GGlearn-AI/api/lib/generateService.ts`, `GGlearn-AI/src/worker/routes/generate.ts`, `GGlearn-AI/src/components/SettingsModal.tsx`, `GGlearn-AI/src/lib/api/apiClient.ts`, `GGlearn-AI/src/config/models.ts`, `GGlearn-AI/src/store/uiStore.ts`, `docs/backend/api-design.md`, `docs/frontend/data-flow.md`, `docs/backend/platform-model-configuration.md`
 
 ---

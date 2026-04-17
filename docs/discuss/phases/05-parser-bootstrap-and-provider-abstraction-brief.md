@@ -12,7 +12,7 @@
 
 ## Objective
 
-完成 Phase 05 的剩余关键工作，让 SlideTutor 的平台文档解析能力真正脱离 Azure 默认假设：
+完成 Phase 05 的剩余关键工作，让 GGlearn 的平台文档解析能力真正脱离 Azure 默认假设：
 
 - 平台自带 parser 改为 `Volcengine`
 - 继续保持平台保底解析 + 服务端额度控制 + degraded fallback
@@ -118,9 +118,9 @@ None.
 - `.planning/ROADMAP.md`
 - `.planning/REQUIREMENTS.md`
 - `docs/backend/api-design.md`
-- `SlideTutor-AI/api/lib/parser/accessService.ts`
-- `SlideTutor-AI/api/lib/parser/azureProvider.ts`
-- `SlideTutor-AI/api/generate.ts`
+- `GGlearn-AI/api/lib/parser/accessService.ts`
+- `GGlearn-AI/api/lib/parser/azureProvider.ts`
+- `GGlearn-AI/api/generate.ts`
 - `tmp_files/volcengine_document_parse_intellgence/2.md`
 - `tmp_files/volcengine_document_parse_intellgence/3.md`
 

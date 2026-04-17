@@ -172,8 +172,8 @@ Tests should avoid user-agent mocking. Prefer stubbing the interaction-capabilit
 
 Expected files:
 
-- `SlideTutor-AI/src/components/CanvasTutor.tsx`
-- `SlideTutor-AI/src/components/CanvasTutor.test.tsx`
+- `GGlearn-AI/src/components/CanvasTutor.tsx`
+- `GGlearn-AI/src/components/CanvasTutor.test.tsx`
 
 Optional only if needed:
 

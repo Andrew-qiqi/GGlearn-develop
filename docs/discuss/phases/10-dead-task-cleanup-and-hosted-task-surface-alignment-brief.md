@@ -103,11 +103,11 @@
 - `docs/backend/api-design.md`
 - `docs/frontend/data-flow.md`
 - `docs/changelog/CHANGELOG_TECH.md`
-- `SlideTutor-AI/api/lib/generateService.ts`
-- `SlideTutor-AI/api/lib/platformAccess/types.ts`
-- `SlideTutor-AI/src/lib/platformAccess/pricing.ts`
-- `SlideTutor-AI/src/hooks/useChunkRegenerate.ts`
-- `SlideTutor-AI/src/hooks/useFollowUp.ts`
+- `GGlearn-AI/api/lib/generateService.ts`
+- `GGlearn-AI/api/lib/platformAccess/types.ts`
+- `GGlearn-AI/src/lib/platformAccess/pricing.ts`
+- `GGlearn-AI/src/hooks/useChunkRegenerate.ts`
+- `GGlearn-AI/src/hooks/useFollowUp.ts`
 
 ## Open Questions
 

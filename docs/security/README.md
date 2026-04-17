@@ -1,6 +1,6 @@
 # 安全文档
 
-本模块包含 SlideTutor 项目的安全架构、Token 认证、速率限制，以及 `Platform API` credits 完整性边界相关文档。
+本模块包含 GGlearn 项目的安全架构、Token 认证、速率限制，以及 `Platform API` credits 完整性边界相关文档。
 
 ## 📚 文档列表
 

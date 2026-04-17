@@ -4,7 +4,7 @@
 
 ## Goal
 
-Reduce false negatives in `Custom OpenAI-compatible` capability checks and stop overstating probe failures as missing single capabilities when the current implementation is actually testing a composite SlideTutor runtime contract.
+Reduce false negatives in `Custom OpenAI-compatible` capability checks and stop overstating probe failures as missing single capabilities when the current implementation is actually testing a composite GGlearn runtime contract.
 
 ## Problem Summary
 
@@ -44,7 +44,7 @@ The custom probe should become a 2-stage contract check:
    - stream
    - `response_format = json_schema`
 
-This keeps the probe aligned with the actual SlideTutor runtime contract instead of drifting into synthetic toy checks.
+This keeps the probe aligned with the actual GGlearn runtime contract instead of drifting into synthetic toy checks.
 
 ### 3. Correct the failure semantics
 
@@ -56,7 +56,7 @@ Recommended replacement:
 
 Meaning:
 
-- the endpoint cannot satisfy the multimodal structured streaming contract SlideTutor currently requires
+- the endpoint cannot satisfy the multimodal structured streaming contract GGlearn currently requires
 
 It must **not** imply:
 

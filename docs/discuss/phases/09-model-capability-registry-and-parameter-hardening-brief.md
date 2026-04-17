@@ -12,7 +12,7 @@
 
 ## Objective
 
-把 SlideTutor 当前活跃 AI 任务的模型能力要求正式收口成一套后端真相，使新增模型、调整默认模型、接入 BYOK custom model 时都不会再因为参数不匹配、能力误判或文档漂移而产生脆弱故障。
+把 GGlearn 当前活跃 AI 任务的模型能力要求正式收口成一套后端真相，使新增模型、调整默认模型、接入 BYOK custom model 时都不会再因为参数不匹配、能力误判或文档漂移而产生脆弱故障。
 
 ## Problem
 
@@ -147,14 +147,14 @@
 - `.planning/ROADMAP.md`
 - `docs/backend/platform-model-configuration.md`
 - `docs/backend/api-design.md`
-- `SlideTutor-AI/src/config/models.ts`
-- `SlideTutor-AI/api/lib/env.ts`
-- `SlideTutor-AI/api/lib/structuredOutputConfig.ts`
-- `SlideTutor-AI/api/lib/generateService.ts`
-- `SlideTutor-AI/src/hooks/useSlideAnalysis.ts`
-- `SlideTutor-AI/src/hooks/useFollowUp.ts`
-- `SlideTutor-AI/src/hooks/useQuiz.ts`
-- `SlideTutor-AI/src/lib/ai/artifacts.ts`
+- `GGlearn-AI/src/config/models.ts`
+- `GGlearn-AI/api/lib/env.ts`
+- `GGlearn-AI/api/lib/structuredOutputConfig.ts`
+- `GGlearn-AI/api/lib/generateService.ts`
+- `GGlearn-AI/src/hooks/useSlideAnalysis.ts`
+- `GGlearn-AI/src/hooks/useFollowUp.ts`
+- `GGlearn-AI/src/hooks/useQuiz.ts`
+- `GGlearn-AI/src/lib/ai/artifacts.ts`
 - `https://ai.google.dev/gemini-api/docs/thinking`
 - `https://ai.google.dev/gemini-api/docs/structured-output`
 - `https://platform.openai.com/docs/guides/structured-outputs`

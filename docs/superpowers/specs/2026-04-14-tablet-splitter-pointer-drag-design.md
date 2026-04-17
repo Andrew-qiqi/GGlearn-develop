@@ -11,7 +11,7 @@ Success means:
 - desktop mouse drag still works
 - tablet touch drag works without requiring a special long-press delay
 - the existing width constraints remain intact
-- the change stays local to the current splitter implementation in `SlideTutor-AI/src/App.tsx`
+- the change stays local to the current splitter implementation in `GGlearn-AI/src/App.tsx`
 
 ## Current Context
 
@@ -136,7 +136,7 @@ Desktop behavior should continue to work because pointer events also cover mouse
 
 Files expected to change:
 
-- `SlideTutor-AI/src/App.tsx`
-- `SlideTutor-AI/src/App.test.tsx`
+- `GGlearn-AI/src/App.tsx`
+- `GGlearn-AI/src/App.test.tsx`
 
 No design-system or backend changes are required.

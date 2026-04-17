@@ -12,7 +12,7 @@
 
 ## Objective
 
-Complete the first hosted-access product path for SlideTutor without turning the app into a full billing SaaS.
+Complete the first hosted-access product path for GGlearn without turning the app into a full billing SaaS.
 
 The intended shape was:
 

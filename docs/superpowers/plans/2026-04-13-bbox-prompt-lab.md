@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED: Use superpowers:subagent-driven-development (if subagents available) or superpowers:executing-plans to implement this plan. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a standalone local experiment tool that compares bbox-grounded prompt behavior across Gemini and OpenAI-compatible models without modifying the main SlideTutor app.
+**Goal:** Build a standalone local experiment tool that compares bbox-grounded prompt behavior across Gemini and OpenAI-compatible models without modifying the main GGlearn app.
 
 **Architecture:** Add a static HTML lab in `tmp_files/` plus a tiny Node proxy in `tmp_files/` that accepts provider credentials, forwards one structured explain request, and returns raw model JSON. Keep the lab isolated from app runtime code; only reuse prompt concepts, not app wiring.
 

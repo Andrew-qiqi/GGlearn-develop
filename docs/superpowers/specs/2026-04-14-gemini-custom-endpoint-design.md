@@ -10,7 +10,7 @@ The immediate product need is to support relay-style Gemini access such as `Righ
 
 ## Problem Summary
 
-SlideTutor currently treats `Gemini` BYOK as a single path:
+GGlearn currently treats `Gemini` BYOK as a single path:
 
 - user selects a Gemini model from the shared model list
 - user enters a Gemini API key
@@ -396,7 +396,7 @@ Manual validation should cover:
 
 ## Final Product Call
 
-SlideTutor should support custom Gemini relay endpoints by extending the existing Gemini BYOK adapter, not by introducing a new provider or changing the hosted path.
+GGlearn should support custom Gemini relay endpoints by extending the existing Gemini BYOK adapter, not by introducing a new provider or changing the hosted path.
 
 The product surface stays intentionally narrow:
 

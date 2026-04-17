@@ -13,8 +13,8 @@
 ### Task 1: Lock the broken behavior with tests
 
 **Files:**
-- Modify: `SlideTutor-AI/src/components/CanvasTutor.test.tsx`
-- Modify: `SlideTutor-AI/src/lib/ai/prompts.test.ts`
+- Modify: `GGlearn-AI/src/components/CanvasTutor.test.tsx`
+- Modify: `GGlearn-AI/src/lib/ai/prompts.test.ts`
 
 - [ ] **Step 1: Write the failing renderer regression test**
 
@@ -37,11 +37,11 @@ Expected: FAIL because the current prompt text only says "use LaTeX for math for
 ### Task 2: Implement the shared renderer fix
 
 **Files:**
-- Create: `SlideTutor-AI/src/components/ui/MarkdownMath.tsx`
-- Create: `SlideTutor-AI/src/lib/markdown/normalizeMathDelimiters.ts`
-- Modify: `SlideTutor-AI/src/components/CanvasTutor.tsx`
-- Modify: `SlideTutor-AI/src/components/AskYouTutor.tsx`
-- Modify: `SlideTutor-AI/src/components/NoteItem.tsx`
+- Create: `GGlearn-AI/src/components/ui/MarkdownMath.tsx`
+- Create: `GGlearn-AI/src/lib/markdown/normalizeMathDelimiters.ts`
+- Modify: `GGlearn-AI/src/components/CanvasTutor.tsx`
+- Modify: `GGlearn-AI/src/components/AskYouTutor.tsx`
+- Modify: `GGlearn-AI/src/components/NoteItem.tsx`
 
 - [ ] **Step 1: Add a pure delimiter normalizer**
 
@@ -63,8 +63,8 @@ Expected: PASS with KaTeX nodes present.
 ### Task 3: Tighten upstream prompt guidance
 
 **Files:**
-- Modify: `SlideTutor-AI/src/lib/ai/prompts.ts`
-- Test: `SlideTutor-AI/src/lib/ai/prompts.test.ts`
+- Modify: `GGlearn-AI/src/lib/ai/prompts.ts`
+- Test: `GGlearn-AI/src/lib/ai/prompts.test.ts`
 
 - [ ] **Step 1: Add explicit delimiter rules**
 

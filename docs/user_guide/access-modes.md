@@ -4,7 +4,7 @@ Last updated: 2026-04-14
 
 ## Overview
 
-SlideTutor keeps two explicit access paths:
+GGlearn keeps two explicit access paths:
 
 - `My API`
 - `Platform API`
@@ -13,7 +13,7 @@ The product does not auto-switch providers for you. You choose the path that fit
 
 ## My API
 
-Use `My API` when you want SlideTutor to send model requests with your own credentials.
+Use `My API` when you want GGlearn to send model requests with your own credentials.
 
 Key traits:
 
@@ -43,12 +43,12 @@ Gemini note:
 
 ## Platform API
 
-Use `Platform API` when you want SlideTutor to use your account credits instead of browser-stored model keys.
+Use `Platform API` when you want GGlearn to use your account credits instead of browser-stored model keys.
 
 Key traits:
 
 - requires sign-in
-- uses your SlideTutor account credits
+- uses your GGlearn account credits
 - keeps parser platform-managed
 - keeps model choice explicit inside the supported platform boundary
 - does not expose Gemini custom routing settings

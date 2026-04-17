@@ -11,10 +11,10 @@ This note records the current BYOK capability-check contract for `My API`, espec
 
 Key files:
 
-- [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/config/models.ts)
-- [apiClient.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/lib/api/apiClient.ts)
-- [modelCapabilityProbe.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/api/lib/modelCapabilityProbe.ts)
-- [generateService.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/api/lib/generateService.ts)
+- [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/config/models.ts)
+- [apiClient.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/lib/api/apiClient.ts)
+- [modelCapabilityProbe.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/api/lib/modelCapabilityProbe.ts)
+- [generateService.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/api/lib/generateService.ts)
 
 ## Current frontend contract
 
@@ -98,7 +98,7 @@ For custom OpenAI-compatible models, probe results now split into three broad cl
 
 ### `usable`
 
-Returned when the custom probe succeeds and SlideTutor can treat the current endpoint/model as eligible for the current product contract.
+Returned when the custom probe succeeds and GGlearn can treat the current endpoint/model as eligible for the current product contract.
 
 ### `unusable`
 
@@ -113,7 +113,7 @@ Returned for clear non-retryable failures:
 - `MODEL_CAPABILITY_CHECK_STRUCTURED_OUTPUT_UNSUPPORTED`
   - current endpoint/model appears unable to satisfy the structured JSON-output part of the structured runtime contract
 - `MODEL_CAPABILITY_CHECK_MULTIMODAL_RUNTIME_CONTRACT_UNSUPPORTED`
-  - current endpoint/model failed the final `image + stream + structured-output` SlideTutor runtime contract probe
+  - current endpoint/model failed the final `image + stream + structured-output` GGlearn runtime contract probe
 
 Legacy note:
 
@@ -150,7 +150,7 @@ For `Custom OpenAI-compatible`, the backend now probes progressively with two hi
 1. streaming structured-output completion
 2. streaming structured-output completion with image input
 
-This preserves the real SlideTutor runtime contract while removing lower-value standalone text / streaming checks.
+This preserves the real GGlearn runtime contract while removing lower-value standalone text / streaming checks.
 
 Current observability now also logs stage-level probe events with request correlation and upstream failure summaries so route-level `200` logs no longer hide which internal stage failed.
 

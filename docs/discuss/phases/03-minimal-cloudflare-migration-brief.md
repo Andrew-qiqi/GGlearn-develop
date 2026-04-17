@@ -101,8 +101,8 @@ None.
 - `docs/architecture/deployment.md`
 - `docs/backend/api-design.md`
 - `docs/security/token-authentication.md`
-- `SlideTutor-AI/api/generate.ts`
-- `SlideTutor-AI/src/config/models.ts`
+- `GGlearn-AI/api/generate.ts`
+- `GGlearn-AI/src/config/models.ts`
 
 ## Open Questions
 

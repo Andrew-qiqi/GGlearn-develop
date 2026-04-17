@@ -1,6 +1,6 @@
 # 前端架构
 
-本文档描述 SlideTutor 项目的前端架构、状态管理和 API 客户端设计。
+本文档描述 GGlearn 项目的前端架构、状态管理和 API 客户端设计。
 
 最后更新：2026-04-14
 
@@ -588,7 +588,7 @@ const response = await apiGenerate({
 
 ### 主题管理 (Theme Management)
 
-SlideTutor 提供多主题支持，包括浅色 (Light)、护眼 (Eyecare)、暮色禅意 (Twilight Zen) 和春日草甸 (Spring Meadow) 模式。
+GGlearn 提供多主题支持，包括浅色 (Light)、护眼 (Eyecare)、暮色禅意 (Twilight Zen) 和春日草甸 (Spring Meadow) 模式。
 
 **实现机制：**
 - **全局状态**：主题状态存储在 `uiStore.ts` (Zustand) 中，使用 `Theme` 类型。

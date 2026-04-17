@@ -12,7 +12,7 @@
 
 ## Objective
 
-在完成最小 Cloudflare 迁移方向确认后，定义并准备实现首个公开版本的 `BYOK-first` 接入层，使用户能够通过自己的模型 API 使用 SlideTutor AI，而不必等待平台托管推理服务先成熟。
+在完成最小 Cloudflare 迁移方向确认后，定义并准备实现首个公开版本的 `BYOK-first` 接入层，使用户能够通过自己的模型 API 使用 GGlearn AI，而不必等待平台托管推理服务先成熟。
 
 ## Problem
 
@@ -92,9 +92,9 @@ None.
 - `.planning/REQUIREMENTS.md`
 - `docs/frontend/architecture.md`
 - `docs/frontend/data-flow.md`
-- `SlideTutor-AI/src/config/models.ts`
-- `SlideTutor-AI/api/generate.ts`
-- `SlideTutor-AI/api/lib/structuredOutputConfig.ts`
+- `GGlearn-AI/src/config/models.ts`
+- `GGlearn-AI/api/generate.ts`
+- `GGlearn-AI/api/lib/structuredOutputConfig.ts`
 
 ## Open Questions
 

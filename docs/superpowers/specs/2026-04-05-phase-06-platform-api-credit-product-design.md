@@ -9,7 +9,7 @@
 
 ## Pain Moment
 
-SlideTutor is moving from a pre-launch experiment into a real product. The core tutoring experience is already becoming clearer, but the hosted-access path still lacks a clean account and payment boundary.
+GGlearn is moving from a pre-launch experiment into a real product. The core tutoring experience is already becoming clearer, but the hosted-access path still lacks a clean account and payment boundary.
 
 Without that boundary, several problems appear at once:
 
@@ -50,7 +50,7 @@ This keeps the learning flow primary while making hosted access sustainable.
 
 ### 1. Two Parallel Modes
 
-SlideTutor keeps two parallel access modes:
+GGlearn keeps two parallel access modes:
 
 - `My API`
 - `Platform API`

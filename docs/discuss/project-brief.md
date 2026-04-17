@@ -10,7 +10,7 @@
 
 ## Project Identity
 
-- Project Name: SlideTutor AI
+- Project Name: GGlearn AI
 - One-line Summary: 一个以 PDF 课件为中心的 AI 学习助手，帮助学生解释 slide、保持上下文连续、做 follow-up 学习与 quiz 自测。
 - Core Value: 把静态课件变成更像老师带学的体验，同时给用户明确的接入边界：既支持 `My API`，也支持未来的 `Platform API`。
 
@@ -71,7 +71,7 @@
 - `Analyze` 被视为一个整体动作，包含 parse、explain、distill；只有整体成功才扣费。
 - 所有 hosted action 都遵循“成功才扣费”。
 - 平台自带文档解析服务的目标 provider 锁定为 `Volcengine`，核心原因是成本更低且更适合当前需求。
-- 当前 SlideTutor 的 parser 只需要稳定提供页面级文本块、块类型和规范化坐标，不需要追求 Azure 全量能力对等。
+- 当前 GGlearn 的 parser 只需要稳定提供页面级文本块、块类型和规范化坐标，不需要追求 Azure 全量能力对等。
 - parser BYOK 不是当前回到 GSD 的目标；如果未来真的要做中国用户友好的 parser BYOK，`MinerU` 是值得优先评估的候选，但暂不进入本轮实现范围。
 - 支付方向锁定为 `ZPAY`，但 payment 接入属于后续 Phase 06 收尾工作，不应混入当前 parser phase。
 - 下一次回到 GSD 时，应优先完成 Phase 05 的剩余工作：平台 parser provider 从 Azure 收口到 Volcengine，并清理遗留 Azure 路径。

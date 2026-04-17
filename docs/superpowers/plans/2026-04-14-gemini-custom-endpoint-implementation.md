@@ -22,51 +22,51 @@
 
 ### Frontend config and persisted access state
 
-- Modify: `SlideTutor-AI/src/config/models.ts`
+- Modify: `GGlearn-AI/src/config/models.ts`
   - add Gemini endpoint-mode types, defaults, normalization, and capability-snapshot helpers
-- Create: `SlideTutor-AI/src/config/models.test.ts`
+- Create: `GGlearn-AI/src/config/models.test.ts`
   - lock migration defaults and Gemini endpoint helper behavior
-- Modify: `SlideTutor-AI/src/store/uiStore.ts`
+- Modify: `GGlearn-AI/src/store/uiStore.ts`
   - persist Gemini endpoint fields and invalidate capability state when Gemini route changes
-- Modify: `SlideTutor-AI/src/store/uiStore.test.ts`
+- Modify: `GGlearn-AI/src/store/uiStore.test.ts`
   - cover legacy migration and stale capability invalidation for Gemini route changes
 
 ### Frontend settings UI and copy
 
-- Modify: `SlideTutor-AI/src/components/SettingsModal.tsx`
+- Modify: `GGlearn-AI/src/components/SettingsModal.tsx`
   - render Gemini endpoint-mode selector and conditional `Gemini Base URL` field
-- Modify: `SlideTutor-AI/src/components/SettingsModal.test.tsx`
+- Modify: `GGlearn-AI/src/components/SettingsModal.test.tsx`
   - cover `Google Official / Custom` UI behavior and compatibility readiness requirements
-- Modify: `SlideTutor-AI/src/lib/i18n/index.ts`
+- Modify: `GGlearn-AI/src/lib/i18n/index.ts`
   - add labels for Gemini endpoint mode and `Gemini Base URL`
 
 ### Frontend request assembly and capability snapshots
 
-- Modify: `SlideTutor-AI/src/lib/api/apiClient.ts`
+- Modify: `GGlearn-AI/src/lib/api/apiClient.ts`
   - send Gemini custom `baseURL` in BYOK generate and capability-check payloads
   - require `Gemini Base URL` only for `Custom`
   - store capability results against an endpoint-aware selection snapshot
-- Modify: `SlideTutor-AI/src/lib/api/apiClient.test.ts`
+- Modify: `GGlearn-AI/src/lib/api/apiClient.test.ts`
   - lock official/custom Gemini payload shape and snapshot behavior
 
 ### Backend access resolution
 
-- Modify: `SlideTutor-AI/api/lib/env.ts`
+- Modify: `GGlearn-AI/api/lib/env.ts`
   - extend Gemini BYOK access payload with optional `baseURL`
   - require BYOK Gemini API key in `mode = 'byok'`
   - return optional Gemini `baseURL` to runtime callers
-- Create: `SlideTutor-AI/api/lib/env.test.ts`
+- Create: `GGlearn-AI/api/lib/env.test.ts`
   - cover official/custom Gemini resolution and platform isolation
 
 ### Gemini runtime and capability probe
 
-- Modify: `SlideTutor-AI/api/lib/generateService.ts`
+- Modify: `GGlearn-AI/api/lib/generateService.ts`
   - instantiate `GoogleGenAI` with `baseURL` only for custom Gemini runtime calls
-- Create: `SlideTutor-AI/api/lib/generateService.gemini.test.ts`
+- Create: `GGlearn-AI/api/lib/generateService.gemini.test.ts`
   - verify official/custom Gemini constructor arguments
-- Modify: `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`
+- Modify: `GGlearn-AI/api/lib/modelCapabilityProbe.ts`
   - run provider probes against the active Gemini endpoint when Gemini uses a custom base URL
-- Modify: `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`
+- Modify: `GGlearn-AI/api/lib/modelCapabilityProbe.test.ts`
   - verify Gemini custom probes use `baseURL` and do not short-circuit to registry-only ready state
 
 ### Docs
@@ -81,10 +81,10 @@
 ## Task 1: Add Gemini endpoint-mode types, defaults, and selection snapshots
 
 **Files:**
-- Modify: `SlideTutor-AI/src/config/models.ts`
-- Create: `SlideTutor-AI/src/config/models.test.ts`
-- Modify: `SlideTutor-AI/src/store/uiStore.ts`
-- Test: `SlideTutor-AI/src/store/uiStore.test.ts`
+- Modify: `GGlearn-AI/src/config/models.ts`
+- Create: `GGlearn-AI/src/config/models.test.ts`
+- Modify: `GGlearn-AI/src/store/uiStore.ts`
+- Test: `GGlearn-AI/src/store/uiStore.test.ts`
 
 - [ ] **Step 1: Write the failing config and store tests**
 
@@ -125,7 +125,7 @@ it('creates a distinct capability selection snapshot for custom gemini routes', 
 });
 ```
 
-Add a store regression test in `SlideTutor-AI/src/store/uiStore.test.ts`:
+Add a store regression test in `GGlearn-AI/src/store/uiStore.test.ts`:
 
 ```ts
 it('marks capability metadata stale when the saved gemini endpoint mode changes', () => {
@@ -167,7 +167,7 @@ it('marks capability metadata stale when the saved gemini endpoint mode changes'
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- src/config/models.test.ts src/store/uiStore.test.ts
+cd GGlearn-AI && npm test -- src/config/models.test.ts src/store/uiStore.test.ts
 ```
 
 Expected:
@@ -206,7 +206,7 @@ export function resolveGeminiBaseURL(aiAccess: AiAccessSettings) {
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- src/config/models.test.ts src/store/uiStore.test.ts
+cd GGlearn-AI && npm test -- src/config/models.test.ts src/store/uiStore.test.ts
 ```
 
 Expected:
@@ -216,20 +216,20 @@ Expected:
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/src/config/models.ts SlideTutor-AI/src/config/models.test.ts SlideTutor-AI/src/store/uiStore.ts SlideTutor-AI/src/store/uiStore.test.ts
+git add GGlearn-AI/src/config/models.ts GGlearn-AI/src/config/models.test.ts GGlearn-AI/src/store/uiStore.ts GGlearn-AI/src/store/uiStore.test.ts
 git commit -m "feat: add gemini endpoint mode state"
 ```
 
 ## Task 2: Add Gemini endpoint-mode controls to Settings
 
 **Files:**
-- Modify: `SlideTutor-AI/src/components/SettingsModal.tsx`
-- Modify: `SlideTutor-AI/src/components/SettingsModal.test.tsx`
-- Modify: `SlideTutor-AI/src/lib/i18n/index.ts`
+- Modify: `GGlearn-AI/src/components/SettingsModal.tsx`
+- Modify: `GGlearn-AI/src/components/SettingsModal.test.tsx`
+- Modify: `GGlearn-AI/src/lib/i18n/index.ts`
 
 - [ ] **Step 1: Write the failing settings tests**
 
-Add tests in `SlideTutor-AI/src/components/SettingsModal.test.tsx` for:
+Add tests in `GGlearn-AI/src/components/SettingsModal.test.tsx` for:
 
 ```ts
 it('shows Google Official and Custom endpoint modes for Gemini BYOK', () => {
@@ -269,7 +269,7 @@ it('does not start Gemini compatibility checks until Gemini Base URL is filled f
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- src/components/SettingsModal.test.tsx
+cd GGlearn-AI && npm test -- src/components/SettingsModal.test.tsx
 ```
 
 Expected:
@@ -298,7 +298,7 @@ Implementation notes:
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- src/components/SettingsModal.test.tsx
+cd GGlearn-AI && npm test -- src/components/SettingsModal.test.tsx
 ```
 
 Expected:
@@ -308,19 +308,19 @@ Expected:
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/src/components/SettingsModal.tsx SlideTutor-AI/src/components/SettingsModal.test.tsx SlideTutor-AI/src/lib/i18n/index.ts
+git add GGlearn-AI/src/components/SettingsModal.tsx GGlearn-AI/src/components/SettingsModal.test.tsx GGlearn-AI/src/lib/i18n/index.ts
 git commit -m "feat: add gemini custom endpoint settings"
 ```
 
 ## Task 3: Send endpoint-aware Gemini BYOK payloads from the client
 
 **Files:**
-- Modify: `SlideTutor-AI/src/lib/api/apiClient.ts`
-- Modify: `SlideTutor-AI/src/lib/api/apiClient.test.ts`
+- Modify: `GGlearn-AI/src/lib/api/apiClient.ts`
+- Modify: `GGlearn-AI/src/lib/api/apiClient.test.ts`
 
 - [ ] **Step 1: Add failing client tests**
 
-Add tests in `SlideTutor-AI/src/lib/api/apiClient.test.ts` for:
+Add tests in `GGlearn-AI/src/lib/api/apiClient.test.ts` for:
 
 ```ts
 it('sends only apiKey for google-official gemini BYOK requests', async () => {
@@ -392,7 +392,7 @@ it('throws a Gemini Base URL configuration error when custom mode is incomplete'
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- src/lib/api/apiClient.test.ts
+cd GGlearn-AI && npm test -- src/lib/api/apiClient.test.ts
 ```
 
 Expected:
@@ -427,7 +427,7 @@ function resolveEffectiveGeminiAccess() {
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- src/lib/api/apiClient.test.ts
+cd GGlearn-AI && npm test -- src/lib/api/apiClient.test.ts
 ```
 
 Expected:
@@ -437,19 +437,19 @@ Expected:
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/src/lib/api/apiClient.ts SlideTutor-AI/src/lib/api/apiClient.test.ts
+git add GGlearn-AI/src/lib/api/apiClient.ts GGlearn-AI/src/lib/api/apiClient.test.ts
 git commit -m "feat: send gemini custom endpoint payloads"
 ```
 
 ## Task 4: Resolve Gemini custom access on the backend
 
 **Files:**
-- Modify: `SlideTutor-AI/api/lib/env.ts`
-- Create: `SlideTutor-AI/api/lib/env.test.ts`
+- Modify: `GGlearn-AI/api/lib/env.ts`
+- Create: `GGlearn-AI/api/lib/env.test.ts`
 
 - [ ] **Step 1: Write the failing env tests**
 
-Create `SlideTutor-AI/api/lib/env.test.ts` with:
+Create `GGlearn-AI/api/lib/env.test.ts` with:
 
 ```ts
 it('resolves google-official gemini byok access without a base URL', () => {
@@ -506,7 +506,7 @@ it('does not fall back to server secrets when gemini byok credentials are missin
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- api/lib/env.test.ts
+cd GGlearn-AI && npm test -- api/lib/env.test.ts
 ```
 
 Expected:
@@ -537,7 +537,7 @@ Implementation notes:
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- api/lib/env.test.ts
+cd GGlearn-AI && npm test -- api/lib/env.test.ts
 ```
 
 Expected:
@@ -547,21 +547,21 @@ Expected:
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/api/lib/env.ts SlideTutor-AI/api/lib/env.test.ts
+git add GGlearn-AI/api/lib/env.ts GGlearn-AI/api/lib/env.test.ts
 git commit -m "feat: resolve gemini custom endpoint access"
 ```
 
 ## Task 5: Make Gemini runtime and capability checks honor custom base URLs
 
 **Files:**
-- Modify: `SlideTutor-AI/api/lib/generateService.ts`
-- Create: `SlideTutor-AI/api/lib/generateService.gemini.test.ts`
-- Modify: `SlideTutor-AI/api/lib/modelCapabilityProbe.ts`
-- Modify: `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts`
+- Modify: `GGlearn-AI/api/lib/generateService.ts`
+- Create: `GGlearn-AI/api/lib/generateService.gemini.test.ts`
+- Modify: `GGlearn-AI/api/lib/modelCapabilityProbe.ts`
+- Modify: `GGlearn-AI/api/lib/modelCapabilityProbe.test.ts`
 
 - [ ] **Step 1: Write the failing runtime and probe tests**
 
-Create `SlideTutor-AI/api/lib/generateService.gemini.test.ts` with constructor-argument assertions:
+Create `GGlearn-AI/api/lib/generateService.gemini.test.ts` with constructor-argument assertions:
 
 ```ts
 it('constructs GoogleGenAI with baseURL for custom gemini runtime requests', async () => {
@@ -593,7 +593,7 @@ it('constructs GoogleGenAI without baseURL for official gemini runtime requests'
 });
 ```
 
-Add tests in `SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts` for:
+Add tests in `GGlearn-AI/api/lib/modelCapabilityProbe.test.ts` for:
 
 ```ts
 it('probes known gemini models through the custom base URL instead of returning registry-only usable', async () => {
@@ -628,7 +628,7 @@ it('probes known gemini models through the custom base URL instead of returning 
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- api/lib/generateService.gemini.test.ts api/lib/modelCapabilityProbe.test.ts
+cd GGlearn-AI && npm test -- api/lib/generateService.gemini.test.ts api/lib/modelCapabilityProbe.test.ts
 ```
 
 Expected:
@@ -665,7 +665,7 @@ function createGeminiClient(input: { apiKey: string; baseURL?: string }) {
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- api/lib/generateService.gemini.test.ts api/lib/modelCapabilityProbe.test.ts
+cd GGlearn-AI && npm test -- api/lib/generateService.gemini.test.ts api/lib/modelCapabilityProbe.test.ts
 ```
 
 Expected:
@@ -675,7 +675,7 @@ Expected:
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/api/lib/generateService.ts SlideTutor-AI/api/lib/generateService.gemini.test.ts SlideTutor-AI/api/lib/modelCapabilityProbe.ts SlideTutor-AI/api/lib/modelCapabilityProbe.test.ts
+git add GGlearn-AI/api/lib/generateService.ts GGlearn-AI/api/lib/generateService.gemini.test.ts GGlearn-AI/api/lib/modelCapabilityProbe.ts GGlearn-AI/api/lib/modelCapabilityProbe.test.ts
 git commit -m "feat: honor gemini custom endpoints at runtime"
 ```
 
@@ -700,8 +700,8 @@ Document:
 Run:
 
 ```bash
-cd SlideTutor-AI && npm run lint
-cd SlideTutor-AI && npm test -- src/config/models.test.ts src/store/uiStore.test.ts src/components/SettingsModal.test.tsx src/lib/api/apiClient.test.ts api/lib/env.test.ts api/lib/modelCapabilityProbe.test.ts api/lib/generateService.gemini.test.ts
+cd GGlearn-AI && npm run lint
+cd GGlearn-AI && npm test -- src/config/models.test.ts src/store/uiStore.test.ts src/components/SettingsModal.test.tsx src/lib/api/apiClient.test.ts api/lib/env.test.ts api/lib/modelCapabilityProbe.test.ts api/lib/generateService.gemini.test.ts
 ```
 
 Expected:
@@ -714,7 +714,7 @@ Expected:
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- api/lib/generateService.platform.test.ts test/workers/generate-stream.worker.test.ts
+cd GGlearn-AI && npm test -- api/lib/generateService.platform.test.ts test/workers/generate-stream.worker.test.ts
 ```
 
 Expected:

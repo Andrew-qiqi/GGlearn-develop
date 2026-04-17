@@ -12,12 +12,12 @@
 
 ## File Map
 
-- Modify: `SlideTutor-AI/src/components/CanvasTutor.tsx`
+- Modify: `GGlearn-AI/src/components/CanvasTutor.tsx`
   - Add a local hover-capability resolver with safe browser fallbacks.
   - Derive explanation-card and note-card action visibility from capability plus current open state.
   - Add stable test hooks for the action containers.
   - Prevent note action taps from interfering with note dragging.
-- Modify: `SlideTutor-AI/src/components/CanvasTutor.test.tsx`
+- Modify: `GGlearn-AI/src/components/CanvasTutor.test.tsx`
   - Add `matchMedia` stubbing helpers.
   - Add regression coverage for touch/no-hover visibility and desktop hover preservation.
 - Modify: `docs/frontend/architecture.md`
@@ -28,7 +28,7 @@
 ## Task 1: Add Failing Capability-Aware Regression Tests
 
 **Files:**
-- Modify: `SlideTutor-AI/src/components/CanvasTutor.test.tsx`
+- Modify: `GGlearn-AI/src/components/CanvasTutor.test.tsx`
 
 - [ ] **Step 1: Add a reusable `matchMedia` stub helper near the test setup**
 
@@ -157,7 +157,7 @@ it('keeps explanation card actions hover-gated on hover-capable devices', () => 
 Run:
 
 ```bash
-cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI
+cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI
 npx vitest --config vitest.node.config.ts run --environment jsdom --globals --exclude '.worktrees/**' src/components/CanvasTutor.test.tsx
 ```
 
@@ -168,7 +168,7 @@ Expected:
 - [ ] **Step 7: Commit the failing test checkpoint**
 
 ```bash
-cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI
+cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI
 git add src/components/CanvasTutor.test.tsx
 git commit -m "test(tutor): cover touch action visibility"
 ```
@@ -176,8 +176,8 @@ git commit -m "test(tutor): cover touch action visibility"
 ## Task 2: Add A Local Hover-Capability Boundary In `CanvasTutor`
 
 **Files:**
-- Modify: `SlideTutor-AI/src/components/CanvasTutor.tsx:1-760`
-- Verify with: `SlideTutor-AI/src/components/CanvasTutor.test.tsx`
+- Modify: `GGlearn-AI/src/components/CanvasTutor.tsx:1-760`
+- Verify with: `GGlearn-AI/src/components/CanvasTutor.test.tsx`
 
 - [ ] **Step 1: Add a local `readSupportsHover` helper above the component exports**
 
@@ -249,8 +249,8 @@ If a helper function is clearer, prefer one that returns class strings for:
 ## Task 3: Apply The Capability Boundary To Card And Note Actions
 
 **Files:**
-- Modify: `SlideTutor-AI/src/components/CanvasTutor.tsx:294-379`
-- Modify: `SlideTutor-AI/src/components/CanvasTutor.tsx:549-575`
+- Modify: `GGlearn-AI/src/components/CanvasTutor.tsx:294-379`
+- Modify: `GGlearn-AI/src/components/CanvasTutor.tsx:549-575`
 
 - [ ] **Step 1: Update the explanation-card action tray classes**
 
@@ -310,7 +310,7 @@ While adjusting classes, confirm the visible tray still sits at the current anch
 Run:
 
 ```bash
-cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI
+cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI
 npx vitest --config vitest.node.config.ts run --environment jsdom --globals --exclude '.worktrees/**' src/components/CanvasTutor.test.tsx
 ```
 
@@ -323,7 +323,7 @@ Expected:
 - [ ] **Step 6: Commit the implementation in the inner repo**
 
 ```bash
-cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI
+cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI
 git add src/components/CanvasTutor.tsx src/components/CanvasTutor.test.tsx
 git commit -m "fix(tutor): show card actions on touch devices"
 ```
@@ -357,14 +357,14 @@ Record:
 Run:
 
 ```bash
-cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI
+cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI
 npx vitest --config vitest.node.config.ts run --environment jsdom --globals --exclude '.worktrees/**' src/components/CanvasTutor.test.tsx
 ```
 
 Optional sanity check if time permits:
 
 ```bash
-cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI
+cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI
 npx vitest run src/App.test.tsx
 ```
 
@@ -373,7 +373,7 @@ Note in the final write-up that full repo typechecking is still known to be bloc
 - [ ] **Step 4: Commit the docs in the outer repo**
 
 ```bash
-cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main
+cd /Users/qiqicute/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main
 git add docs/frontend/architecture.md docs/changelog/CHANGELOG_TECH.md docs/superpowers/plans/2026-04-14-touch-card-actions-visibility.md
 git commit -m "docs: record touch card action visibility plan"
 ```

@@ -4,7 +4,7 @@ Last updated: 2026-04-14
 
 ## Current Target
 
-SlideTutor AI is now intended to ship from one Cloudflare Worker base URL.
+GGlearn AI is now intended to ship from one Cloudflare Worker base URL.
 
 The Worker is responsible for:
 
@@ -70,7 +70,7 @@ Deploy:
 npm run deploy
 ```
 
-Worker configuration lives in [wrangler.jsonc](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/wrangler.jsonc).
+Worker configuration lives in [wrangler.jsonc](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/wrangler.jsonc).
 
 ## Required Secrets
 
@@ -125,7 +125,7 @@ ZPAY note:
 - production recharge now uses the ZPAY page-redirect `submit.php` checkout flow
 - `APP_URL` must be the canonical public origin because the Worker derives both `return_url` and `notify_url` from it
 - `/api/payment-webhook` must remain publicly reachable and must answer successful callbacks with plain-text `success`
-- the full smoke sequence is documented in [china-operator-checklist.md](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/docs/operations/china-operator-checklist.md)
+- the full smoke sequence is documented in [china-operator-checklist.md](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/docs/operations/china-operator-checklist.md)
 
 ## Observability
 
@@ -165,4 +165,4 @@ When an operational route returns JSON errors, copy the `requestId` and search W
 - confirm `/api/recharge-intent` returns a ZPAY checkout URL when `PAYMENT_PROVIDER=zpay`
 - confirm `/api/payment-webhook` is reachable from the public internet and returns plain-text `success` for valid ZPAY callbacks
 - confirm direct browser navigation to `/api/*` does not return the SPA shell
-- for the full China-facing smoke procedure, use [china-operator-checklist.md](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/docs/operations/china-operator-checklist.md)
+- for the full China-facing smoke procedure, use [china-operator-checklist.md](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/docs/operations/china-operator-checklist.md)

@@ -22,13 +22,13 @@
 
 关键代码入口：
 
-- 前端模型配置：[SlideTutor-AI/src/config/models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/config/models.ts)
-- 前端设置页：[SlideTutor-AI/src/components/SettingsModal.tsx](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/components/SettingsModal.tsx)
-- 前端请求组装：[SlideTutor-AI/src/lib/api/apiClient.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/lib/api/apiClient.ts)
-- 前端持久化：[SlideTutor-AI/src/store/uiStore.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/store/uiStore.ts)
-- 后端密钥与提供商解析：[SlideTutor-AI/api/lib/env.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/api/lib/env.ts)
-- 后端生成主链路：[SlideTutor-AI/api/lib/generateService.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/api/lib/generateService.ts)
-- 环境变量样例：[SlideTutor-AI/.env.example](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/.env.example)
+- 前端模型配置：[GGlearn-AI/src/config/models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/config/models.ts)
+- 前端设置页：[GGlearn-AI/src/components/SettingsModal.tsx](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/components/SettingsModal.tsx)
+- 前端请求组装：[GGlearn-AI/src/lib/api/apiClient.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/lib/api/apiClient.ts)
+- 前端持久化：[GGlearn-AI/src/store/uiStore.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/store/uiStore.ts)
+- 后端密钥与提供商解析：[GGlearn-AI/api/lib/env.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/api/lib/env.ts)
+- 后端生成主链路：[GGlearn-AI/api/lib/generateService.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/api/lib/generateService.ts)
+- 环境变量样例：[GGlearn-AI/.env.example](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/.env.example)
 
 ## 决策树
 
@@ -51,7 +51,7 @@
 
 你通常只需要改前端模型清单文件：
 
-- [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/config/models.ts)
+- [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/config/models.ts)
 
 主要改动点：
 
@@ -73,7 +73,7 @@
 
 当前默认模型定义在：
 
-- [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/config/models.ts#L44)
+- [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/config/models.ts#L44)
 
 操作步骤：
 
@@ -95,7 +95,7 @@ export const DEFAULT_SELECTED_MODEL: SelectedModel = {
 
 - 这个默认值只影响“没有保存过 `slide_tutor_model` 的用户”
 - 已有用户的模型选择会被本地持久化覆盖
-- 持久化逻辑在 [uiStore.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/store/uiStore.ts)
+- 持久化逻辑在 [uiStore.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/store/uiStore.ts)
 
 这意味着：
 
@@ -112,7 +112,7 @@ export const DEFAULT_SELECTED_MODEL: SelectedModel = {
 
 操作步骤：
 
-1. 在 [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/config/models.ts#L115) 的 `MODEL_CONFIG` 中加入新模型
+1. 在 [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/config/models.ts#L115) 的 `MODEL_CONFIG` 中加入新模型
 2. 如果它属于 `openai-compatible`，写上正确的 `endpointPreset`
 3. 如果希望它成为默认模型，再同步改 `DEFAULT_SELECTED_MODEL`
 4. 验证前端设置页能选到它，且请求体里带对了 `providerId / modelId / endpointPreset`
@@ -154,20 +154,20 @@ Qwen 示例：
 
 ### 前端要改什么
 
-先改 [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/config/models.ts)：
+先改 [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/config/models.ts)：
 
 1. 扩展 `OpenAiCompatibleEndpointPreset` 类型
 2. 在 `OPENAI_COMPATIBLE_ENDPOINTS` 里加入新 provider 的 `label + baseURL`
 3. 在 `MODEL_CONFIG` 里挂上该 provider 下的一个或多个模型
 
-再改 [SettingsModal.tsx](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/components/SettingsModal.tsx#L357)：
+再改 [SettingsModal.tsx](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/components/SettingsModal.tsx#L357)：
 
 1. 在 `Endpoint Preset` 下拉框里加入新 `<option>`
 2. 保证切换预设时，`baseURL` 能自动切到你新配置的 `baseURL`
 
 ### 后端要改什么
 
-改 [env.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/api/lib/env.ts)：
+改 [env.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/api/lib/env.ts)：
 
 1. 扩展 `SupportedProviderId`
 2. 扩展 `OpenAiCompatibleEndpointPreset`
@@ -178,7 +178,7 @@ Qwen 示例：
 
 再改环境变量样例：
 
-- [SlideTutor-AI/.env.example](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/.env.example)
+- [GGlearn-AI/.env.example](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/.env.example)
 
 例如新增：
 
@@ -207,12 +207,12 @@ DEEPSEEK_API_KEY=""
 
 你至少要改这些位置：
 
-1. [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/config/models.ts)
-2. [apiClient.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/lib/api/apiClient.ts#L117)
-3. [env.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/api/lib/env.ts#L133)
-4. [generateService.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/api/lib/generateService.ts#L86)
-5. [generateService.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/api/lib/generateService.ts#L659)
-6. [SlideTutor-AI/.env.example](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/.env.example)
+1. [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/config/models.ts)
+2. [apiClient.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/lib/api/apiClient.ts#L117)
+3. [env.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/api/lib/env.ts#L133)
+4. [generateService.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/api/lib/generateService.ts#L86)
+5. [generateService.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/api/lib/generateService.ts#L659)
+6. [GGlearn-AI/.env.example](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/.env.example)
 
 你需要新增的能力通常包括：
 
@@ -233,8 +233,8 @@ DEEPSEEK_API_KEY=""
 
 平台模式下，`custom` 会被后端拒绝：
 
-- [env.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/api/lib/env.ts#L153)
-- [generateService.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/api/lib/generateService.ts#L578)
+- [env.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/api/lib/env.ts#L153)
+- [generateService.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/api/lib/generateService.ts#L578)
 
 原因很直接：
 
@@ -248,7 +248,7 @@ DEEPSEEK_API_KEY=""
 
 当前设置页的模型下拉框是共享的：
 
-- [SettingsModal.tsx](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/components/SettingsModal.tsx#L288)
+- [SettingsModal.tsx](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/components/SettingsModal.tsx#L288)
 
 这意味着：
 
@@ -262,7 +262,7 @@ DEEPSEEK_API_KEY=""
 
 ### 场景 A：只改 platform 默认模型
 
-1. 改 [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/config/models.ts#L44) 的 `DEFAULT_SELECTED_MODEL`
+1. 改 [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/config/models.ts#L44) 的 `DEFAULT_SELECTED_MODEL`
 2. 确认该 provider 的服务端密钥已存在
 3. 用全新浏览器会话打开设置页，确认默认值变化
 4. 在 `Platform API` 模式下跑一次 `Analyze` 和 `Follow-up`
@@ -288,7 +288,7 @@ DEEPSEEK_API_KEY=""
 
 代码改完后，至少做这几步：
 
-1. 在 `SlideTutor-AI` 目录运行 `npm run lint`
+1. 在 `GGlearn-AI` 目录运行 `npm run lint`
 2. 运行 `npm test -- src/lib/api/apiClient.test.ts src/components/SettingsModal.test.tsx api/lib/generateService.platform.test.ts`
 3. 如果改到了 Worker 鉴权或 platform 路由，再运行 `npm run test:workers -- test/workers/platform-generate.worker.test.ts`
 4. 本地打开设置页，确认模型下拉框、预设切换、默认值都符合预期
@@ -345,7 +345,7 @@ This section overrides several older assumptions about `My API` OpenAI-compatibl
 
 OpenAI-compatible BYOK credentials are now separated by preset instead of sharing one runtime key.
 
-Current persisted fields in [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/config/models.ts) and [uiStore.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/store/uiStore.ts) include:
+Current persisted fields in [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/config/models.ts) and [uiStore.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/store/uiStore.ts) include:
 
 - `qwenApiKey`
 - `doubaoApiKey`
@@ -394,7 +394,7 @@ This means `Compatibility check pending` should no longer be the steady-state su
 
 When you add or change a model now, frontend list updates are not enough.
 
-- Current selectable built-in models live in `SlideTutor-AI/src/config/models.ts`, and backend capability truth for those models is derived from that shared config in `SlideTutor-AI/api/lib/modelCapabilities.ts`.
+- Current selectable built-in models live in `GGlearn-AI/src/config/models.ts`, and backend capability truth for those models is derived from that shared config in `GGlearn-AI/api/lib/modelCapabilities.ts`.
 - A small backend-only legacy capability alias list may still exist for older saved model ids, but new selectable built-ins should not be maintained in a second manual registry.
 - Save-time BYOK checks go through `POST /api/model-capability-check`.
 - Persisted readiness state lives in `selectedModel + aiAccess + modelCapabilityCheck`, not in raw provider secrets.
@@ -418,7 +418,7 @@ Correction for the earlier "Case 1: only replace an existing model id" section:
 
 - That older guidance is no longer accurate after Phase 09.
 - Replacing a built-in selectable model id is no longer a frontend-only change.
-- The safe rule now is: update the shared model definition in `SlideTutor-AI/src/config/models.ts`, verify backend capability resolution still recognizes it, then run a real request smoke test.
+- The safe rule now is: update the shared model definition in `GGlearn-AI/src/config/models.ts`, verify backend capability resolution still recognizes it, then run a real request smoke test.
 
 ## 内置模型新增操作手册
 
@@ -432,7 +432,7 @@ Correction for the earlier "Case 1: only replace an existing model id" section:
 
 新增内置模型的唯一主入口是：
 
-- `SlideTutor-AI/src/config/models.ts`
+- `GGlearn-AI/src/config/models.ts`
 
 当前实现下，前端可选模型列表和后端内置模型 capability truth 都从这份共享配置出发。不要再去单独维护第二份“当前内置模型 id 列表”。
 
@@ -452,7 +452,7 @@ Correction for the earlier "Case 1: only replace an existing model id" section:
 
 编辑：
 
-- [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/src/config/models.ts)
+- [models.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/src/config/models.ts)
 
 在 `MODEL_CONFIG.providers[].models[]` 中新增模型，并补全它的共享 capability 元数据。
 
@@ -525,7 +525,7 @@ OpenAI-compatible 示例：
 
 这时可以在：
 
-- [modelCapabilities.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/SlideTutor-AI-main/SlideTutor-AI/api/lib/modelCapabilities.ts)
+- [modelCapabilities.ts](/c:/Users/hoo/Documents/z_cqmeng_file/local_repository/GGlearn-AI-main/GGlearn-AI/api/lib/modelCapabilities.ts)
 
 里的 `LEGACY_MODEL_CAPABILITY_REGISTRY` 保留一条旧 id 映射，让旧选择不会立刻在运行时掉成 `MODEL_CAPABILITY_UNKNOWN`。
 
@@ -550,7 +550,7 @@ OpenAI-compatible 示例：
 
 新增内置模型后，至少做下面这些验证：
 
-1. 在 `SlideTutor-AI` 目录运行：
+1. 在 `GGlearn-AI` 目录运行：
    `npm test -- api/lib/modelCapabilities.test.ts api/lib/modelCapabilityProbe.test.ts api/lib/generateService.platform.test.ts`
 2. 运行：
    `npm run lint`

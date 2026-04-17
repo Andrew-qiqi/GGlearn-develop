@@ -23,22 +23,22 @@
 
 ### Backend provider-access resolution
 
-- Modify: `SlideTutor-AI/api/lib/env.ts`
+- Modify: `GGlearn-AI/api/lib/env.ts`
   - branch Gemini provider resolution by access mode
   - add platform-only custom Gemini env parsing
   - validate `PLATFORM_GEMINI_BASE_URL` as an absolute URL
   - require `PLATFORM_GEMINI_API_KEY` only when hosted custom Gemini is enabled
-- Modify: `SlideTutor-AI/api/lib/env.test.ts`
+- Modify: `GGlearn-AI/api/lib/env.test.ts`
   - cover hosted official/custom Gemini env resolution and misconfiguration failures
 
 ### Gemini runtime regression coverage
 
-- Modify: `SlideTutor-AI/api/lib/generateService.gemini.test.ts`
+- Modify: `GGlearn-AI/api/lib/generateService.gemini.test.ts`
   - lock that hosted Gemini still constructs `GoogleGenAI` with or without `httpOptions.baseUrl` based on resolved hosted access
 
 ### Env examples and docs
 
-- Modify: `SlideTutor-AI/.env.example`
+- Modify: `GGlearn-AI/.env.example`
   - add `PLATFORM_GEMINI_BASE_URL`
   - add `PLATFORM_GEMINI_API_KEY`
 - Modify: `docs/architecture/deployment.md`
@@ -53,12 +53,12 @@
 ## Task 1: Resolve Hosted Gemini Route From Worker Env
 
 **Files:**
-- Modify: `SlideTutor-AI/api/lib/env.ts`
-- Modify: `SlideTutor-AI/api/lib/env.test.ts`
+- Modify: `GGlearn-AI/api/lib/env.ts`
+- Modify: `GGlearn-AI/api/lib/env.test.ts`
 
 - [ ] **Step 1: Write the failing env tests**
 
-Add tests in `SlideTutor-AI/api/lib/env.test.ts` for hosted Gemini:
+Add tests in `GGlearn-AI/api/lib/env.test.ts` for hosted Gemini:
 
 ```ts
 it('uses GEMINI_API_KEY for platform gemini when PLATFORM_GEMINI_BASE_URL is empty', () => {
@@ -136,7 +136,7 @@ it('rejects platform custom gemini when PLATFORM_GEMINI_BASE_URL is not a valid 
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- api/lib/env.test.ts
+cd GGlearn-AI && npm test -- api/lib/env.test.ts
 ```
 
 Expected:
@@ -145,7 +145,7 @@ Expected:
 
 - [ ] **Step 3: Implement hosted Gemini env resolution**
 
-Implementation notes for `SlideTutor-AI/api/lib/env.ts`:
+Implementation notes for `GGlearn-AI/api/lib/env.ts`:
 
 - keep the current BYOK Gemini branch unchanged
 - inside the `input.access?.mode === 'platform' && input.providerId === 'gemini'` path:
@@ -186,7 +186,7 @@ function resolvePlatformGeminiAccess(env: EnvBag) {
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- api/lib/env.test.ts
+cd GGlearn-AI && npm test -- api/lib/env.test.ts
 ```
 
 Expected:
@@ -196,18 +196,18 @@ Expected:
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/api/lib/env.ts SlideTutor-AI/api/lib/env.test.ts
+git add GGlearn-AI/api/lib/env.ts GGlearn-AI/api/lib/env.test.ts
 git commit -m "feat: resolve platform gemini custom endpoints"
 ```
 
 ## Task 2: Lock Hosted Gemini Runtime Construction
 
 **Files:**
-- Modify: `SlideTutor-AI/api/lib/generateService.gemini.test.ts`
+- Modify: `GGlearn-AI/api/lib/generateService.gemini.test.ts`
 
 - [ ] **Step 1: Add hosted Gemini constructor regression tests**
 
-Extend `SlideTutor-AI/api/lib/generateService.gemini.test.ts` with platform-mode cases:
+Extend `GGlearn-AI/api/lib/generateService.gemini.test.ts` with platform-mode cases:
 
 ```ts
 it('constructs GoogleGenAI without baseURL for official platform gemini requests', async () => {
@@ -274,7 +274,7 @@ it('constructs GoogleGenAI with baseURL for custom platform gemini requests', as
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- api/lib/env.test.ts api/lib/generateService.gemini.test.ts
+cd GGlearn-AI && npm test -- api/lib/env.test.ts api/lib/generateService.gemini.test.ts
 ```
 
 Expected:
@@ -285,7 +285,7 @@ Expected:
 
 Implementation note:
 
-- existing `createGeminiClient({ apiKey, baseURL })` in `SlideTutor-AI/api/lib/generateService.ts` already supports both official and custom Gemini construction
+- existing `createGeminiClient({ apiKey, baseURL })` in `GGlearn-AI/api/lib/generateService.ts` already supports both official and custom Gemini construction
 - this task is primarily regression coverage for hosted mode, not a planned runtime refactor
 - if the tests reveal any mode-specific regression, keep the production change minimal and local to the Gemini client construction path
 
@@ -294,7 +294,7 @@ Implementation note:
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- api/lib/env.test.ts api/lib/generateService.gemini.test.ts
+cd GGlearn-AI && npm test -- api/lib/env.test.ts api/lib/generateService.gemini.test.ts
 ```
 
 Expected:
@@ -304,14 +304,14 @@ Expected:
 - [ ] **Step 5: Commit**
 
 ```bash
-git add SlideTutor-AI/api/lib/generateService.gemini.test.ts
+git add GGlearn-AI/api/lib/generateService.gemini.test.ts
 git commit -m "test: cover platform gemini runtime routing"
 ```
 
 ## Task 3: Document Hosted Gemini Routing And Env Setup
 
 **Files:**
-- Modify: `SlideTutor-AI/.env.example`
+- Modify: `GGlearn-AI/.env.example`
 - Modify: `docs/architecture/deployment.md`
 - Modify: `docs/user_guide/access-modes.md`
 - Modify: `docs/backend/platform-model-configuration.md`
@@ -319,7 +319,7 @@ git commit -m "test: cover platform gemini runtime routing"
 
 - [ ] **Step 1: Update the env example**
 
-Add platform Gemini vars near the existing AI provider secrets in `SlideTutor-AI/.env.example`:
+Add platform Gemini vars near the existing AI provider secrets in `GGlearn-AI/.env.example`:
 
 ```env
 GEMINI_API_KEY=""
@@ -370,8 +370,8 @@ Add a top entry in `docs/changelog/CHANGELOG_TECH.md` describing:
 Run:
 
 ```bash
-cd SlideTutor-AI && npm test -- api/lib/env.test.ts api/lib/generateService.gemini.test.ts
-git diff -- SlideTutor-AI/.env.example docs/architecture/deployment.md docs/user_guide/access-modes.md docs/backend/platform-model-configuration.md docs/changelog/CHANGELOG_TECH.md
+cd GGlearn-AI && npm test -- api/lib/env.test.ts api/lib/generateService.gemini.test.ts
+git diff -- GGlearn-AI/.env.example docs/architecture/deployment.md docs/user_guide/access-modes.md docs/backend/platform-model-configuration.md docs/changelog/CHANGELOG_TECH.md
 ```
 
 Expected:
@@ -382,7 +382,7 @@ Expected:
 - [ ] **Step 6: Commit**
 
 ```bash
-git add SlideTutor-AI/.env.example docs/architecture/deployment.md docs/user_guide/access-modes.md docs/backend/platform-model-configuration.md docs/changelog/CHANGELOG_TECH.md
+git add GGlearn-AI/.env.example docs/architecture/deployment.md docs/user_guide/access-modes.md docs/backend/platform-model-configuration.md docs/changelog/CHANGELOG_TECH.md
 git commit -m "docs: record platform gemini endpoint configuration"
 ```
 

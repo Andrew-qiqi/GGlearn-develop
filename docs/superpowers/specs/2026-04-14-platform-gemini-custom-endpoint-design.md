@@ -13,7 +13,7 @@ without changing the existing `My API` Gemini behavior and without splitting the
 
 ## Problem Summary
 
-SlideTutor already supports custom Gemini routing for `My API`, but `Platform API` still assumes one hosted Gemini path backed by the official server-side key.
+GGlearn already supports custom Gemini routing for `My API`, but `Platform API` still assumes one hosted Gemini path backed by the official server-side key.
 
 This creates an operational gap:
 
@@ -217,7 +217,7 @@ Desired behavior:
 
 The rollout should update:
 
-- `SlideTutor-AI/.env.example`
+- `GGlearn-AI/.env.example`
 - `docs/architecture/deployment.md`
 - `docs/user_guide/access-modes.md`
 - `docs/backend/platform-model-configuration.md`
