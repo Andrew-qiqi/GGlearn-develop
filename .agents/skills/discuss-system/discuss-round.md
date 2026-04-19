@@ -1,6 +1,6 @@
 ---
-skill: discuss-round
-description: Join a discussion and contribute with automatic participant registration and speaking lock
+name: discuss-round
+description: Use when joining a local discussion and contributing with participant registration and a speaking lock
 ---
 
 # Discuss Round
@@ -26,7 +26,7 @@ When you invoke this skill, I will:
 
 1. **Read discussion state**: Load current stage, round, and all previous messages
 2. **Register if new**: If first time joining, add participant info to document header
-3. **Acquire speaking lock**: Wait for lock to be free (with timeout protection)
+3. **Acquire speaking lock**: Create `.speaking.lock/` when free (with timeout protection)
 4. **Generate response**: Based on all previous messages and discussion context
 5. **Write message**: Append to current stage document with timestamp
 6. **Release lock**: Allow next agent to speak
@@ -35,9 +35,9 @@ When you invoke this skill, I will:
 
 To prevent concurrent speaking conflicts:
 - Only one agent can speak at a time
-- Lock shows: `{holder: "Bob", timestamp: "...", status: "发言中"}`
+- Lock directory contains `holder` and `timestamp`
 - Other agents see: "⏳ Bob 正在发言，等待中..."
-- Auto-timeout: 60 seconds (prevents deadlock)
+- Auto-timeout: 60 seconds (prevents stale locks)
 - Leader can force-conclude even if lock is held
 
 ## Example
@@ -75,12 +75,12 @@ Names are assigned in order as agents join.
 
 ## Cross-Model Support
 
-This skill works with any AI model:
+This skill works with any AI model that can read and write the local discussion files:
 - Claude (native)
 - Codex (via `/ask codex`)
 - Gemini (via `/ask gemini`)
 
-All models read/write to the same shared memory namespace and markdown documents.
+All models read/write the same `.omc/discussions/{discussion-id}/` JSON and markdown files.
 
 ## What to Contribute
 

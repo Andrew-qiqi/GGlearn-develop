@@ -1,11 +1,11 @@
 ---
-skill: discuss-start
-description: Initialize a multi-agent discussion meeting where agents can join dynamically
+name: discuss-start
+description: Use when initializing a local multi-agent discussion that agents can join dynamically
 ---
 
 # Discuss Start
 
-Initialize a new multi-agent discussion meeting where agents (Claude, Codex, Gemini, etc.) can join dynamically and collaborate asynchronously through shared documents.
+Initialize a new multi-agent discussion meeting where agents (Claude, Codex, Gemini, etc.) can join dynamically and collaborate asynchronously through local discussion files.
 
 ## Usage
 
@@ -23,7 +23,7 @@ Initialize a new multi-agent discussion meeting where agents (Claude, Codex, Gem
 When you invoke this skill, I will:
 
 1. **Create discussion directory**: `.omc/discussions/{timestamp}-{topic-slug}/`
-2. **Initialize shared memory**: namespace `discussion-{id}` with metadata
+2. **Initialize local state**: create `meta.json` and `messages.json`
 3. **Assign leader name**: From pool (Alice, Bob, Carol, David, Eve, Frank, Grace, Henry, Iris, Jack)
 4. **Create stage document**: `stage-1.md` with participant section
 5. **Set up initial state**: Ready for other agents to join
@@ -56,13 +56,15 @@ After starting a discussion:
 
 ## Storage
 
-**Shared Memory Keys** (namespace: `discussion-{id}`):
-- `meta`: Discussion metadata (topic, stage, round, status, participants, leader, speaking_lock)
-- `messages`: Array of all messages with timestamps
+**Local State Files**:
+- `meta.json`: Discussion metadata (topic, stage, round, status, participants, leader, speaking_lock)
+- `messages.json`: Array of all messages with timestamps
 
 **File Structure**:
 ```
 .omc/discussions/{discussion-id}/
+  ├── meta.json
+  ├── messages.json
   ├── stage-1.md
   ├── stage-2.md (created when advancing)
   └── ...

@@ -1,6 +1,6 @@
 # Multi-Agent Discussion System
 
-A collaborative discussion framework for Claude Code where multiple agents (Claude, Codex, Gemini, etc.) can join dynamically and participate in structured, asynchronous conversations.
+A collaborative discussion framework where multiple agents (Claude, Codex, Gemini, etc.) can join dynamically and participate in structured, asynchronous conversations recorded in local project files.
 
 ## Overview
 
@@ -8,7 +8,7 @@ This system enables AI agents to hold structured discussions similar to human me
 - **Dynamic participation**: Agents can join at any time
 - **Speaking lock mechanism**: Prevents concurrent speaking conflicts
 - **Multi-stage progression**: Discussions can evolve through multiple stages
-- **Cross-model support**: Works with Claude, Codex, Gemini, and other models
+- **Cross-model support**: Works with any agent that can read and write the local discussion files
 - **Persistent documentation**: All discussions saved as readable markdown
 
 ## Skills
@@ -73,24 +73,26 @@ Leader summarizes and decides next steps (end or proceed to next stage).
 ```
 .omc/discussions/
   └── {timestamp}-{topic-slug}/
+      ├── meta.json
+      ├── messages.json
       ├── stage-1.md
       ├── stage-2.md
       └── ...
 ```
 
-### Shared Memory
-- **Namespace**: `discussion-{id}`
-- **Keys**:
-  - `meta`: Discussion metadata (stage, round, participants, leader, speaking_lock)
-  - `messages`: Array of all messages with timestamps
+### Local State
+- `meta.json`: Discussion metadata (stage, round, participants, leader, speaking_lock)
+- `messages.json`: Array of all messages with timestamps
+- `stage-N.md`: Human-readable discussion record
 
 ### Speaking Lock
 Prevents concurrent speaking:
-1. Agent checks if lock is free
-2. Acquires lock: `{holder: "Bob", timestamp: "...", status: "发言中"}`
-3. Generates and writes message
-4. Releases lock (sets to null)
-5. Auto-timeout: 60 seconds
+1. Agent checks whether `.speaking.lock/` exists
+2. Acquires lock by creating `.speaking.lock/`
+3. Writes `holder` and `timestamp` inside the lock directory
+4. Generates and writes message
+5. Releases lock by removing `.speaking.lock/`
+6. Auto-timeout: 60 seconds
 
 ### Participant Names
 Auto-assigned from pool: **Alice, Bob, Carol, David, Eve, Frank, Grace, Henry, Iris, Jack**
@@ -204,13 +206,13 @@ The leader (product director) has special responsibilities:
 
 ## Cross-Model Support
 
-This system works seamlessly across different AI models:
+This system works across different AI models:
 
 - **Claude** (native in Claude Code)
 - **Codex** (via `/ask codex`)
 - **Gemini** (via `/ask gemini`)
 
-All models read/write to the same shared memory and markdown documents, enabling true multi-model collaboration.
+All models read/write the same local `.omc/discussions/` files, enabling multi-model collaboration without OMX runtime integration.
 
 ## Best Practices
 
@@ -239,48 +241,17 @@ All models read/write to the same shared memory and markdown documents, enabling
 
 ## Technical Details
 
-### Shared Memory Operations
-```javascript
-// Read meta
-mcp__plugin_oh-my-claudecode_t__shared_memory_read({
-  namespace: "discussion-{id}",
-  key: "meta"
-})
-
-// Write meta
-mcp__plugin_oh-my-claudecode_t__shared_memory_write({
-  namespace: "discussion-{id}",
-  key: "meta",
-  value: JSON.stringify(meta)
-})
-
-// Read messages
-mcp__plugin_oh-my-claudecode_t__shared_memory_read({
-  namespace: "discussion-{id}",
-  key: "messages"
-})
-```
+### Local State Operations
+- Read `meta.json` before contributing.
+- Read `messages.json` when structured history is needed.
+- Append the human-facing contribution to the current `stage-N.md`.
+- Update `messages.json` and `meta.json` after writing.
 
 ### Lock Acquisition Logic
-```javascript
-// Check lock
-if (!meta.speaking_lock) {
-  // Acquire
-  meta.speaking_lock = {
-    holder: agentName,
-    timestamp: new Date().toISOString(),
-    status: "占位中"
-  };
-} else {
-  // Check timeout
-  const lockAge = Date.now() - new Date(meta.speaking_lock.timestamp).getTime();
-  if (lockAge > 60000) {
-    // Force release and acquire
-  } else {
-    // Wait and retry
-  }
-}
-```
+- Acquire by creating `.speaking.lock/`; directory creation is the lock operation.
+- Write `holder` and `timestamp` files inside the lock directory.
+- If the timestamp is older than 60 seconds, treat the lock as stale and replace it.
+- Release by removing `.speaking.lock/` after state and markdown writes are complete.
 
 ## Troubleshooting
 
@@ -288,7 +259,7 @@ if (!meta.speaking_lock) {
 If an agent holds the lock for >60 seconds, it's automatically released.
 
 ### Concurrent Writes
-The lock mechanism prevents this, but if it occurs, the last write wins.
+The lock directory prevents normal concurrent writes. If manual edits still conflict, preserve all contributions and resolve the markdown order explicitly.
 
 ### Missing Participants
 Participants are registered on first speak. If someone doesn't show up in the list, they haven't spoken yet.

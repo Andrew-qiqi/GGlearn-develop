@@ -1,6 +1,6 @@
 ---
-skill: discuss-conclude
-description: Leader concludes current stage with comprehensive summary and decides next steps
+name: discuss-conclude
+description: Use when the leader concludes the current local discussion stage and decides next steps
 ---
 
 # Discuss Conclude
