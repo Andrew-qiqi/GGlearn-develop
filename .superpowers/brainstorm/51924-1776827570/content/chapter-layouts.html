@@ -1,0 +1,65 @@
+<h2>Chapter 布局方案探讨</h2>
+<p class="subtitle">解决标题过大及“卡片化”导致的视觉疲劳</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>方案 A: 极简排版 (Minimalist)</h3>
+      <p>完全移除卡片背景和投影。标题居中，字号从 7xl 降至 4xl，增加字母间距。Intro 部分使用通栏布局，与后文的知识卡片形成明显的结构差异。</p>
+      <div class="mockup" style="margin-top: 1rem;">
+        <div class="mockup-body" style="background: #FDFBF7; padding: 2rem; text-align: center;">
+          <div style="text-transform: uppercase; letter-spacing: 0.4em; color: #AFB3B0; font-size: 10px; font-weight: bold; margin-bottom: 1rem;">Chapter 3</div>
+          <h1 style="font-family: serif; font-size: 2.25rem; color: #1A1A1A; margin: 0;">构造与维度：从分量到矩阵</h1>
+          <div style="margin: 2rem auto; height: 1px; width: 60px; background: #E0E0DE;"></div>
+          <p style="color: #5F6368; font-size: 14px; line-height: 1.6; max-width: 500px; margin: 0 auto;">在进入复杂的微积分运算之前，我们需要先建立起雅可比矩阵的“骨架”...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>方案 B: 社论风格 (Editorial)</h3>
+      <p>标题左对齐，使用装饰性的章节编号。Intro 部分采用左侧缩进或两栏排版。利用大量留白来强调“章”的开始，而非使用物理容器。</p>
+      <div class="mockup" style="margin-top: 1rem;">
+        <div class="mockup-body" style="background: #FDFBF7; padding: 2rem;">
+          <div style="display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem;">
+            <span style="font-family: serif; font-style: italic; font-size: 2rem; color: #AFB3B0;">03.</span>
+            <h1 style="font-family: serif; font-size: 2rem; color: #1A1A1A; margin: 0; border-bottom: 3px solid #1A1A1A;">构造与维度：从分量到矩阵</h1>
+          </div>
+          <div style="padding-left: 3rem;">
+            <p style="color: #5F6368; font-size: 14px; line-height: 1.6; margin: 0;">在进入复杂的微积分运算之前，我们需要先建立起雅可比矩阵的“骨架”...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>方案 C: 柔和分区 (Soft Zone)</h3>
+      <p>不使用带阴影的卡片，而是使用一个横跨屏幕的浅色背景区域。字号适中，通过背景色的细微变化来界定范围。Intro 字体略微放大，作为全文导读。</p>
+      <div class="mockup" style="margin-top: 1rem;">
+        <div class="mockup-body" style="background: #F8F8F6; border-bottom: 1px solid #E0E0DE; padding: 3rem 2rem;">
+          <div style="max-width: 600px; margin: 0 auto;">
+            <div style="color: #AFB3B0; font-size: 12px; font-weight: bold; margin-bottom: 0.5rem;">CHAPTER THREE</div>
+            <h1 style="font-family: sans-serif; font-size: 2.5rem; color: #1A1A1A; margin: 0 0 1.5rem 0; font-weight: 800; letter-spacing: -0.02em;">构造与维度：从分量到矩阵</h1>
+            <p style="color: #3C4043; font-size: 16px; line-height: 1.8; margin: 0;">在进入复杂的微积分运算之前，我们需要先建立起雅可比矩阵的“骨架”...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 2rem;">
+  <h3>设计考量：</h3>
+  <ul>
+    <li><b>移除卡片</b>：所有方案都移除了 <code>bg-white</code> 和 <code>shadow-paper-lg</code>。</li>
+    <li><b>缩小字号</b>：从当前的 <code>text-7xl</code> (约 72px) 降至 <code>text-4xl</code> (36px) 或 <code>text-5xl</code> (48px)。</li>
+    <li><b>增强对比</b>：通过留白和排版，而非物理边界，来区分 Chapter 和 Section。</li>
+  </ul>
+</div>

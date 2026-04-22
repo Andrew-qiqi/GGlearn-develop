@@ -1,0 +1,69 @@
+<h2>方案 B (社论风格) 细化预览</h2>
+<p class="subtitle">针对 1.0 版本的反馈，进一步优化比例与结构</p>
+
+<div class="mockup">
+  <div class="mockup-header">ReaderView 章节头部效果</div>
+  <div class="mockup-body" style="background: #FDFBF7; padding: 4rem 3rem; min-height: 500px;">
+    
+    <!-- Chapter Header -->
+    <div style="max-width: 800px; margin: 0 auto;">
+      <div style="display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 2rem;">
+        <span style="font-family: serif; font-style: italic; font-size: 3rem; color: #AFB3B0; line-height: 1;">03.</span>
+        <div>
+          <h1 style="font-family: serif; font-size: 3.5rem; color: #1A1A1A; margin: 0; line-height: 1.1; letter-spacing: -0.02em;">
+            构造与维度：从分量到矩阵
+          </h1>
+          <div style="margin-top: 1.5rem; height: 3px; width: 4rem; background: #1A1A1A;"></div>
+        </div>
+      </div>
+
+      <!-- Intro Content with Indentation -->
+      <div style="padding-left: 4.5rem; max-width: 650px;">
+        <p style="color: #5F6368; font-size: 1.125rem; line-height: 1.8; margin: 0; opacity: 0.9;">
+          在进入复杂的微积分运算之前，我们需要先建立起雅可比矩阵的“骨架”。如果你熟悉单变量函数的导数，你会发现当面对一个“多输入、多输出”的向量函数时，单一的斜率已经无法描述系统的变化。
+        </p>
+      </div>
+    </div>
+
+    <!-- Divider to regular content -->
+    <div style="margin: 6rem auto 4rem auto; text-align: center;">
+      <div style="display: inline-block; width: 4px; height: 4px; background: #E0E0DE; border-radius: 50%; margin: 0 8px;"></div>
+      <div style="display: inline-block; width: 4px; height: 4px; background: #E0E0DE; border-radius: 50%; margin: 0 8px;"></div>
+      <div style="display: inline-block; width: 4px; height: 4px; background: #E0E0DE; border-radius: 50%; margin: 0 8px;"></div>
+    </div>
+
+    <!-- Example Section Card -->
+    <div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 1.5rem; border: 1px solid #E0E0DE; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+       <h3 style="margin-top: 0; font-size: 1.25rem;">3.1 线性变换的局部线性化</h3>
+       <p style="color: #5F6368; font-size: 14px;">这是后续知识卡片的展示方式，与章节头部形成明显对比...</p>
+    </div>
+
+  </div>
+</div>
+
+<div class="section" style="margin-top: 2rem;">
+  <h3>关键改进点：</h3>
+  <ul>
+    <li><b>去除包裹感</b>：章节头部直接浮在背景上，不再受卡片限制，气场更开阔。</li>
+    <li><b>不对称平衡</b>：通过编号左偏、内容缩进，营造出类似专业杂志或精装书籍的排版感。</li>
+    <li><b>字号调优</b>：标题 3.5rem (56px) 相比之前的 7xl (72px) 更加克制，兼顾了力量感和可读性。</li>
+    <li><b>显式导读</b>：Intro 使用了更大的行高和字号 (`1.125rem`)，强调其导论性质。</li>
+  </ul>
+</div>
+
+<div class="options" data-multiselect>
+  <div class="option" data-choice="large-number" onclick="toggleSelect(this)">
+    <div class="letter">1</div>
+    <div class="content">
+      <h3>保留大字编号 (03.)</h3>
+      <p>更有视觉冲击力，强化章节感</p>
+    </div>
+  </div>
+  <div class="option" data-choice="larger-intro" onclick="toggleSelect(this)">
+    <div class="letter">2</div>
+    <div class="content">
+      <h3>使用更大字号的 Intro</h3>
+      <p>作为导读，字号应明显大于后续正文</p>
+    </div>
+  </div>
+</div>
